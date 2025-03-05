@@ -1,8 +1,6 @@
 "use client";
 import React, { useCallback, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { SyncLoader } from "react-spinners";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { api } from "~/trpc/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -35,20 +33,7 @@ const NewVerificationForm = () => {
   useEffect(() => {
     onSubmit();
   }, [onSubmit]);
-  return (
-    <Card className="w-96">
-      <CardHeader>
-        <CardTitle className="flex w-full justify-center">
-          Confirming your verification
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex h-full w-full items-center justify-center">
-          <SyncLoader loading={true} size={20}></SyncLoader>
-        </div>
-      </CardContent>
-    </Card>
-  );
+  return <div></div>;
 };
 
 export default NewVerificationForm;
