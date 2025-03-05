@@ -50,12 +50,12 @@ export function RegisterForm() {
   const router = useRouter();
 
   const createUser = api.user.createUser.useMutation({
-    onSuccess: () => {
+    onSuccess: (user) => {
       toast.success("User successfully created");
-      router.push("/auth/login");
+      router.push(`/auth/send-verification?email=${user.email}`);
     },
-    onError: () => {
-      toast.error("There is an error occured!");
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
 
@@ -131,7 +131,9 @@ export function RegisterForm() {
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button className="w-full" type="submit">
+          Register
+        </Button>
       </form>
     </Form>
   );
