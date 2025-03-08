@@ -16,16 +16,22 @@ export const authConfig = {
       async authorize(credentials) {
         const email = credentials.email;
         const password = credentials.password;
-        if (!email && !password) return null;
-        if (typeof email !== "string" || typeof password !== "string")
-          return null;
-        const user = await getUserByEmail(email);
-        if (!user?.password) return null;
+        if (!email || !password)
+          throw new Error("Email and password are required.");
 
-        return bcrypt.compare(password, user.password).then((passwordMatch) => {
-          if (!passwordMatch) return null;
-          return user;
-        });
+        if (typeof email !== "string" || typeof password !== "string")
+          throw new Error("Invalid input: Email and password must be strings.");
+
+        const user = await getUserByEmail(email);
+        if (!user) throw new Error("User not found.");
+
+        if (!user.password)
+          throw new Error("User account is missing a password.");
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) throw new Error("Incorrect password.");
+
+        return user;
       },
     }),
     GoogleProvider({
@@ -35,7 +41,7 @@ export const authConfig = {
   ],
   pages: {
     signIn: "/auth/login",
-    error: "/auth/error",
+    error: "/auth/login",
   },
   events: {
     async linkAccount({ user }) {
@@ -54,9 +60,7 @@ export const authConfig = {
       return true;
     },
     async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
       if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // Allows callback URLs on the same origin
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },

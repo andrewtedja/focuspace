@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import { Suspense } from "react";
 import { LoginForm } from "~/app/_components/auth/login";
 import Link from "next/link";
 const page = () => {
@@ -16,14 +17,16 @@ const page = () => {
           <CardTitle>Login</CardTitle>
         </CardHeader>
         <CardContent>
-          <LoginForm></LoginForm>
+          <Suspense>
+            <LoginForm></LoginForm>
+          </Suspense>
         </CardContent>
         <CardFooter className="flex w-full justify-center">
           <Link
             className="text-sm underline hover:opacity-60"
             href={"register"}
           >
-            Don&apost have an account?
+            Don&apos;t have an account?
           </Link>
         </CardFooter>
       </Card>

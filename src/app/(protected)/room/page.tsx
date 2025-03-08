@@ -1,14 +1,22 @@
 "use client";
 import React from "react";
+import { useSessionStore } from "~/stores/useSessionStore";
 import { signOut } from "next-auth/react";
 import { Button } from "~/components/ui/button";
+import { useRouter } from "next/navigation";
+import ProtectedRoute from "~/app/_components/routes/protectedRoute";
+
 const page = () => {
+  const router = useRouter();
+  const { user, logout } = useSessionStore();
   return (
-    <div>
+    <ProtectedRoute>
+      <span>session store: {JSON.stringify(user)}</span>
+      <br></br>
       <Button
         onClick={async () => {
           try {
-            await signOut();
+            await signOut().then(() => logout());
           } catch (error) {
             console.log(error);
           }
@@ -16,7 +24,15 @@ const page = () => {
       >
         Sign Out
       </Button>
-    </div>
+      <br></br>
+      <Button
+        onClick={() => {
+          router.push("/settings");
+        }}
+      >
+        Go to settings
+      </Button>
+    </ProtectedRoute>
   );
 };
 

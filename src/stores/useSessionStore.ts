@@ -1,78 +1,146 @@
 "use client";
-
 import { create } from "zustand";
-import { jwtDecode } from "jwt-decode";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-interface Session {
-  userId: string;
-  email: string;
-  exp: number;
-}
-
+import type { User } from "next-auth";
 type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 
 interface SessionState {
-  session: Session | null;
+  user: User | null;
   status: AuthStatus;
   isAuthenticated: boolean;
-  setSession: (token: string) => void;
+  expires: String | null;
+  setSession: (expires: string, userData: User | undefined) => void;
   checkToken: () => void;
   logout: () => void;
 }
 
-export const useSessionStore = create<SessionState>((set) => ({
-  session: null,
-  status: "loading",
-  isAuthenticated: false,
+export const useSessionStore = create<SessionState>()(
+  persist(
+    (set) => ({
+      // State fields
+      user: null,
+      expires: null, // store expiration timestamp string
+      status: "loading", // e.g., "idle" (logged out/unknown), "authenticated"
+      isAuthenticated: false,
 
-  setSession: (token: string) => {
-    try {
-      const decoded = jwtDecode<Session>(token);
-      localStorage.setItem("token", token);
-      set({ session: decoded, status: "authenticated", isAuthenticated: true });
-    } catch (error) {
-      console.error("Invalid token:", error);
-      localStorage.removeItem("token");
-      set({ session: null, status: "unauthenticated", isAuthenticated: false });
-    }
-  },
-
-  checkToken: () => {
-    set({ status: "loading" });
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decoded = jwtDecode<Session>(token);
-        if (decoded.exp * 1000 > Date.now()) {
+      // Action: setSession with expiration and user data
+      setSession: (expires: string, userData: User | undefined) => {
+        const expiryTime = new Date(expires);
+        if (Number.isNaN(expiryTime.getTime()) || expiryTime <= new Date()) {
+          console.error("Invalid or expired session expiration date");
+          // Clean up any stored data since this session is not valid
+          localStorage.removeItem("user");
+          localStorage.removeItem("expires");
           set({
-            session: decoded,
-            status: "authenticated",
-            isAuthenticated: true,
-          });
-        } else {
-          localStorage.removeItem("token");
-          set({
-            session: null,
+            user: null,
+            expires: null,
             status: "unauthenticated",
             isAuthenticated: false,
           });
+          return;
         }
-      } catch (error) {
-        console.error("Invalid token:", error);
-        localStorage.removeItem("token");
+        try {
+          // Store session data in localStorage for persistence
+          localStorage.setItem("user", JSON.stringify(userData));
+          localStorage.setItem("expires", expires);
+        } catch (e) {
+          console.error("Failed to access localStorage:", e);
+          // If storing fails, ensure state remains clean
+          set({
+            user: null,
+            expires: null,
+            status: "unauthenticated",
+            isAuthenticated: false,
+          });
+          return;
+        }
+        // Update Zustand state to reflect the logged-in user
         set({
-          session: null,
+          user: userData,
+          expires: expires,
+          status: "authenticated",
+          isAuthenticated: true,
+        });
+      },
+
+      // Action: checkToken (validate existing session)
+      checkToken: () => {
+        try {
+          set({ status: "loading" });
+          const expires = localStorage.getItem("expires");
+          const userData = localStorage.getItem("user");
+          if (!expires || !userData) {
+            // No session in storage
+            set({
+              user: null,
+              expires: null,
+              status: "unauthenticated",
+              isAuthenticated: false,
+            });
+            return false;
+          }
+          const expiryTime = new Date(expires);
+          if (expiryTime <= new Date()) {
+            try {
+              localStorage.removeItem("user");
+              localStorage.removeItem("expires");
+            } catch (e) {
+              console.error("Failed to clear localStorage:", e);
+            }
+            set({
+              user: null,
+              expires: null,
+              status: "unauthenticated",
+              isAuthenticated: false,
+            });
+          }
+          // Session is valid, restore user into state if not already
+          const parsedUser = JSON.parse(userData);
+          set({
+            user: parsedUser,
+            expires: expires,
+            status: "authenticated",
+            isAuthenticated: true,
+          });
+          return true;
+        } catch (e) {
+          console.error("Error checking token:", e);
+          try {
+            localStorage.removeItem("user");
+            localStorage.removeItem("expires");
+          } catch (e) {
+            console.error("Failed to clear localStorage:", e);
+          }
+          set({
+            user: null,
+            expires: null,
+            status: "unauthenticated",
+            isAuthenticated: false,
+          });
+          return false;
+        }
+      },
+
+      // Action: logout (clear session)
+      logout: () => {
+        try {
+          localStorage.removeItem("user");
+          localStorage.removeItem("expires");
+        } catch (e) {
+          console.error("Failed to clear localStorage:", e);
+        }
+        set({
+          user: null,
+          expires: null,
           status: "unauthenticated",
           isAuthenticated: false,
         });
-      }
-    } else {
-      set({ session: null, status: "unauthenticated", isAuthenticated: false });
-    }
-  },
-
-  logout: () => {
-    localStorage.removeItem("token");
-    set({ session: null, status: "unauthenticated", isAuthenticated: false });
-  },
-}));
+      },
+    }),
+    {
+      name: "session-storage", // Name of the storage key
+      storage: createJSONStorage(() => localStorage), // Use localStorage for persistence
+    },
+  ),
+);

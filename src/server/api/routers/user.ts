@@ -64,14 +64,6 @@ export const userRouter = createTRPCRouter({
 
         if (!existingUser.emailVerified) {
           return { error: existingUser.email };
-          // const verificationToken = await generateVerificationToken(
-          //   existingUser.email,
-          // );
-          // await sendVerificationEmail(
-          //   verificationToken.token,
-          //   verificationToken.email,
-          // );
-          // return { success: "Confirmation email sent!" };
         }
         try {
           await signIn(input.provider, {
@@ -81,7 +73,6 @@ export const userRouter = createTRPCRouter({
           });
           return { success: "Login successful" };
         } catch (error) {
-          console.log("CONSOLE ERROR", error);
           if (error instanceof AuthError) {
             switch (error.type) {
               case "CredentialsSignin":
@@ -97,7 +88,6 @@ export const userRouter = createTRPCRouter({
           await signIn(input.provider, { redirect: false });
           return { success: "Login successful" };
         } catch (error) {
-          console.log("CONSOLE ERROR", error);
           if (error instanceof AuthError) {
             switch (error.type) {
               case "CredentialsSignin":
