@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -65,4 +66,19 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* @import "tailwindcss"; */
+
+@theme {
+  --container-9xs: 4rem;
+  --container-8xs: 6rem;
+  --container-7xs: 8rem;
+  --container-6xs: 10rem;
+  --container-5xs: 12rem;
+  --container-4xs: 14rem;
+}
+
+.container-class {
+  container-type: inline-size;
 }
