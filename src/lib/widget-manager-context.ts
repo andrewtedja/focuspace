@@ -1,43 +1,30 @@
 import { createContext, useContext } from "react";
+import type { GridStackOptions } from "gridstack";
 
 export type WidgetConfig = {
   id: string;
   name: string;
-  props: any;
+  props: Record<string, any>;
   w: number;
   h: number;
   x?: number;
   y?: number;
 };
-
 export type WidgetManagerContextType = {
   pages: Record<number, WidgetConfig[]>;
   currentPage: number;
   addPage: (pageNumber?: number) => void;
   removePage: (pageNumber: number) => void;
-  setCurrentPage: (n: number) => void;
+  setCurrentPage: (page: number) => void;
   addWidgetToPage: (widget: WidgetConfig, page?: number) => void;
-  removeWidgetFromPage: (id: string, page?: number) => void;
-  getWidgetsForPage: (page?: number) => WidgetConfig[];
+  getGridOptions: (page: number) => GridStackOptions;
 };
 
-export const WidgetManagerContext = createContext<{
-  pages: Record<number, WidgetConfig[]>;
-  currentPage: number;
-  addPage: (pageNumber?: number) => void;
-  removePage: (pageNumber: number) => void;
-  setCurrentPage: (n: number) => void;
-  addWidgetToPage: (widget: WidgetConfig, page?: number) => void;
-  removeWidgetFromPage: (id: string, page?: number) => void;
-  getWidgetsForPage: (page?: number) => WidgetConfig[];
-} | null>(null);
+export const WidgetManagerContext =
+  createContext<WidgetManagerContextType | null>(null);
 
-export function useWidgetManager() {
+export const useWidgetManager = () => {
   const context = useContext(WidgetManagerContext);
-  if (!context) {
-    throw new Error(
-      "useWidgetManager must be used within a WidgetManagerProvider",
-    );
-  }
+  if (!context) throw new Error("WidgetManager must be used in a provider");
   return context;
-}
+};

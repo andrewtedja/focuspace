@@ -1,47 +1,72 @@
 "use client";
 import { WidgetManagerContext } from "./widget-manager-context";
 import { type WidgetConfig } from "./widget-manager-context";
-import { useGridStackContext } from "./grid-stack-context";
-import { type PropsWithChildren, useCallback, useMemo, useState } from "react";
+import { GridStackOptions } from "gridstack";
 
+import { type PropsWithChildren, useCallback, useState } from "react";
+
+const CELL_HEIGHT = 50;
+const BREAKPOINTS = [
+  { c: 1, w: 700 },
+  { c: 3, w: 850 },
+  { c: 6, w: 950 },
+  { c: 8, w: 1100 },
+];
+
+export const baseGridOptions: GridStackOptions = {
+  removable: true,
+  acceptWidgets: true,
+  columnOpts: {
+    breakpointForWindow: true,
+    breakpoints: BREAKPOINTS,
+    layout: "moveScale",
+    columnMax: 12,
+  },
+  float: true,
+  margin: 8,
+  row: 12,
+  cellHeight: CELL_HEIGHT,
+  subGridOpts: {
+    acceptWidgets: true,
+    columnOpts: {
+      breakpoints: BREAKPOINTS,
+      layout: "moveScale",
+    },
+    margin: 8,
+    minRow: 2,
+    cellHeight: CELL_HEIGHT,
+  },
+};
 export function WidgetManagerProvider({ children }: PropsWithChildren) {
-  const { addWidget: addGridWidget, removeWidget: removeGridWidget } =
-    useGridStackContext();
-
-  const [pages, setPages] = useState<Record<number, WidgetConfig[]>>({ 0: [] });
+  const [pages, setPages] = useState<Record<number, WidgetConfig[]>>({
+    0: [],
+  });
   const [currentPage, setCurrentPage] = useState(0);
 
-  const getWidgetsForPage = useCallback(
-    (page = currentPage) => pages[page] ?? [],
-    [pages, currentPage],
+  const addPage = useCallback(
+    (pageNumber?: number) => {
+      setPages((prev) => {
+        const nextPage =
+          pageNumber ?? Math.max(...Object.keys(prev).map(Number), 0) + 1;
+        if (prev[nextPage]) return prev;
+        return {
+          ...prev,
+          [nextPage]: [],
+        };
+      });
+      setCurrentPage((prev) => {
+        const nextPage =
+          pageNumber ?? Math.max(...Object.keys(pages).map(Number), 0) + 1;
+        return nextPage;
+      });
+    },
+    [pages],
   );
-
-  const addPage = useCallback((pageNumber?: number) => {
-    setPages((prev) => {
-      const nextPage =
-        pageNumber ?? Math.max(...Object.keys(prev).map(Number)) + 1;
-
-      if (prev[nextPage]) return prev;
-      return {
-        ...prev,
-        [nextPage]: [],
-      };
-    });
-  }, []);
 
   const removePage = useCallback((pageNumber: number) => {
     setPages((prev) => {
-      const newPages = Object.entries(prev)
-        .filter(([key]) => Number(key) !== pageNumber)
-        .sort(([a], [b]) => Number(a) - Number(b))
-        .reduce(
-          (acc, [, value], idx) => {
-            acc[idx] = value;
-            return acc;
-          },
-          {} as Record<number, WidgetConfig[]>,
-        );
-
+      const newPages = { ...prev };
+      delete newPages[pageNumber];
       return newPages;
     });
 
@@ -52,66 +77,45 @@ export function WidgetManagerProvider({ children }: PropsWithChildren) {
     });
   }, []);
 
-  const { gridStack, addWidget } = useGridStackContext();
-
   const addWidgetToPage = useCallback(
     (widget: WidgetConfig, page = currentPage) => {
-      const { id, w, h, x, y } = widget;
-
       setPages((prev) => ({
         ...prev,
         [page]: [...(prev[page] ?? []), widget],
       }));
-
-      // if (!gridStack) {
-      //   console.warn("GridStack not ready when adding widget");
-      //   return;
-      // }
-
-      addWidget(() => ({
-        id,
-        w,
-        h,
-        content: JSON.stringify({ name: widget.name, props: widget.props }),
-      }));
     },
-    [currentPage, gridStack, addGridWidget],
+    [currentPage],
   );
 
-  const removeWidgetFromPage = useCallback(
-    (id: string, page = currentPage) => {
-      setPages((prev) => ({
-        ...prev,
-        [page]: (prev[page] ?? []).filter((w) => w.id !== id),
-      }));
-
-      removeGridWidget(id);
+  const getGridOptions = useCallback(
+    (page: number) => {
+      return {
+        ...baseGridOptions,
+        children: (pages[page] ?? []).map((w) => ({
+          id: w.id,
+          w: w.w,
+          h: w.h,
+          x: w.x,
+          y: w.y,
+          content: JSON.stringify({ name: w.name, props: w.props }),
+        })),
+      };
     },
-    [currentPage, removeGridWidget],
+    [pages],
   );
 
-  const value = useMemo(
-    () => ({
-      pages,
-      currentPage,
-      setCurrentPage,
-      addWidgetToPage,
-      removeWidgetFromPage,
-      getWidgetsForPage,
-      addPage,
-      removePage,
-    }),
-    [
-      pages,
-      currentPage,
-      addWidgetToPage,
-      removeWidgetFromPage,
-      addPage,
-      removePage,
-    ],
-  );
   return (
-    <WidgetManagerContext.Provider value={value}>
+    <WidgetManagerContext.Provider
+      value={{
+        pages,
+        currentPage,
+        addPage,
+        removePage,
+        setCurrentPage,
+        addWidgetToPage,
+        getGridOptions,
+      }}
+    >
       {children}
     </WidgetManagerContext.Provider>
   );

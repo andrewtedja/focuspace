@@ -3,7 +3,6 @@
 import { Button } from "~/components/ui/button";
 import { useWidgetManager } from "~/lib/widget-manager-context";
 import { useGridStackContext } from "~/lib/grid-stack-context";
-import { v4 as uuidv4 } from "uuid";
 
 interface AddWidgetButtonProps {
   label?: string;
@@ -22,26 +21,24 @@ export default function AddWidgetButton({
   widgetProps = {},
   w = 2,
   h = 2,
-  x,
-  y,
+  x = 0,
+  y = 0,
   page,
 }: AddWidgetButtonProps) {
-  const { addWidgetToPage } = useWidgetManager();
-  const handleClick = () => {
-    const id = `widget-${uuidv4()}`;
+  const { addWidgetToPage, currentPage } = useWidgetManager();
+  const { addWidget } = useGridStackContext();
 
-    addWidgetToPage(
-      {
-        id,
+  const handleClick = () => {
+    addWidget(() => ({
+      w,
+      h,
+      x,
+      y,
+      content: JSON.stringify({
         name: widgetName,
         props: widgetProps,
-        w,
-        h,
-        x,
-        y,
-      },
-      page,
-    );
+      }),
+    }));
   };
 
   return <Button onClick={handleClick}>{label}</Button>;
