@@ -17,8 +17,8 @@ const UserNavbar = () => {
   const router = useRouter();
 
   return (
-    <nav className="fixed z-50 w-full bg-gray-950/90 px-6 py-4 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between">
+    <nav className="sticky top-0 z-50 flex h-20 w-full items-center bg-gray-950/90 px-6 text-white backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
         <div className="flex items-center space-x-3">
           {/* logo Sementara */}
           <div className="relative h-10 w-10">
@@ -27,35 +27,34 @@ const UserNavbar = () => {
           <span className="text-xl font-bold">FocuSpace</span>
         </div>
 
-        {/* Links */}
-        <div className="items-center space-x-8 text-sm">
+        <div className="items-center space-x-8">
           <a
             onClick={() => router.push("/")}
-            className="text-sm font-normal transition-colors hover:text-indigo-400"
+            className="text-md font-normal transition-colors hover:text-indigo-400"
           >
             Home
           </a>
           <a
             onClick={() => router.push("/")}
-            className="text-sm font-normal transition-colors hover:text-indigo-400"
+            className="text-md font-normal transition-colors hover:text-indigo-400"
           >
-            Features
+            Rooms
           </a>
           <a
             onClick={() => router.push("/")}
-            className="text-sm font-normal transition-colors hover:text-indigo-400"
+            className="text-md font-normal transition-colors hover:text-indigo-400"
           >
-            About Us
+            AI Flashcard
           </a>
           <a
             onClick={() => router.push("/")}
-            className="text-sm font-normal transition-colors hover:text-indigo-400"
+            className="text-md font-normal transition-colors hover:text-indigo-400"
           >
             Community
           </a>
           <a
             onClick={() => router.push("/")}
-            className="text-sm font-normal text-[#ffed93] transition-all hover:text-opacity-80"
+            className="text-md font-normal transition-all hover:text-[#ffed93]"
           >
             Pricing
           </a>
@@ -66,7 +65,7 @@ const UserNavbar = () => {
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="flex items-center space-x-2 rounded-full bg-gray-800 px-3 py-2 transition-colors hover:bg-gray-700"
+              className="flex items-center space-x-2 rounded-full bg-gray-800 px-3 py-2 transition-colors focus:outline-none"
             >
               <Avatar className="h-8 w-8 border-0">
                 <AvatarImage
@@ -78,13 +77,13 @@ const UserNavbar = () => {
                 </AvatarFallback>
               </Avatar>
               <span className="hidden text-sm font-medium md:inline">
-                Username
+                Hi, Username1
               </span>
               <ChevronDown className="h-4 w-4" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="mt-1 w-56 border-gray-700 bg-gray-800"
+            className="mt-1 w-56 border-gray-600 bg-gray-800"
             align="end"
           >
             <DropdownMenuLabel className="text-gray-400">
