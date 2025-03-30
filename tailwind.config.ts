@@ -6,17 +6,8 @@ export default {
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
-      screens: {
-        "9xs": "200px",
-        "8xs": "300px",
-        "7xs": "400px",
-        "6xs": "500px",
-        "5xs": "600px",
-        "4xs": "700px",
-      },
-
       fontFamily: {
-        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        sans: ["var(--font-poppins)", ...fontFamily.sans],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -67,11 +58,5 @@ export default {
       },
     },
   },
-  variants: {
-    containerType: ["responsive"],
-  },
-  plugins: [
-    require("tailwindcss-animate"),
-    require("@tailwindcss/container-queries"),
-  ],
+  plugins: [require("tailwindcss-animate")],
 } satisfies Config;
