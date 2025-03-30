@@ -4,7 +4,7 @@ import { Rnd } from "react-rnd";
 import TodoList from "./TodoList";
 import TimerPomodoro from "./TimerPodomoro";
 
-import { Card, CardFooter } from "~/components/ui/card";
+import { Card} from "~/components/ui/card";
 
 import {
   Tabs,

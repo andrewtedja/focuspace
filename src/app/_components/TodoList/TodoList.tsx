@@ -58,11 +58,11 @@ const TodoList: React.FC<TodoListProps> = ({ show, onClose }) => {
         size={{ width: size.width, height: size.height }}
         onResize={(e, direction, ref, delta, position) => {
           setSize({
-            width: ref.offsetWidth,
+            width: 450,
             height: ref.offsetHeight
           });
         }}
-        minWidth={240}
+        minWidth={450}
         minHeight={300}
         bounds="window"
         className="overflow-hidden"
