@@ -8,6 +8,7 @@ import clsx from "clsx";
 import Rating from "./Rating";
 import CTA from "./CTA";
 import Footer from "../footer/Footer";
+import Pricing from "./Pricing";
 
 const LandingPage = () => {
   const [displaySpace, setDisplaySpace] = useState(0);
@@ -44,13 +45,13 @@ const LandingPage = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setDisplaySpace((prev) => (prev + 1) % spaces.length);
-    }, 7000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [spaces.length]);
 
   return (
     <main className="bg-[#BCD0D7] text-[#2D3748]">
-      <div className="min-h-screen py-20">
+      <div className="min-h-screen bg-[#BCD0D7] py-20 text-[#2D3748]">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
             <div className="space-y-8">
@@ -142,6 +143,7 @@ const LandingPage = () => {
 
       <Features />
       <Rating />
+      <Pricing />
       <CTA />
       <Footer />
     </main>

@@ -47,7 +47,7 @@ const Features = () => {
           </span>
           <h2 className="mb-4 text-4xl font-bold tracking-tight text-[#2D3748]">
             Designed for Your{" "}
-            <span className="bg-gradient-to-r from-[#5A8CA3] to-[#6183ac] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#7B9EA8] to-[#6183ac] bg-clip-text text-transparent">
               Unique Mind
             </span>
           </h2>

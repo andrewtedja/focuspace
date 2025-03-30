@@ -50,7 +50,7 @@ const GuestNavbar = () => {
 
         <div className="flex items-center space-x-4">
           <button
-            className="ease text-btn-base md:text-btn-lg text-trypan-blue-900 !font-body flex min-w-[180px] flex-row items-center justify-center gap-2.5 whitespace-nowrap rounded-xl border-[1px] border-black/40 bg-white p-3.5 !text-sm font-semibold transition duration-200 hover:bg-white"
+            className="ease text-btn-base md:text-btn-lg text-trypan-blue-900 !font-body flex min-w-[180px] flex-row items-center justify-center gap-2.5 whitespace-nowrap rounded-xl border-[1px] border-black/40 bg-white p-3.5 !text-sm font-semibold transition duration-200 hover:border-black/60 hover:bg-gray-100"
             onClick={() => router.push("/auth/login")}
           >
             Sign In
