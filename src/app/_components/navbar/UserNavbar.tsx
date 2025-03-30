@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { User, LogOut, Settings, HelpCircle, ChevronDown } from "lucide-react";
+import { signOut } from "next-auth/react";
 import { useSessionStore } from "~/stores/useSessionStore";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
@@ -120,9 +121,12 @@ const UserNavbar = () => {
             <DropdownMenuSeparator className="bg-[#E9EEF2]" />
             <DropdownMenuItem
               className="cursor-pointer text-[#f1523d] hover:bg-[#F5F7FA] focus:bg-[#F5F7FA] focus:text-[#d9675a]"
-              onClick={() => {
-                // Add logout logic here
-                router.push("/auth/login");
+              onClick={async () => {
+                try {
+                  await signOut({}).then(() => logout());
+                } catch (error) {
+                  console.log(error);
+                }
               }}
             >
               <LogOut className="mr-2 h-4 w-4" />
