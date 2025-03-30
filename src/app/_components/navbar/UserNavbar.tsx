@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { User, LogOut, Settings, HelpCircle, ChevronDown } from "lucide-react";
-
+import { useSessionStore } from "~/stores/useSessionStore";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   DropdownMenu,
@@ -15,6 +15,7 @@ import {
 
 const UserNavbar = () => {
   const router = useRouter();
+  const { user, logout } = useSessionStore();
 
   return (
     <nav className="sticky top-0 z-50 flex h-20 w-full items-center bg-[#F5F7FA] px-6 text-[#2D3748] shadow-sm backdrop-blur-md">
@@ -77,19 +78,19 @@ const UserNavbar = () => {
                 </AvatarFallback>
               </Avatar>
               <span className="hidden text-sm font-medium text-[#2D3748] md:inline">
-                Hi, Username1
+                Hi, {user?.name}
               </span>
               <ChevronDown className="h-4 w-4 text-[#718096]" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="mt-1 w-56 rounded-xl border-[#E9EEF2] bg-white shadow-md"
+            className="mt-1 w-64 rounded-xl border-[#E9EEF2] bg-white shadow-md"
             align="end"
           >
             <DropdownMenuLabel className="text-[#718096]">
               <p className="text-xs">Signed in as</p>
               <p className="truncate font-medium text-[#4A5568]">
-                user@example.com
+                {user?.email}
               </p>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-[#E9EEF2]" />

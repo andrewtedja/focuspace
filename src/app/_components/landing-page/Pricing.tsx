@@ -41,15 +41,17 @@ const Pricing = () => {
             </div>
             <div className="flex items-start">
               <Check className="mr-3 h-5 w-5 flex-shrink-0 text-green-600" />
-              <span className="text-sm">Limited distraction blocking</span>
+              <span className="text-sm">Limited AI Buddy prompts</span>
             </div>
             <div className="flex items-start">
               <Check className="mr-3 h-5 w-5 flex-shrink-0 text-green-600" />
-              <span className="text-sm">Basic timers and tracking</span>
+              <span className="text-sm">Basic productivity tools</span>
             </div>
             <div className="flex items-start">
               <Check className="mr-3 h-5 w-5 flex-shrink-0 text-green-600" />
-              <span className="text-sm">Basic accessibility features</span>
+              <span className="text-sm">
+                Neurodivergent-friendly customizations
+              </span>
             </div>
           </div>
         </div>
@@ -90,25 +92,11 @@ const Pricing = () => {
             </div>
             <div className="flex items-start">
               <Check className="mr-3 h-5 w-5 flex-shrink-0 text-green-600" />
-              <span className="text-sm">
-                Advanced distraction blocking system
-              </span>
+              <span className="text-sm">Unlimited AI Buddy Usage</span>
             </div>
             <div className="flex items-start">
               <Check className="mr-3 h-5 w-5 flex-shrink-0 text-green-600" />
-              <span className="text-sm">Focus analytics and insights</span>
-            </div>
-            <div className="flex items-start">
-              <Check className="mr-3 h-5 w-5 flex-shrink-0 text-green-600" />
-              <span className="text-sm">
-                Neurodivergent-friendly customizations
-              </span>
-            </div>
-            <div className="flex items-start">
-              <Check className="mr-3 h-5 w-5 flex-shrink-0 text-green-600" />
-              <span className="text-sm">
-                Priority support for neurodivergent learners
-              </span>
+              <span className="text-sm">AI Flashcard Generator</span>
             </div>
           </div>
         </div>

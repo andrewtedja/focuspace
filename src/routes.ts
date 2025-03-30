@@ -12,7 +12,7 @@ export const publicRoutes = ["/"];
  * @type {string[]}
  */
 
-export const protectedRoutes = ["/room", "/profile", "/settings"];
+export const protectedRoutes = ["/room", "/profile", "/settings, /dashboard"];
 
 /**
  * An array of routes that are used for authentication

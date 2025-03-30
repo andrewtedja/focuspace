@@ -105,7 +105,8 @@ const LandingPage = () => {
                     },
                   )}
                 >
-                  <div className="absolute inset-0 z-20 bg-gradient-to-t from-[#2D3748]/60 to-transparent opacity-70"></div>
+                  s
+                  <div className="absolute inset-0 z-20 bg-gradient-to-t from-[#000000]/100 to-transparent opacity-100"></div>
                   <Image
                     src={space.imagePath}
                     alt={space.name}
