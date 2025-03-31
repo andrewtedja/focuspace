@@ -16,19 +16,38 @@ interface PomodoroTimerProps {
 }
 
 const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onClose }) => {
-  const [time, setTime] = useState(25 * 60);
-  const [isRunning, setIsRunning] = useState(false);
+  const [time, setTime] = useState(() => {
+    const savedTime = localStorage.getItem("pomodoroTime"); //lovcalstorage
+    return savedTime ? parseInt(savedTime, 10) : 25 * 60;
+  });
+  const [isRunning, setIsRunning] = useState(() => {
+    // Load the running state from localStorage
+    const savedRunningState = localStorage.getItem("pomodoroIsRunning");
+    return savedRunningState === "true";
+  });
   const [isEditing, setIsEditing] = useState(false);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(25);
   const [seconds, setSeconds] = useState(0);
   const [size, setSize] = useState({ width: 450, height: 400 });
+  const [lastUpdateTime, setLastUpdateTime] = useState(() => {
+    const savedLastUpdateTime = localStorage.getItem("pomodoroLastUpdateTime");
+    return savedLastUpdateTime ? parseInt(savedLastUpdateTime, 10) : null;
+  });
 
   useEffect(() => {
     setHours(Math.floor(time / 3600));
     setMinutes(Math.floor((time % 3600) / 60));
     setSeconds(time % 60);
   }, [time]);
+
+  useEffect(() => {
+    if (isRunning && lastUpdateTime) {
+      const now = Math.floor(Date.now() / 1000);
+      const elapsed = now - lastUpdateTime;
+      setTime((prevTime) => Math.max(prevTime - elapsed, 0));
+    }
+  }, [isRunning, lastUpdateTime]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -46,8 +65,20 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onClose }) => {
     };
   }, [isRunning, time]);
 
+  useEffect(() => {
+    // Save time and running state to localStorage whenever they change
+    localStorage.setItem("pomodoroTime", time.toString());
+    localStorage.setItem("pomodoroIsRunning", isRunning.toString());
+    if (isRunning) {
+      localStorage.setItem("pomodoroLastUpdateTime", Math.floor(Date.now() / 1000).toString());
+    } else {
+      localStorage.removeItem("pomodoroLastUpdateTime");
+    }
+  }, [time, isRunning]);
+
   const handleStart = () => {
     setIsRunning(true);
+    setLastUpdateTime(Math.floor(Date.now() / 1000));
   };
 
   const handlePause = () => {
@@ -57,6 +88,7 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onClose }) => {
   const handleReset = () => {
     setIsRunning(false);
     setTime(25 * 60);
+    localStorage.removeItem("pomodoroLastUpdateTime");
   };
 
   const handleTimeClick = () => {
@@ -75,7 +107,7 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onClose }) => {
 
   return (
         <Card 
-        className="text-white border-none w-200" 
+        className="text-white border-none w-200 rounded-lg" 
         style={{ backgroundColor: '#1e3a8a'}}
         >
             <CardHeader className="relative">
@@ -151,7 +183,7 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onClose }) => {
                     </Button>
                     <Button 
                     onClick={handleReset}
-                    className="bg-blue-800 hover:bg-blue-700 text-white px-8 py-6 rounded-full"
+                    className="bg-blue-800 hover:bg-blue-700 text-white px-12 py-6 rounded-full text-xl"
                     >
                     Reset
                     </Button>
@@ -166,7 +198,7 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({ onClose }) => {
                     </Button>
                     <Button 
                     onClick={handleReset}
-                    className="bg-blue-800 hover:bg-blue-700 text-white px-8 py-6 rounded-full"
+                    className="bg-blue-800 hover:bg-blue-700 text-white px-12 py-6 rounded-full text-xl"
                     >
                     Reset
                     </Button>

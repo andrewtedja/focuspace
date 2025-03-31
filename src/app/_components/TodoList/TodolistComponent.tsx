@@ -28,27 +28,27 @@ const TodolistComponent = () => {
       minHeight={300}
       bounds="window"
     >
-    <div className="max-w-md mx-auto">
-      <Card className="rounded-lg overflow-hidden">
-        <Tabs defaultValue="timer" className="w-full">
-          <TabsList 
-            className="grid w-full grid-cols-2 h-14"
-            style={{ backgroundColor: "#D4D770" }}
-          >
-            <TabsTrigger value="timer" className="text-base font-medium">Timer</TabsTrigger>
-            <TabsTrigger value="todo" className="text-base font-medium">To-do List</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="timer" className="p-0 m-0">
-            <TimerPomodoro show={true} onClose={() => {}} />
-          </TabsContent>
-          
-          <TabsContent value="todo" className="p-0 m-0">
-            <TodoList show={true} onClose={() => {}} />
-          </TabsContent>
-        </Tabs>
-      </Card>
-    </div>
+      <div className="max-w-md mx-auto">
+        <Card className="rounded-lg overflow-hidden">
+          <Tabs defaultValue="timer" className="w-full">
+            <TabsList 
+              className="grid w-full grid-cols-2 h-14"
+              style={{ backgroundColor: "#D4D770" }}
+            >
+              <TabsTrigger value="timer" className="text-base font-medium">Timer</TabsTrigger>
+              <TabsTrigger value="todo" className="text-base font-medium">To-do List</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="timer" className="p-0 m-0">
+              <TimerPomodoro show={true} onClose={() => {}} />
+            </TabsContent>
+            
+            <TabsContent value="todo" className="p-0 m-0">
+              <TodoList show={true} onClose={() => {}} />
+            </TabsContent>
+          </Tabs>
+        </Card>
+      </div>
     </Rnd>
   );
 };
