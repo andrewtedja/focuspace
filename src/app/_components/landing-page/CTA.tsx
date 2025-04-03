@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import React from "react";
+import CoolButton from "./CoolButton";
 
 const CTA = () => {
   return (
@@ -15,16 +16,8 @@ const CTA = () => {
           Join thousands of neurodivergent learners who have found their perfect
           focus environment.
         </p>
-        <div className="flex flex-row justify-center space-x-4 space-y-0">
-          <button className="group flex items-center justify-center rounded-full bg-[#86B3D1] px-24 py-8 text-5xl font-semibold text-white transition-all hover:bg-[#8fbecb] hover:shadow-lg hover:shadow-[#86B3D1]/30 active:bg-[#86B3D1]">
-            <span className="transition-transform group-hover:-translate-x-2">
-              Get Started
-            </span>
-            <ChevronRight
-              size={42}
-              className="ml-3 transition-transform group-hover:translate-x-2"
-            />
-          </button>
+        <div className="flex flex-col justify-center space-x-4 space-y-0">
+          <CoolButton />
         </div>
       </div>
     </section>
