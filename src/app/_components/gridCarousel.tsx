@@ -20,6 +20,7 @@ import "gridstack/dist/gridstack-extra.css";
 import "gridstack/dist/gridstack.css";
 import "~/styles/demo.css";
 import WidgetToolkit from "./WidgetToolkit";
+import { CarouselPagination } from "./CarouselPagination";
 
 export default function GridCarouselLayout() {
   const {
@@ -35,10 +36,12 @@ export default function GridCarouselLayout() {
   const [addingPage, setAddingPage] = useState(false);
   const [removingPage, setRemovingPage] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
     if (!carouselApi) return;
     const handleSelect = () => {
+      setSelectedIndex(carouselApi.selectedScrollSnap());
       const newIndex = carouselApi.selectedScrollSnap();
       if (newIndex >= 0 && newIndex < pages.length) {
         const pageAtIndex = pages[newIndex];
@@ -94,6 +97,7 @@ export default function GridCarouselLayout() {
       <WidgetToolkit
         setAddingPage={setAddingPage}
         setRemovingPage={setRemovingPage}
+        disabled={disabled}
       ></WidgetToolkit>
 
       <Carousel setApi={setCarouselApi} className="h-full w-full">
@@ -119,6 +123,12 @@ export default function GridCarouselLayout() {
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
+
+        <CarouselPagination
+          pageCount={pages.length}
+          selectedIndex={selectedIndex}
+          onSelectPage={(index) => carouselApi?.scrollTo(index)}
+        ></CarouselPagination>
       </Carousel>
     </div>
   );
