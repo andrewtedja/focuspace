@@ -3,6 +3,7 @@
 import { Button } from "~/components/ui/button";
 import { useWidgetManager } from "~/lib/widget-manager-context";
 import { COMPONENT_MAP } from "~/lib/component-map";
+import { toast } from "sonner";
 
 interface AddWidgetButtonProps {
   label?: string;
@@ -26,7 +27,7 @@ export default function AddWidgetButton({
   const { addWidgetToPage } = useWidgetManager();
 
   const handleClick = () => {
-    addWidgetToPage(page, (newId) => ({
+    const transfer = addWidgetToPage(page, widgetName, (newId) => ({
       id: newId,
       x,
       y,
@@ -34,6 +35,14 @@ export default function AddWidgetButton({
       h,
       content: widgetName,
     }));
+    if (transfer) {
+      toast("This widget already exists on another page.", {
+        action: {
+          label: "Move it here",
+          onClick: transfer,
+        },
+      });
+    }
   };
 
   return <Button onClick={handleClick}>{label}</Button>;

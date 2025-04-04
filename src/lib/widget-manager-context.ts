@@ -13,13 +13,20 @@ interface WidgetManagerContextValue {
   pages: PageData[];
   currentPageId: number;
   setCurrentPageId: (id: number) => void;
-  addWidgetToPage: (
-    pageId: number,
-    fn: (id: string) => Omit<GridStackWidget, "id">,
-  ) => void;
   addPage: () => void;
   removePage: (id: number) => void;
-  registerGridStack: (pageId: number, grid: GridStack | null) => void; // ✅ ADD THIS
+  addWidgetToPage: (
+    pageId: number,
+    widgetName: string,
+    fn: (id: string) => Omit<GridStackWidget, "id">,
+  ) => void | (() => void);
+  registerGridStack: (pageId: number, grid: GridStack | null) => void;
+  transferWidgetToPage: (
+    widgetName: string,
+    fromPageId: number,
+    toPageId: number,
+    fn: (id: string) => Omit<GridStackWidget, "id">,
+  ) => void;
 }
 
 export const WidgetManagerContext =

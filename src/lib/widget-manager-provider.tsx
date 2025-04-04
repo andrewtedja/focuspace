@@ -54,6 +54,10 @@ export function WidgetManagerProvider({ children }: { children: ReactNode }) {
     0: null,
   });
 
+  const [activeWidgets, setActiveWidgets] = useState<Record<string, number>>(
+    {},
+  );
+
   const addPage = useCallback(() => {
     let localNewId = -1;
 
@@ -90,10 +94,21 @@ export function WidgetManagerProvider({ children }: { children: ReactNode }) {
 
       return newPages;
     });
+
     setPageStacks((prevStacks) => {
       const newStacks = { ...prevStacks };
       delete newStacks[id];
       return newStacks;
+    });
+
+    setActiveWidgets((prev) => {
+      const updated: typeof prev = {};
+      for (const [widgetName, pageId] of Object.entries(prev)) {
+        if (pageId !== id) {
+          updated[widgetName] = pageId;
+        }
+      }
+      return updated;
     });
   }, []);
 
@@ -107,8 +122,47 @@ export function WidgetManagerProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const transferWidgetToPage = useCallback(
+    (
+      widgetName: string,
+      fromPageId: number,
+      toPageId: number,
+      fn: (id: string) => Omit<GridStackWidget, "id">,
+    ) => {
+      const fromStack = pageStacks[fromPageId];
+      const toStack = pageStacks[toPageId];
+      if (!fromStack || !toStack) return;
+
+      const node = fromStack.engine.nodes.find((n) => n.content === widgetName);
+      if (node?.el) {
+        fromStack.removeWidget(node.el);
+      }
+      const newId = `widget-${Math.random().toString(36).substring(2, 15)}`;
+      const partialWidget = fn(newId);
+      toStack.addWidget({ ...partialWidget, id: newId, content: widgetName });
+      setActiveWidgets((prev) => ({ ...prev, [widgetName]: toPageId }));
+    },
+    [pageStacks],
+  );
+
   const addWidgetToPage = useCallback(
-    (pageId: number, fn: (id: string) => Omit<GridStackWidget, "id">) => {
+    (
+      pageId: number,
+      widgetName: string,
+      fn: (id: string) => Omit<GridStackWidget, "id">,
+    ): (() => void) | void => {
+      const existingPageId = activeWidgets[widgetName];
+
+      if (existingPageId !== undefined) {
+        if (existingPageId === pageId) {
+          console.log(
+            `[WidgetManager] Widget "${widgetName}" already exists on page ${pageId}.`,
+          );
+          return;
+        }
+        return () =>
+          transferWidgetToPage(widgetName, existingPageId, pageId, fn);
+      }
       const stack = pageStacks[pageId];
       if (!stack) {
         console.warn("No gridStack found for page:", pageId);
@@ -116,10 +170,10 @@ export function WidgetManagerProvider({ children }: { children: ReactNode }) {
       }
       const newId = `widget-${Math.random().toString(36).substring(2, 15)}`;
       const partialWidget = fn(newId);
-
-      stack.addWidget({ ...partialWidget, id: newId });
+      stack.addWidget({ ...partialWidget, id: newId, content: widgetName });
+      setActiveWidgets((prev) => ({ ...prev, [widgetName]: pageId }));
     },
-    [pageStacks],
+    [pageStacks, activeWidgets],
   );
 
   return (
@@ -132,6 +186,7 @@ export function WidgetManagerProvider({ children }: { children: ReactNode }) {
         removePage,
         addWidgetToPage,
         registerGridStack,
+        transferWidgetToPage,
       }}
     >
       {children}
