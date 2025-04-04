@@ -32,10 +32,11 @@ export default function GridCarouselLayout() {
 
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
   const [addingPage, setAddingPage] = useState(false);
+  const [removingPage, setRemovingPage] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     if (!carouselApi) return;
-
     const handleSelect = () => {
       const newIndex = carouselApi.selectedScrollSnap();
       if (newIndex >= 0 && newIndex < pages.length) {
@@ -45,22 +46,33 @@ export default function GridCarouselLayout() {
       }
       console.log("Carousel selected index:", newIndex);
     };
-
     carouselApi.on("select", handleSelect);
-
     if (addingPage) {
       addPage();
       setAddingPage(false);
       setTimeout(() => {
         carouselApi.scrollTo(pages.length, false);
       }, 0);
+    } else if (removingPage) {
+      const currentIndex = pages.findIndex((p) => p.id === currentPageId);
+      let targetIndex = currentIndex === 0 ? 1 : currentIndex - 1;
+      const onScrollFinish = () => {
+        const pageAtIndex = pages[targetIndex];
+        if (!pageAtIndex) return;
+        removePage(currentPageId);
+        if (targetIndex === 1 && currentIndex === 0) {
+          carouselApi.scrollTo(0, true);
+          targetIndex = 0;
+        }
+        setDisabled(false);
+      };
+      setDisabled(true);
+      carouselApi.scrollTo(targetIndex, false);
+      setTimeout(() => {
+        onScrollFinish();
+      }, 1000);
+      setRemovingPage(false);
     }
-
-    const indexOfCurrent = pages.findIndex((p) => p.id === currentPageId);
-    if (indexOfCurrent >= 0) {
-      carouselApi.scrollTo(indexOfCurrent, false);
-    }
-
     return () => {
       carouselApi.off("select", handleSelect);
     };
@@ -72,6 +84,8 @@ export default function GridCarouselLayout() {
     setAddingPage,
     currentPageId,
     setCurrentPageId,
+    removingPage,
+    setRemovingPage,
   ]);
 
   return (
@@ -107,8 +121,8 @@ export default function GridCarouselLayout() {
               />
               <Button
                 variant="destructive"
-                disabled={pages.length <= 1}
-                onClick={() => removePage(page.id)}
+                disabled={pages.length <= 1 || disabled}
+                onClick={() => setRemovingPage(true)}
               >
                 🗑️ Remove Slide {page.title ?? page.id}
               </Button>

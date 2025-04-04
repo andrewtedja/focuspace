@@ -79,20 +79,23 @@ export function WidgetManagerProvider({ children }: { children: ReactNode }) {
     }));
   }, []);
 
-  const removePage = useCallback(
-    (id: number) => {
-      setPages((prev) => prev.filter((p) => p.id !== id));
-      setPageStacks((prev) => {
-        const newStacks = { ...prev };
-        delete newStacks[id];
-        return newStacks;
-      });
-      if (id === currentPageId) {
-        setCurrentPageId(0);
+  const removePage = useCallback((id: number) => {
+    setPages((prevPages) => {
+      const index = prevPages.findIndex((p) => p.id === id);
+      const newPages = prevPages.filter((p) => p.id !== id);
+      const fallbackPage = index === 0 ? newPages[0] : newPages[index - 1];
+      if (fallbackPage) {
+        setCurrentPageId(fallbackPage.id);
       }
-    },
-    [currentPageId],
-  );
+
+      return newPages;
+    });
+    setPageStacks((prevStacks) => {
+      const newStacks = { ...prevStacks };
+      delete newStacks[id];
+      return newStacks;
+    });
+  }, []);
 
   const registerGridStack = useCallback(
     (pageId: number, grid: GridStack | null) => {
