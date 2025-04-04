@@ -1,14 +1,32 @@
+"use client";
 import type { GridStack, GridStackOptions, GridStackWidget } from "gridstack";
-import { type PropsWithChildren, useCallback, useState } from "react";
+import React, {
+  type PropsWithChildren,
+  useCallback,
+  useRef,
+  useState,
+  useLayoutEffect,
+} from "react";
 import { GridStackContext } from "./grid-stack-context";
+import { GridStack as GridStackLib } from "gridstack";
+
+interface GridStackProviderProps extends PropsWithChildren {
+  pageId: number;
+  initialOptions: GridStackOptions;
+  onGridStackReady?: (gs: GridStack) => void;
+}
 
 export function GridStackProvider({
   children,
+  pageId,
   initialOptions,
-}: PropsWithChildren<{ initialOptions: GridStackOptions }>) {
+  onGridStackReady,
+}: GridStackProviderProps) {
   const [gridStack, setGridStack] = useState<GridStack | null>(null);
+
   const [rawWidgetMetaMap, setRawWidgetMetaMap] = useState(() => {
     const map = new Map<string, GridStackWidget>();
+
     const deepFindNodeWithContent = (obj: GridStackWidget) => {
       if (obj.id && obj.content) {
         map.set(obj.id, obj);
@@ -25,11 +43,29 @@ export function GridStackProvider({
     return map;
   });
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!gridStack && containerRef.current) {
+      const gs = GridStackLib.init(initialOptions, containerRef.current);
+
+      setGridStack(gs);
+      onGridStackReady?.(gs);
+    }
+  }, [gridStack, initialOptions, onGridStackReady]);
+
+  const genRandomId = () =>
+    `widget-${Math.random().toString(36).substring(2, 15)}`;
+
   const addWidget = useCallback(
     (fn: (id: string) => Omit<GridStackWidget, "id">) => {
-      const newId = `widget-${Math.random().toString(36).substring(2, 15)}`;
+      const newId = genRandomId();
       const widget = fn(newId);
-      gridStack?.addWidget({ ...widget, id: newId });
+
+      if (gridStack) {
+        gridStack.addWidget({ ...widget, id: newId });
+      }
+
       setRawWidgetMetaMap((prev) => {
         const newMap = new Map<string, GridStackWidget>(prev);
         newMap.set(newId, widget);
@@ -46,18 +82,18 @@ export function GridStackProvider({
         withWidget: (w: Omit<GridStackWidget, "id">) => GridStackWidget,
       ) => Omit<GridStackWidget, "id">,
     ) => {
-      const newId = `sub-grid-${Math.random().toString(36).substring(2, 15)}`;
+      const subGridId = `sub-grid-${Math.random().toString(36).substring(2, 15)}`;
       const subWidgetIdMap = new Map<string, GridStackWidget>();
 
-      const widget = fn(newId, (w) => {
-        const subWidgetId = `widget-${Math.random()
-          .toString(36)
-          .substring(2, 15)}`;
-        subWidgetIdMap.set(subWidgetId, w);
-        return { ...w, id: subWidgetId };
+      const widget = fn(subGridId, (w) => {
+        const subId = genRandomId();
+        subWidgetIdMap.set(subId, w);
+        return { ...w, id: subId };
       });
 
-      gridStack?.addWidget({ ...widget, id: newId });
+      if (gridStack) {
+        gridStack.addWidget({ ...widget, id: subGridId });
+      }
 
       setRawWidgetMetaMap((prev) => {
         const newMap = new Map<string, GridStackWidget>(prev);
@@ -70,9 +106,12 @@ export function GridStackProvider({
     [gridStack],
   );
 
+  /** Removes a widget by ID. */
   const removeWidget = useCallback(
     (id: string) => {
-      gridStack?.removeWidget(id);
+      if (gridStack) {
+        gridStack.removeWidget(id);
+      }
       setRawWidgetMetaMap((prev) => {
         const newMap = new Map<string, GridStackWidget>(prev);
         newMap.delete(id);
@@ -91,12 +130,10 @@ export function GridStackProvider({
       value={{
         initialOptions,
         gridStack,
-
         addWidget,
         removeWidget,
         addSubGrid,
         saveOptions,
-
         _gridStack: {
           value: gridStack,
           set: setGridStack,
@@ -107,7 +144,9 @@ export function GridStackProvider({
         },
       }}
     >
-      {children}
+      <div ref={containerRef} style={{ width: "100%", height: "100%" }}>
+        {children}
+      </div>
     </GridStackContext.Provider>
   );
 }

@@ -19,86 +19,108 @@ import { Button } from "~/components/ui/button";
 import "gridstack/dist/gridstack-extra.css";
 import "gridstack/dist/gridstack.css";
 import "~/styles/demo.css";
-import { baseGridOptions } from "~/lib/widget-manager-provider";
 
 export default function GridCarouselLayout() {
-  const { pages, setCurrentPage, addPage, removePage } = useWidgetManager();
+  const {
+    pages,
+    currentPageId,
+    setCurrentPageId,
+    addPage,
+    removePage,
+    registerGridStack,
+  } = useWidgetManager();
+
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
+  const [addingPage, setAddingPage] = useState(false);
 
   useEffect(() => {
-    if (!carouselApi) return () => undefined;
+    if (!carouselApi) return;
 
-    const onSelect = () => {
+    const handleSelect = () => {
       const newIndex = carouselApi.selectedScrollSnap();
-      const pageKeys = Object.keys(pages).map(Number);
-      const pageAtIndex = pageKeys[newIndex];
-      if (pageAtIndex !== undefined) {
-        setCurrentPage(pageAtIndex);
+      if (newIndex >= 0 && newIndex < pages.length) {
+        const pageAtIndex = pages[newIndex];
+        if (!pageAtIndex) return;
+        setCurrentPageId(pageAtIndex.id);
       }
+      console.log("Carousel selected index:", newIndex);
     };
 
-    onSelect();
-    carouselApi.on("select", onSelect);
+    carouselApi.on("select", handleSelect);
+
+    if (addingPage) {
+      addPage();
+      setAddingPage(false);
+      setTimeout(() => {
+        carouselApi.scrollTo(pages.length, false);
+      }, 0);
+    }
+
+    const indexOfCurrent = pages.findIndex((p) => p.id === currentPageId);
+    if (indexOfCurrent >= 0) {
+      carouselApi.scrollTo(indexOfCurrent, false);
+    }
 
     return () => {
-      carouselApi.off("select", onSelect);
+      carouselApi.off("select", handleSelect);
     };
-  }, [carouselApi, pages, setCurrentPage]);
-  const handleAddSlide = () => {
-    const newPageIndex = Math.max(...Object.keys(pages).map(Number), 0) + 1;
-    addPage(newPageIndex);
-    setCurrentPage(newPageIndex);
-  };
+  }, [
+    carouselApi,
+    pages,
+    addingPage,
+    addPage,
+    setAddingPage,
+    currentPageId,
+    setCurrentPageId,
+  ]);
 
   return (
-    <div className="h-[600px] w-full">
+    <div className="h-screen w-full">
       <div className="mb-2 flex justify-between">
-        <Button onClick={handleAddSlide}>➕ Add Slide</Button>
+        <Button onClick={() => setAddingPage(true)}>➕ Add Slide</Button>
       </div>
+
       <Carousel setApi={setCarouselApi} className="h-full w-full">
         <CarouselContent>
-          {Object.entries(pages).map(([pageKey, widgets]) => (
-            <CarouselItem key={pageKey}>
+          {pages.map((page) => (
+            <CarouselItem key={page.id}>
+              <AddWidgetButton
+                label="Add Text"
+                widgetName="Text"
+                w={3}
+                h={3}
+                page={page.id}
+              />
+              <AddWidgetButton
+                label="Add Text 1"
+                widgetName="Text1"
+                w={2}
+                h={2}
+                page={page.id}
+              />
+              <AddWidgetButton
+                label="Add Text 2"
+                widgetName="Text2"
+                w={1}
+                h={1}
+                page={page.id}
+              />
+              <Button
+                variant="destructive"
+                disabled={pages.length <= 1}
+                onClick={() => removePage(page.id)}
+              >
+                🗑️ Remove Slide {page.title ?? page.id}
+              </Button>
               <GridStackProvider
-                initialOptions={{ ...baseGridOptions, children: widgets }}
+                key={page.id}
+                pageId={page.id}
+                initialOptions={page.initialOptions}
+                onGridStackReady={(gs) => registerGridStack(page.id, gs)}
               >
                 <GridStackRenderProvider>
                   <div className="flex flex-col gap-2">
-                    <div className="flex gap-2">
-                      <AddWidgetButton
-                        label="Add Text"
-                        widgetName="Text"
-                        widgetProps={{ content: "Text!" }}
-                        w={3}
-                        h={2}
-                        page={parseInt(pageKey)}
-                      />
-                      <AddWidgetButton
-                        label="Add Text 1"
-                        widgetName="Text1"
-                        widgetProps={{ content: "Text 1!" }}
-                        w={3}
-                        h={2}
-                        page={parseInt(pageKey)}
-                      />
-                      <AddWidgetButton
-                        label="Add Text 2"
-                        widgetName="Text2"
-                        widgetProps={{ content: "Text 2!" }}
-                        w={3}
-                        h={2}
-                        page={parseInt(pageKey)}
-                      />
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        disabled={Object.keys(pages).length <= 1}
-                        onClick={() => removePage(parseInt(pageKey))}
-                      >
-                        🗑️ Remove Slide {parseInt(pageKey) + 1}
-                      </Button>
-                    </div>
-                    <div className="grid-stack min-h-[600px]">
+                    <div className="grid-stack">
                       <GridStackRender componentMap={COMPONENT_MAP} />
                     </div>
                   </div>

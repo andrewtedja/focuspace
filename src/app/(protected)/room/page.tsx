@@ -15,7 +15,7 @@ const Page = () => {
 
   return (
     <ProtectedRoute>
-      <div className="px-10 pt-6">
+      <div className="">
         <span className="break-words">
           session store: {JSON.stringify(user)}
         </span>

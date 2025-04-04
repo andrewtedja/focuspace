@@ -2,42 +2,37 @@
 
 import { Button } from "~/components/ui/button";
 import { useWidgetManager } from "~/lib/widget-manager-context";
-import { useGridStackContext } from "~/lib/grid-stack-context";
+import { COMPONENT_MAP } from "~/lib/component-map";
 
 interface AddWidgetButtonProps {
   label?: string;
-  widgetName: string;
-  widgetProps?: Record<string, any>;
+  widgetName: keyof typeof COMPONENT_MAP;
   w?: number;
   h?: number;
   x?: number;
   y?: number;
-  page?: number;
+  page: number;
 }
 
 export default function AddWidgetButton({
   label = "Add Widget",
   widgetName,
-  widgetProps = {},
+  page,
   w = 2,
   h = 2,
   x = 0,
   y = 0,
-  page,
 }: AddWidgetButtonProps) {
-  const { addWidgetToPage, currentPage } = useWidgetManager();
-  const { addWidget } = useGridStackContext();
+  const { addWidgetToPage } = useWidgetManager();
 
   const handleClick = () => {
-    addWidget(() => ({
-      w,
-      h,
+    addWidgetToPage(page, (newId) => ({
+      id: newId,
       x,
       y,
-      content: JSON.stringify({
-        name: widgetName,
-        props: widgetProps,
-      }),
+      w,
+      h,
+      content: widgetName,
     }));
   };
 

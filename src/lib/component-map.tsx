@@ -5,4 +5,4 @@ export const COMPONENT_MAP = {
   Text: (props: any) => <Text {...props} />,
   Text1: (props: any) => <Text1 {...props} />,
   Text2: (props: any) => <Text2 {...props} />,
-};
+} as const;

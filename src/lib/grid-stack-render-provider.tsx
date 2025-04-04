@@ -9,6 +9,8 @@ import { useGridStackContext } from "./grid-stack-context";
 import { GridStack, GridStackOptions, GridStackWidget } from "gridstack";
 import { GridStackRenderContext } from "./grid-stack-render-context";
 import isEqual from "react-fast-compare";
+import ReactDOM from "react-dom/client";
+import { COMPONENT_MAP } from "./component-map";
 
 export function GridStackRenderProvider({ children }: PropsWithChildren) {
   const {
@@ -20,10 +22,40 @@ export function GridStackRenderProvider({ children }: PropsWithChildren) {
   const containerRef = useRef<HTMLDivElement>(null);
   const optionsRef = useRef<GridStackOptions>(initialOptions);
 
+  const logAllNodes = useCallback((gs: GridStack | null, label: string) => {
+    if (!gs) return;
+    console.log(
+      `==== ${label}: enumerating ${gs.engine.nodes.length} node(s) ====`,
+    );
+    gs.engine.nodes.forEach((node) => {
+      console.log(
+        "Node ID:",
+        node.id,
+        "| w:",
+        node.w,
+        "| h:",
+        node.h,
+        "| content:",
+        node.content,
+      );
+    });
+  }, []);
+
   const renderCBFn = useCallback(
     (element: HTMLElement, widget: GridStackWidget) => {
-      if (widget.id) {
+      if (widget.id && typeof widget.content === "string") {
+        // console.log("Widget added to DOM:", widget.id, widget.content);
         widgetContainersRef.current.set(widget.id, element);
+
+        const Component =
+          COMPONENT_MAP[widget.content as keyof typeof COMPONENT_MAP];
+
+        if (Component) {
+          const root = ReactDOM.createRoot(element);
+          root.render(<Component />);
+        } else {
+          console.warn("Unknown component:", widget.content);
+        }
       }
     },
     [],
@@ -32,41 +64,48 @@ export function GridStackRenderProvider({ children }: PropsWithChildren) {
   const initGrid = useCallback(() => {
     if (containerRef.current) {
       GridStack.renderCB = renderCBFn;
-      return GridStack.init(optionsRef.current, containerRef.current);
-      // ! Change event not firing on nested grids (resize, move...) https://github.com/gridstack/gridstack.js/issues/2671
-      // .on("change", () => {
-      //   console.log("changed");
-      // })
-      // .on("resize", () => {
-      //   console.log("resize");
-      // })
+      const gs = GridStack.init(optionsRef.current, containerRef.current);
+      // logAllNodes(gs, "After initGrid");
+      return gs;
     }
     return null;
-  }, [renderCBFn]);
+  }, [renderCBFn, logAllNodes]);
 
   useLayoutEffect(() => {
     if (!isEqual(initialOptions, optionsRef.current) && gridStack) {
       try {
+        // console.log("Reinitializing grid. Possibly removing all nodes");
         gridStack.removeAll(false);
         gridStack.destroy(false);
         widgetContainersRef.current.clear();
         optionsRef.current = initialOptions;
-        setGridStack(initGrid());
+
+        const newGs = initGrid();
+        setGridStack(newGs);
+
+        // setTimeout(() => {
+        //   logAllNodes(newGs, "After re-init");
+        // }, 0);
       } catch (e) {
         console.error("Error reinitializing gridstack", e);
       }
     }
-  }, [initialOptions, gridStack, initGrid, setGridStack]);
+  }, [initialOptions, gridStack, initGrid, setGridStack, logAllNodes]);
 
   useLayoutEffect(() => {
     if (!gridStack) {
       try {
-        setGridStack(initGrid());
+        const newGs = initGrid();
+        setGridStack(newGs);
+
+        // setTimeout(() => {
+        //   logAllNodes(newGs, "After first init (mount)");
+        // }, 0);
       } catch (e) {
         console.error("Error initializing gridstack", e);
       }
     }
-  }, [gridStack, initGrid, setGridStack]);
+  }, [gridStack, initGrid, setGridStack, logAllNodes]);
 
   return (
     <GridStackRenderContext.Provider
@@ -76,8 +115,6 @@ export function GridStackRenderProvider({ children }: PropsWithChildren) {
             return widgetContainersRef.current.get(widgetId) || null;
           },
         }),
-        // ! gridStack is required to reinitialize the grid when the options change
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [gridStack],
       )}
     >
