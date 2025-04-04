@@ -133,10 +133,12 @@ export function WidgetManagerProvider({ children }: { children: ReactNode }) {
       const toStack = pageStacks[toPageId];
       if (!fromStack || !toStack) return;
 
-      const node = fromStack.engine.nodes.find((n) => n.content === widgetName);
-      if (node?.el) {
-        fromStack.removeWidget(node.el);
-      }
+      fromStack.engine.nodes.forEach((node) => {
+        if (node.content === widgetName && node.el) {
+          fromStack.removeWidget(node.el);
+        }
+      });
+
       const newId = `widget-${Math.random().toString(36).substring(2, 15)}`;
       const partialWidget = fn(newId);
       toStack.addWidget({ ...partialWidget, id: newId, content: widgetName });
