@@ -34,25 +34,25 @@ const UserNavbar = () => {
             onClick={() => router.push("/")}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
-            Home
+            Dashboard
           </a>
           <a
             onClick={() => router.push("/")}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
-            Rooms
+            My Space
           </a>
           <a
             onClick={() => router.push("/")}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
-            AI Flashcard
+            AI Buddy
           </a>
           <a
             onClick={() => router.push("/")}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
-            Community
+            Discover
           </a>
           <a
             onClick={() => router.push("/")}
