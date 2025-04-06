@@ -108,24 +108,24 @@
   border-radius: 10px;
   background: linear-gradient(
     45deg,
-    #0f172a,
-    #0f172a,
-    #0f172a,
-    #69a8a8,
-    #69a8a8,
-    #69a8a8,
-    #0f172a,
-    #0f172a
+    #020202,
+    #83f2f4,
+    #020202,
+    #83f2f4,
+    #83f2f4,
+    #020202,
+    #83f2f4,
+    #020202
   );
   background-size: 400%;
   width: calc(100% + 4px);
   height: calc(100% + 4px);
   z-index: -1;
-  animation: steam 15s linear infinite;
+  animation: steam 20s linear infinite;
 }
 
 .animated-border:hover::after {
-  filter: blur(20px);
+  filter: blur(10px);
 }
 
 @keyframes steam {
