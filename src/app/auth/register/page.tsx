@@ -13,25 +13,7 @@ const page = () => {
   return (
     <div className="flex h-screen w-screen">
       <div className="relative flex w-full items-center justify-center bg-gradient-to-br from-[#86B3D1] to-[#5aa182] p-8 md:w-1/2">
-        <div className="absolute left-0 top-0 h-full w-full overflow-hidden">
-          <div className="absolute left-[10%] top-[15%] h-24 w-24 rounded-full border border-white/20 bg-white/10 backdrop-blur-md"></div>
-          <div className="absolute bottom-[20%] right-[15%] h-24 w-24 rounded-full border border-white/20 bg-white/10 backdrop-blur-md"></div>
-          <div className="absolute right-[20%] top-[40%] h-24 w-24 rounded-full border border-white/20 bg-white/10 backdrop-blur-md"></div>
-          <div className="absolute left-[25%] top-[15%] h-32 w-32 rounded-full border border-white/20 bg-white/10 backdrop-blur-md"></div>
-
-          <div className="absolute right-[30%] top-[25%] text-white/20">
-            <CircleIcon size={48} />
-          </div>
-          <div className="absolute bottom-[15%] left-[20%] text-white/20">
-            <Sparkles size={64} />
-          </div>
-          <div className="absolute bottom-[85%] left-[80%] text-white/20 opacity-50">
-            <Sparkles size={64} />
-          </div>
-          <div className="absolute left-[15%] top-[60%] text-white/20">
-            <SquareIcon size={42} />
-          </div>
-        </div>
+        <div className="absolute left-0 top-0 h-full w-full overflow-hidden"></div>
 
         <div className="relative z-10 max-w-md">
           <h1 className="mb-8 text-6xl font-bold tracking-tight text-white">

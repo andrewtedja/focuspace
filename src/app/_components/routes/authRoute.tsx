@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, PropsWithChildren } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -24,11 +25,7 @@ const AuthRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   }, [session]);
 
   if (session === undefined || session) {
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
+    return <Loading />;
   }
   return <div>{children}</div>;
 };
