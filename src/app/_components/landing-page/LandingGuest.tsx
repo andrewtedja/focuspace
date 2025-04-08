@@ -84,7 +84,7 @@ const LandingPage = () => {
                     className="ml-2 transition-transform group-hover:translate-x-1"
                   />
                 </button>
-                <button className="group relative overflow-hidden rounded-full border border-[#A7BBC7] bg-[#F9FBFD] px-6 py-3 text-[#7B9EA8]">
+                <button className="group relative overflow-hidden rounded-full border border-[#A7BBC7] px-6 py-3 text-[#7B9EA8]">
                   <span className="absolute inset-0 w-0 bg-[#9ebb89] transition-all duration-300 ease-out group-hover:w-full group-active:bg-[#8da779]"></span>
                   <span className="relative transition-colors duration-300 ease-out group-hover:text-[#F9FBFD]">
                     Explore Spaces
