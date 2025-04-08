@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useSessionStore } from "~/stores/useSessionStore";
+import Loading from "../Loading";
 
 const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const router = useRouter();
@@ -17,7 +18,11 @@ const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   }, [status]);
 
   if (status === "loading" || status === "unauthenticated") {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
   return <div>{children}</div>;
 };

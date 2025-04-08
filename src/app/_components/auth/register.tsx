@@ -134,11 +134,11 @@ export function RegisterForm() {
           />
 
           <Button
-            className="w-full"
+            className="w-full bg-[#86B3D1] text-white hover:bg-[#7AA3C1]"
             type="submit"
             disabled={createUser.isPending}
           >
-            Register
+            Sign Up
           </Button>
         </form>
       </Form>

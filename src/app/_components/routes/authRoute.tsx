@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useSessionStore } from "~/stores/useSessionStore";
+import Loading from "../Loading";
 
 const AuthRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const router = useRouter();
@@ -23,7 +24,11 @@ const AuthRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   }, [session]);
 
   if (session === undefined || session) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   }
   return <div>{children}</div>;
 };
