@@ -3,15 +3,16 @@ import { useState, useEffect } from "react";
 import { Search, Plus, ArrowRight, Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
-import Footer from "../footer/Footer";
+import CreateSpaceModal from "./CreateSpaceModal";
 
 const MenuPage = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
-  // database: id, name, desc, backgroundImage, category, isFavorite
+  // ? database: id, name, desc, backgroundImage, category, isFavorite
   const [rooms, setRooms] = useState([
     {
       id: 1,
@@ -55,100 +56,9 @@ const MenuPage = () => {
       backgroundImage: "/images/spaces/placeholder/lofi.jpg",
       isFavorite: false,
     },
-    {
-      id: 7,
-      name: "Focus Space",
-      desc: "Specialized fonts and audio",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 8,
-      name: "Focus Space",
-      desc: "Structured environment",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 9,
-      name: "Focus Space",
-      desc: "Soothing pink noise",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 10,
-      name: "Focus Space",
-      desc: "White noise background",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 11,
-      name: "Focus Space",
-      desc: "Immersive timeline",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 12,
-      name: "Focus Space",
-      desc: "Colorful space with ideas",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 13,
-      name: "Focus Space",
-      desc: "Task-oriented environment",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 14,
-      name: "Focus Space",
-      desc: "Organized space with notes",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 15,
-      name: "Focus Space",
-      desc: "Minimal distractions",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 16,
-      name: "Focus Space",
-      desc: "Collaborative environment",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 17,
-      name: "Focus Space",
-      desc: "Creative environment",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 18,
-      name: "Focus Space",
-      desc: "Curated instrumental playlists",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
-    {
-      id: 19,
-      name: "Focus Space",
-      desc: "Bright environment",
-      backgroundImage: "/images/spaces/placeholder/lofi.jpg",
-      isFavorite: false,
-    },
   ]);
 
-  // Simulate loading
+  // * Simulate loading
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -170,6 +80,27 @@ const MenuPage = () => {
         }
       }),
     );
+  };
+
+  const handleCreateSpace = (newSpace: {
+    name: string;
+    desc: string;
+    backgroundImage: string;
+  }) => {
+    // Generate a new ID (in a real app, this would come from the backend)
+    const newId = Math.max(...rooms.map((room) => room.id)) + 1;
+
+    // Add the new space to the rooms array
+    setRooms((prevRooms) => [
+      ...prevRooms,
+      {
+        id: newId,
+        name: newSpace.name,
+        desc: newSpace.desc,
+        backgroundImage: newSpace.backgroundImage,
+        isFavorite: false,
+      },
+    ]);
   };
 
   const getFilteredRooms = () => {
@@ -212,11 +143,10 @@ const MenuPage = () => {
               For Neurodivergent Minds
             </div>
 
-            {/* Heading with animated text */}
-            <h1 className="mb-2 text-3xl font-bold tracking-tight">
+            <h1 className="mb-2 text-5xl font-bold tracking-tight">
               Your{" "}
               <span className="relative">
-                <span className="relative z-10 bg-gradient-to-r from-[#63B3ED] to-[#48BB78] bg-clip-text text-transparent">
+                <span className="z-5 relative bg-gradient-to-r from-[#63B3ED] to-[#48BB78] bg-clip-text text-transparent">
                   learning
                 </span>
                 <span className="absolute bottom-0 left-0 z-0 h-2 w-full bg-gradient-to-r from-[#63B3ED]/20 to-[#48BB78]/20 blur-sm"></span>
@@ -236,7 +166,7 @@ const MenuPage = () => {
                 <button
                   key={category.id}
                   onClick={() => setActiveFilter(category.id)}
-                  className={`flex items-center rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
+                  className={`flex items-center rounded-full px-4 py-2.5 text-sm font-medium transition-all ${
                     activeFilter === category.id
                       ? "bg-[#86B3D1] text-[#ffffff] hover:bg-[#96bedb]"
                       : "bg-[#1E293B] text-[#CBD5E0]"
@@ -264,6 +194,7 @@ const MenuPage = () => {
               </div>
               <button
                 type="button"
+                onClick={() => setIsModalOpen(true)}
                 className="ml-4 flex min-w-[160px] items-center justify-center rounded-full bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] px-4 py-3 text-sm font-medium text-white shadow-sm transition-all hover:shadow-md"
               >
                 <Plus size={18} className="mr-1.5" />
@@ -273,7 +204,7 @@ const MenuPage = () => {
           </div>
         </div>
 
-        {/* Loading state for rooms */}
+        {/* Loading skeleton */}
         {isLoading ? (
           <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((item) => (
@@ -356,7 +287,10 @@ const MenuPage = () => {
             )}
 
             {filteredRooms.length > 0 && (
-              <div className="group relative mt-2 flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-xl border border-[#CBD5E0] bg-white p-4 backdrop-blur-sm transition-all hover:border-[#4A90E2] hover:shadow-lg hover:shadow-[#4A90E2]/10">
+              <div
+                onClick={() => setIsModalOpen(true)}
+                className="group relative mt-2 flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-xl border border-[#CBD5E0] bg-white p-4 backdrop-blur-sm transition-all hover:border-[#4A90E2] hover:shadow-lg hover:shadow-[#4A90E2]/10"
+              >
                 <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#EBF8FF] transition-colors group-hover:bg-[#BEE3F8]">
                   <Plus size={28} className="text-[#4A90E2]" />
                 </div>
@@ -370,6 +304,13 @@ const MenuPage = () => {
       </main>
 
       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#E0F2FE]/90 to-transparent"></div>
+
+      {/* Create Space Modal */}
+      <CreateSpaceModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onCreateSpace={handleCreateSpace}
+      />
     </div>
   );
 };
