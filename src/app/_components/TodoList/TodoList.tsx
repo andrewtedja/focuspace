@@ -3,12 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Rnd } from "react-rnd";
 import TodoItem from "./TodoItem";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { X } from "lucide-react";
 
@@ -25,9 +20,11 @@ interface TodoListProps {
 
 const TodoList: React.FC<TodoListProps> = ({ show, onClose }) => {
   const [todos, setTodos] = useState<Todo[]>(() => {
-    // Load todos from localStorage on initial render
-    const savedTodos = localStorage.getItem("todos");
-    return savedTodos ? JSON.parse(savedTodos) : [];
+    if (typeof window !== "undefined") {
+      const savedTodos = localStorage.getItem("todos");
+      return savedTodos ? (JSON.parse(savedTodos) as Todo[]) : [];
+    }
+    return [];
   });
   const [newTodo, setNewTodo] = useState("");
   const [size, setSize] = useState({ width: 450, height: 400 });
@@ -56,43 +53,43 @@ const TodoList: React.FC<TodoListProps> = ({ show, onClose }) => {
   const toggleTodoComplete = (id: number) => {
     setTodos(
       todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
+      ),
     );
   };
 
   if (!show) return null;
 
   return (
-    <Card className="bg-blue-900 text-white border-none rounded-lg h-full">
-      <CardHeader className="pb-2 relative">
+    <Card className="h-full rounded-lg border-none bg-blue-900 text-white">
+      <CardHeader className="relative pb-2">
         <Button
           onClick={onClose}
           variant="ghost"
-          className="absolute top-2 right-2 text-yellow-300 hover:text-yellow-500 hover:bg-transparent p-1 h-auto"
+          className="absolute right-2 top-2 h-auto p-1 text-yellow-300 hover:bg-transparent hover:text-yellow-500"
         >
           <X size={18} />
         </Button>
         <CardTitle className="text-xl font-bold">To-do List</CardTitle>
       </CardHeader>
-      <CardContent className="p-4 flex flex-col h-[calc(100%-100px)]">
-        <div className="flex gap-2 mb-4">
+      <CardContent className="flex h-[calc(100%-100px)] flex-col p-4">
+        <div className="mb-4 flex gap-2">
           <input
             type="text"
             value={newTodo}
             onChange={(e) => setNewTodo(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && addTodo()}
+            onKeyPress={(e) => e.key === "Enter" && addTodo()}
             placeholder="Add a new task"
-            className="border rounded px-2 py-1 flex-1 text-black"
+            className="flex-1 rounded border px-2 py-1 text-black"
           />
           <Button
             onClick={addTodo}
-            className="bg-yellow-500 hover:bg-yellow-600 text-black border-0"
+            className="border-0 bg-yellow-500 text-black hover:bg-yellow-600"
           >
             Add
           </Button>
         </div>
-        <ul className="space-y-2 overflow-y-auto flex-1">
+        <ul className="flex-1 space-y-2 overflow-y-auto">
           {todos.map((todo) => (
             <TodoItem
               key={todo.id}
