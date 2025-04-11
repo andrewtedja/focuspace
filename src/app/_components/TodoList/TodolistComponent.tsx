@@ -13,7 +13,7 @@ const TodolistComponent = () => {
   return (
     <Rnd
       size={{ width: size.width, height: size.height }}
-      onResize={(e, direction, ref, delta, position) => {
+      onResize={(e, direction, ref: HTMLElement, delta, position) => {
         setSize({
           width: ref.offsetWidth,
           height: ref.offsetHeight,
@@ -39,11 +39,21 @@ const TodolistComponent = () => {
             </TabsList>
 
             <TabsContent value="timer" className="m-0 p-0">
-              <TimerPomodoro show={true} onClose={() => {}} />
+              <TimerPomodoro
+                show={true}
+                onClose={() => {
+                  // Handle closing the TimerPomodoro component here
+                }}
+              />
             </TabsContent>
 
             <TabsContent value="todo" className="m-0 p-0">
-              <TodoList show={true} onClose={() => {}} />
+              <TodoList
+                show={true}
+                onClose={() => {
+                  // Handle closing the TodoList component here
+                }}
+              />
             </TabsContent>
           </Tabs>
         </Card>

@@ -10,22 +10,46 @@ import {
   Volume2,
   Volume1,
   VolumeX,
+  XIcon,
+  Settings,
 } from "lucide-react";
+import Image from "next/image";
 
 export const MusicPlayer = () => {
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+
   const [volume, setVolume] = useState(0.7);
   const [isMuted, setIsMuted] = useState(false);
+
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
 
+  const [isDragging, setIsDragging] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressBarRef = useRef<HTMLInputElement | null>(null);
   const currentSong = songs[currentSongIndex];
 
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // for searching
+  const [searchQuery, setSearchQuery] = useState("");
+  <input
+    type="text"
+    placeholder="Search songs..."
+    className="w-full rounded-md border border-gray-600 bg-gray-800 p-2 text-white placeholder-gray-400 focus:outline-none"
+    value={searchQuery}
+    onChange={(e) => setSearchQuery(e.target.value)}
+  />;
+
+  const filteredSongs = songs.filter(
+    (song) =>
+      song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      song.artist.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  const [showModal, setShowModal] = useState(false);
   const playPause = async () => {
     if (!audioRef.current) return;
 
@@ -134,27 +158,63 @@ export const MusicPlayer = () => {
     next();
   };
 
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (!modalRef.current?.contains(event.target as Node)) {
+        setShowModal(false);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowModal(false);
+      }
+    };
+
+    if (showModal) {
+      document.addEventListener("click", handleOutsideClick);
+      document.addEventListener("keydown", handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [showModal]);
+
   return (
-    <div className="mx-auto max-w-md rounded-xl bg-gradient-to-b from-gray-800 to-gray-900 p-6 text-white shadow-lg">
+    <div className="relative mx-auto max-w-md rounded-xl bg-gradient-to-b from-gray-800 to-gray-900 p-6 text-white shadow-lg">
       <div className="mb-4 flex items-center justify-between">
+        <div>
+          {currentSong?.cover ? (
+            <Image
+              src={currentSong.cover}
+              alt="Cover"
+              className="mr-4 h-16 w-16 rounded-2xl bg-white object-cover"
+              width={16}
+              height={16}
+            />
+          ) : (
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gray-600 p-2">
+              <span className="text-xs">♪</span>
+            </div>
+          )}
+        </div>
         <div className="flex-1">
+          <div></div>
           <h2 className="truncate text-xl font-bold">{currentSong?.title}</h2>
           <p className="truncate text-sm text-gray-300">
             {currentSong?.artist}
           </p>
         </div>
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-700 p-2 shadow-md">
-          {currentSong?.cover ? (
-            <img
-              src={currentSong.cover}
-              alt="Cover"
-              className="h-full w-full rounded-full object-cover"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center rounded-full bg-gray-600">
-              <span className="text-xs">♪</span>
-            </div>
-          )}
+
+        <div>
+          <button
+            onClick={() => setShowModal(true)}
+            className="absolute right-5 top-5 text-gray-300 hover:text-white"
+          >
+            <Settings size={24} />
+          </button>
         </div>
       </div>
 
@@ -229,6 +289,53 @@ export const MusicPlayer = () => {
       >
         <source src={currentSong?.url} type="audio/mpeg" />
       </audio>
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+          <div className="w-96 rounded-lg bg-gray-800 p-6 text-white shadow-lg">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Select a Sound</h3>
+              <button
+                onClick={() => setShowModal(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                <XIcon size={24} />
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-4">
+              <input
+                type="text"
+                placeholder="Search songs..."
+                className="w-full rounded-md border border-gray-600 bg-gray-700 p-2 text-white placeholder-gray-400 focus:outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+
+              <div className="max-h-64 space-y-2 overflow-y-auto">
+                {filteredSongs.slice(0, 10).map((song, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      if (audioRef.current) {
+                        audioRef.current.currentTime = 0;
+                        audioRef.current.pause();
+                      }
+
+                      setCurrentSongIndex(songs.indexOf(song)); // make sure the real index is used
+                      setShowModal(false);
+                      setIsPlaying(true);
+                    }}
+                    className="w-full rounded-md bg-gray-700 px-4 py-2 text-left text-sm hover:bg-green-500 hover:text-white"
+                  >
+                    <span className="font-semibold">{song.title}</span> –{" "}
+                    <span className="text-gray-300">{song.artist}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

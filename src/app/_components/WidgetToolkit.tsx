@@ -42,6 +42,13 @@ export default function WidgetToolkit({
         h={1}
         page={currentPageId}
       />
+      <AddWidgetButton
+        label="Add MusicPlayer"
+        widgetName="MusicPlayer"
+        w={3}
+        h={3}
+        page={currentPageId}
+      />
 
       <Button
         variant="destructive"
