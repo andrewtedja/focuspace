@@ -15,8 +15,8 @@ const Page = () => {
 
   return (
     <ProtectedRoute>
-      <div className="">
-        <span className="break-words">
+      <div className="h-screen w-full">
+        {/* <span className="break-words">
           session store: {JSON.stringify(user)}
         </span>
         <div className="flex gap-4 py-4">
@@ -38,7 +38,7 @@ const Page = () => {
           >
             Go to settings
           </Button>
-        </div>
+        </div> */}
         <WidgetManagerProvider>
           <GridCarouselLayout />
         </WidgetManagerProvider>

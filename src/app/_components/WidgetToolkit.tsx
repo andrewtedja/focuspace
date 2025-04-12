@@ -18,7 +18,7 @@ export default function WidgetToolkit({
   const { currentPageId, pages } = useWidgetManager();
 
   return (
-    <div className="flex w-96 flex-col flex-wrap gap-2 p-2">
+    <div className="absolute flex w-96 flex-col flex-wrap gap-2 p-2">
       <Button onClick={() => setAddingPage(true)}>➕ Add Slide</Button>
 
       <AddWidgetButton
@@ -39,6 +39,13 @@ export default function WidgetToolkit({
         label="Add Text 2"
         widgetName="Text2"
         w={1}
+        h={1}
+        page={currentPageId}
+      />
+      <AddWidgetButton
+        label="Add MusicPlayer"
+        widgetName="MusicPlayer"
+        w={3}
         h={1}
         page={currentPageId}
       />
