@@ -1,6 +1,6 @@
 .grid-stack {
-  background: #fafad2;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .grid-stack-item-content {

@@ -18,8 +18,8 @@ export default function WidgetToolkit({
   const { currentPageId, pages } = useWidgetManager();
 
   return (
-    <div className="absolute flex w-96 flex-col flex-wrap gap-2 p-2">
-      <Button onClick={() => setAddingPage(true)}>➕ Add Slide</Button>
+    <div className="flex w-96 flex-col flex-wrap gap-2 p-2">
+      <Button onClick={() => setAddingPage?.(true)}>➕ Add Slide</Button>
 
       <AddWidgetButton
         label="Add Text"
@@ -45,7 +45,7 @@ export default function WidgetToolkit({
       <AddWidgetButton
         label="Add MusicPlayer"
         widgetName="MusicPlayer"
-        w={3}
+        w={4}
         h={1}
         page={currentPageId}
       />
@@ -53,7 +53,7 @@ export default function WidgetToolkit({
       <Button
         variant="destructive"
         disabled={pages.length <= 1 || disabled}
-        onClick={() => setRemovingPage(true)}
+        onClick={() => setRemovingPage?.(true)}
       >
         🗑️ Remove Slide {currentPageId}
       </Button>

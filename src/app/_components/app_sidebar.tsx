@@ -1,5 +1,20 @@
+"use client";
 import type React from "react";
-import { Home, BookOpen, Coffee, User, LogOut, Sparkle } from "lucide-react";
+import {
+  Home,
+  BookOpen,
+  Coffee,
+  User,
+  LogOut,
+  Sparkle,
+  ChevronDown,
+  ChevronRight,
+  Sparkles,
+  Boxes,
+  Plus,
+  Wallpaper,
+  CopyPlus,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -12,12 +27,21 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
+import WidgetToolkit from "./WidgetToolkit";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "~/components/ui/collapsible";
+import { useState } from "react";
+import Image from "next/image";
 
-// Menu items for the main navigation
 const mainItems = [
   {
     title: "Home",
@@ -34,15 +58,11 @@ const mainItems = [
     url: "#",
     icon: Coffee,
   },
-  {
-    title: "Profile",
-    url: "#",
-    icon: User,
-  },
+
   {
     title: "Get Plus",
     url: "#",
-    icon: Sparkle,
+    icon: Sparkles,
     className:
       "glow relative overflow-hidden bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] text-white transition-all duration-300 ease-out  hover:shadow-xl hover:shadow-[#86B3D1]/50  hover:text-[#f7f7f7] active:shadow-none active:text-[#f7f7f7]",
   },
@@ -50,10 +70,17 @@ const mainItems = [
 
 export function AppSidebar({
   collapsible = "icon",
+  setAddingPage,
+  setRemovingPage,
+  disabled,
   ...props
-}: { collapsible?: "offcanvas" | "icon" | "none" } & React.ComponentProps<
-  typeof Sidebar
->) {
+}: {
+  collapsible?: "offcanvas" | "icon" | "none";
+  setAddingPage?: (val: boolean) => void;
+  setRemovingPage?: (val: boolean) => void;
+  disabled?: boolean;
+} & React.ComponentProps<typeof Sidebar>) {
+  const [open, setOpen] = useState(false);
   return (
     <Sidebar collapsible={collapsible} {...props}>
       <SidebarHeader className="border-sidebar-border flex h-16 items-center justify-center border-b">
@@ -67,29 +94,123 @@ export function AppSidebar({
           </div>
         </div>
       </SidebarHeader>
-
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-xs">Navigation</SidebarGroupLabel>
+          <SidebarMenu>
+            {mainItems.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  tooltip={item.title}
+                  className={item.className}
+                >
+                  <a href={item.url} className="flex items-center py-5">
+                    <item.icon className="h-8 w-8" />
+                    <span className="text-md">{item.title}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-xs">
+            Workspace Customization
+          </SidebarGroupLabel>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                tooltip="Change Background"
+                className="flex w-full cursor-pointer items-center justify-between"
+              >
+                <a className="flex items-center gap-2 py-2">
+                  <Wallpaper className="h-7 w-7 flex-none" />
+                  <span className="text-md flex-1">Change Background</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                tooltip="Add Page"
+                className="flex w-full cursor-pointer items-center justify-between"
+                onClick={() => setAddingPage?.(true)}
+              >
+                <a className="flex items-center gap-2 py-2">
+                  <CopyPlus className="h-7 w-7 flex-none" />
+                  <span className="text-md flex-1">Add Page</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+        <SidebarGroup className="-mt-3">
+          <SidebarGroupLabel className="text-xs">Widgets</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {mainItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    tooltip={item.title}
-                    className={item.className}
-                  >
-                    <a href={item.url} className="flex items-center gap-2">
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
+              <Collapsible defaultOpen className="w-full">
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      tooltip="Widget Controls"
+                      className="flex w-full items-center justify-between"
+                      onClick={() => setOpen(!open)}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Boxes className="h-7 w-7" />
+                        <span className="text-sm">Widget Controls</span>
+                      </div>
+                      {open ? (
+                        <ChevronRight className="h-7 w-7 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+                      ) : (
+                        <ChevronDown className="h-7 w-7 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+                      )}
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
                 </SidebarMenuItem>
-              ))}
+
+                <CollapsibleContent>
+                  <SidebarMenuSub>
+                    <SidebarMenuSubItem>
+                      <a
+                        href="#"
+                        className="flex items-center gap-2 py-2 transition-all hover:bg-gray-100"
+                      >
+                        <Plus className="h-5 w-5 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+                        <span className="text-sm">Ambient Sounds</span>
+                        <span className="flex flex-1" />
+                      </a>
+                    </SidebarMenuSubItem>
+                    <SidebarMenuSubItem>
+                      <a
+                        href="#"
+                        className="flex items-center gap-2 py-2 transition-all hover:bg-gray-100"
+                      >
+                        <Plus className="h-5 w-5 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+                        <span className="text-sm">Focus Timer</span>
+                        <span className="flex flex-1" />
+                      </a>
+                    </SidebarMenuSubItem>
+                    <SidebarMenuSubItem>
+                      <a
+                        href="#"
+                        className="flex items-center gap-2 py-2 transition-all hover:bg-gray-100"
+                      >
+                        <Plus className="h-5 w-5 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+                        <span className="text-sm">Todo-List</span>
+                        <span className="flex flex-1" />
+                      </a>
+                    </SidebarMenuSubItem>
+                  </SidebarMenuSub>
+                </CollapsibleContent>
+              </Collapsible>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <SidebarSeparator className="border-sidebar-border" />
+        <SidebarGroup></SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter className="border-sidebar-border border-t p-2">
@@ -98,11 +219,13 @@ export function AppSidebar({
             <SidebarMenuButton asChild tooltip="Profile & Logout">
               <a href="#" className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 overflow-hidden rounded-full bg-gray-200">
-                    <img
+                  <div className="h-8 w-8 overflow-hidden rounded-full bg-gray-200 group-data-[collapsible=icon]:hidden">
+                    <Image
                       src="/images/landing/avatar.png"
                       alt="User avatar"
                       className="h-full w-full object-cover"
+                      width={40}
+                      height={40}
                     />
                   </div>
                   <div className="flex flex-col group-data-[collapsible=icon]:hidden">
@@ -112,13 +235,12 @@ export function AppSidebar({
                     </span>
                   </div>
                 </div>
-                <LogOut className="h-4 w-4 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+                <LogOut className="h-7 w-7 text-muted-foreground group-data-[collapsible=icon]:hidden" />
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
-
       <SidebarRail />
     </Sidebar>
   );

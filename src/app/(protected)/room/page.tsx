@@ -15,7 +15,7 @@ const Page = () => {
 
   return (
     <ProtectedRoute>
-      <div className="h-screen w-full">
+      <div className="b h-screen w-full bg-[url('/images/spaces/placeholder/cozers.png')] bg-cover bg-center filter">
         {/* <span className="break-words">
           session store: {JSON.stringify(user)}
         </span>
@@ -39,9 +39,7 @@ const Page = () => {
             Go to settings
           </Button>
         </div> */}
-        <WidgetManagerProvider>
-          <GridCarouselLayout />
-        </WidgetManagerProvider>
+        <GridCarouselLayout />
       </div>
     </ProtectedRoute>
   );
