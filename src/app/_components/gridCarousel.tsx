@@ -93,15 +93,17 @@ export default function GridCarouselLayout() {
   ]);
 
   return (
-    <div className="h-screen w-full">
+    <div className="relative h-screen w-full overflow-hidden">
       <WidgetToolkit
         setAddingPage={setAddingPage}
         setRemovingPage={setRemovingPage}
         disabled={disabled}
       ></WidgetToolkit>
-
-      <Carousel setApi={setCarouselApi} className="h-full w-full">
-        <CarouselContent>
+      <Carousel
+        setApi={setCarouselApi}
+        className="flex h-full w-full flex-col justify-between"
+      >
+        <CarouselContent className="flex-1">
           {pages.map((page) => (
             <CarouselItem key={page.id}>
               <GridStackProvider
@@ -111,24 +113,25 @@ export default function GridCarouselLayout() {
                 onGridStackReady={(gs) => registerGridStack(page.id, gs)}
               >
                 <GridStackRenderProvider>
-                  <div className="flex flex-col gap-2">
-                    <div className="grid-stack">
-                      <GridStackRender componentMap={COMPONENT_MAP} />
-                    </div>
+                  <div className="grid-stack">
+                    <GridStackRender componentMap={COMPONENT_MAP} />
                   </div>
                 </GridStackRenderProvider>
               </GridStackProvider>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-
-        <CarouselPagination
-          pageCount={pages.length}
-          selectedIndex={selectedIndex}
-          onSelectPage={(index) => carouselApi?.scrollTo(index)}
-        ></CarouselPagination>
+        <CarouselPrevious className="mx-2 px-4 py-2" />
+        <CarouselNext className="mx-2 px-4 py-2" />
+        {/* //! MAIN PAGINATION */}
+        {/* <div className="bg-opacity-0 px-4 py-2 backdrop-blur-md">
+          <CarouselPagination
+            pageCount={pages.length}
+            selectedIndex={selectedIndex}
+            onSelectPage={(index) => carouselApi?.scrollTo(index)}
+          />
+        </div>
+      </Carousel> */}
       </Carousel>
     </div>
   );

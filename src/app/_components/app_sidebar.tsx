@@ -1,4 +1,5 @@
-import { Home, BookOpen, Coffee, User, LogOut, BookMarked } from "lucide-react";
+import type React from "react";
+import { Home, BookOpen, Coffee, User, LogOut, Sparkle } from "lucide-react";
 
 import {
   Sidebar,
@@ -13,6 +14,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
   SidebarSeparator,
+  SidebarTrigger,
 } from "~/components/ui/sidebar";
 
 // Menu items for the main navigation
@@ -37,20 +39,30 @@ const mainItems = [
     url: "#",
     icon: User,
   },
+  {
+    title: "Get Plus",
+    url: "#",
+    icon: Sparkle,
+    className:
+      "glow relative overflow-hidden bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] text-white transition-all duration-300 ease-out  hover:shadow-xl hover:shadow-[#86B3D1]/50  hover:text-[#f7f7f7] active:shadow-none active:text-[#f7f7f7]",
+  },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({
+  collapsible = "icon",
+  ...props
+}: { collapsible?: "offcanvas" | "icon" | "none" } & React.ComponentProps<
+  typeof Sidebar
+>) {
   return (
-    <Sidebar>
-      <SidebarHeader className="border-sidebar-border h-16 border-b">
-        <div className="flex items-center gap-2 px-4 py-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#86B3D1] text-white">
-            <BookMarked className="h-4 w-4" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-sm font-bold">FocusSpace</span>
+    <Sidebar collapsible={collapsible} {...props}>
+      <SidebarHeader className="border-sidebar-border flex h-16 items-center justify-center border-b">
+        <div className="flex items-center gap-2 px-2">
+          <SidebarTrigger />
+          <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+            <span className="text-md font-bold">FocuSpace</span>
             <span className="text-xs text-muted-foreground">
-              Stay productive
+              Focus, Learn, Thrive
             </span>
           </div>
         </div>
@@ -63,11 +75,12 @@ export function AppSidebar() {
             <SidebarMenu>
               {mainItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a
-                      href={item.url}
-                      className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex items-center gap-2"
-                    >
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={item.title}
+                    className={item.className}
+                  >
+                    <a href={item.url} className="flex items-center gap-2">
                       <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
                     </a>
@@ -82,24 +95,24 @@ export function AppSidebar() {
       <SidebarFooter className="border-sidebar-border border-t p-2">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton asChild tooltip="Profile & Logout">
               <a href="#" className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="h-8 w-8 overflow-hidden rounded-full bg-gray-200">
                     <img
-                      src="/placeholder.svg?height=32&width=32"
+                      src="/images/landing/avatar.png"
                       alt="User avatar"
                       className="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium">Alex Johnson</span>
+                  <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+                    <span className="text-sm font-medium">Theo Kurniady</span>
                     <span className="text-xs text-muted-foreground">
                       Student
                     </span>
                   </div>
                 </div>
-                <LogOut className="h-4 w-4 text-muted-foreground text-red-500" />
+                <LogOut className="h-4 w-4 text-muted-foreground group-data-[collapsible=icon]:hidden" />
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
