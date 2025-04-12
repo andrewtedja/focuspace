@@ -102,7 +102,7 @@ export default function PomodoroTodoApp() {
   };
 
   return (
-    <div className="mx-auto max-w-md overflow-hidden rounded-lg text-white shadow-lg backdrop-blur-xl">
+    <div className="mx-auto flex h-full w-full flex-col overflow-hidden rounded-lg text-white shadow-lg backdrop-blur-xl">
       <div className="flex border-b border-gray-700 bg-black/60 backdrop-blur-lg">
         <button
           className={`flex items-center justify-center px-4 py-3 text-lg font-medium ${activeTab === "tasks" ? "border-b-2 border-[#86B3D1] text-[#86B3D1]" : "text-gray-400 hover:text-gray-500"}`}
@@ -183,15 +183,15 @@ export default function PomodoroTodoApp() {
       {activeTab === "timer" && (
         <div className="bg-black/70 p-6 backdrop-blur-xl">
           <div className="mb-4 flex items-center justify-center">
-            <Clock className="mr-2" size={20} />
-            <h2 className="text-xl font-semibold text-gray-50">Pomodoro</h2>
+            <Clock className="mr-2" size={12} />
+            <h2 className="text-sm font-semibold text-gray-50">Pomodoro</h2>
           </div>
 
-          <div className="mb-8 text-center text-6xl font-bold text-[#c2d3d3]">
+          <div className="mb-4 text-center text-6xl font-normal text-[#c2d3d3]">
             {formatTime(timeLeft)}
           </div>
 
-          <div className="mb-8 flex justify-center space-x-4">
+          <div className="mb-6 flex justify-center space-x-4">
             {!isRunning ? (
               <button
                 onClick={startTimer}
@@ -223,7 +223,7 @@ export default function PomodoroTodoApp() {
                 <button
                   key={minutes}
                   onClick={() => selectTime(minutes)}
-                  className={`rounded-md px-2 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  className={`rounded-md px-2 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                     selectedTime === minutes
                       ? "bg-[#6297b9] text-white"
                       : "bg-[#b7c6d1] text-gray-800 hover:bg-gray-200"
