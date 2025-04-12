@@ -1,5 +1,6 @@
 "use client";
 import type React from "react";
+import { useRouter } from "next/navigation";
 import {
   Home,
   BookOpen,
@@ -14,6 +15,9 @@ import {
   Plus,
   Wallpaper,
   CopyPlus,
+  Crown,
+  Gem,
+  Minus,
 } from "lucide-react";
 
 import {
@@ -28,6 +32,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
+  SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
   SidebarSeparator,
@@ -41,28 +46,29 @@ import {
 } from "~/components/ui/collapsible";
 import { useState } from "react";
 import Image from "next/image";
+import { useWidgetManager } from "~/lib/widget-manager-context";
+import AddWidgetButton from "./addWidgetButton";
 
 const mainItems = [
   {
     title: "Home",
-    url: "#",
+    url: "/dashboard",
     icon: Home,
   },
   {
-    title: "Study Room",
-    url: "#",
+    title: "My Room",
+    url: "",
     icon: BookOpen,
   },
   {
-    title: "Break Room",
-    url: "#",
-    icon: Coffee,
+    title: "Profile",
+    url: "/profile",
+    icon: User,
   },
-
   {
-    title: "Get Plus",
+    title: "Get Plus++",
     url: "#",
-    icon: Sparkles,
+    icon: Gem,
     className:
       "glow relative overflow-hidden bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] text-white transition-all duration-300 ease-out  hover:shadow-xl hover:shadow-[#86B3D1]/50  hover:text-[#f7f7f7] active:shadow-none active:text-[#f7f7f7]",
   },
@@ -81,20 +87,23 @@ export function AppSidebar({
   disabled?: boolean;
 } & React.ComponentProps<typeof Sidebar>) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const { currentPageId } = useWidgetManager();
   return (
-    <Sidebar collapsible={collapsible} {...props}>
+    <Sidebar
+      className="bg-[#ffffff] text-black backdrop-blur-xl"
+      collapsible={collapsible}
+      {...props}
+    >
       <SidebarHeader className="border-sidebar-border flex h-16 items-center justify-center border-b">
         <div className="flex items-center gap-2 px-2">
           <SidebarTrigger />
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
             <span className="text-md font-bold">FocuSpace</span>
-            <span className="text-xs text-muted-foreground">
-              Focus, Learn, Thrive
-            </span>
           </div>
         </div>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="">
         <SidebarGroup>
           <SidebarGroupLabel className="text-xs">Navigation</SidebarGroupLabel>
           <SidebarMenu>
@@ -105,7 +114,10 @@ export function AppSidebar({
                   tooltip={item.title}
                   className={item.className}
                 >
-                  <a href={item.url} className="flex items-center py-5">
+                  <a
+                    onClick={() => router.push(item.url)}
+                    className="flex items-center py-5"
+                  >
                     <item.icon className="h-8 w-8" />
                     <span className="text-md">{item.title}</span>
                   </a>
@@ -144,9 +156,22 @@ export function AppSidebar({
                 </a>
               </SidebarMenuButton>
             </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                asChild
+                tooltip="Remove Page"
+                className="flex w-full cursor-pointer items-center justify-between"
+                onClick={() => setRemovingPage?.(true)}
+              >
+                <a className="flex items-center gap-2 py-2">
+                  <Minus className="h-7 w-7 flex-none" />
+                  <span className="text-md flex-1">Remove Current</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
-        <SidebarGroup className="-mt-3">
+        <SidebarGroup className="">
           <SidebarGroupLabel className="text-xs">Widgets</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -174,34 +199,22 @@ export function AppSidebar({
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     <SidebarMenuSubItem>
-                      <a
-                        href="#"
-                        className="flex items-center gap-2 py-2 transition-all hover:bg-gray-100"
-                      >
-                        <Plus className="h-5 w-5 text-muted-foreground group-data-[collapsible=icon]:hidden" />
-                        <span className="text-sm">Ambient Sounds</span>
-                        <span className="flex flex-1" />
-                      </a>
+                      <AddWidgetButton
+                        label="Add Music"
+                        widgetName="MusicPlayer"
+                        w={4}
+                        h={1}
+                        page={currentPageId}
+                      />
                     </SidebarMenuSubItem>
                     <SidebarMenuSubItem>
-                      <a
-                        href="#"
-                        className="flex items-center gap-2 py-2 transition-all hover:bg-gray-100"
-                      >
-                        <Plus className="h-5 w-5 text-muted-foreground group-data-[collapsible=icon]:hidden" />
-                        <span className="text-sm">Focus Timer</span>
-                        <span className="flex flex-1" />
-                      </a>
-                    </SidebarMenuSubItem>
-                    <SidebarMenuSubItem>
-                      <a
-                        href="#"
-                        className="flex items-center gap-2 py-2 transition-all hover:bg-gray-100"
-                      >
-                        <Plus className="h-5 w-5 text-muted-foreground group-data-[collapsible=icon]:hidden" />
-                        <span className="text-sm">Todo-List</span>
-                        <span className="flex flex-1" />
-                      </a>
+                      <AddWidgetButton
+                        label="Add Todo/Timer"
+                        widgetName="TodolistComponent"
+                        w={3}
+                        h={3}
+                        page={currentPageId}
+                      />
                     </SidebarMenuSubItem>
                   </SidebarMenuSub>
                 </CollapsibleContent>
@@ -210,34 +223,32 @@ export function AppSidebar({
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarSeparator className="border-sidebar-border" />
-        <SidebarGroup></SidebarGroup>
       </SidebarContent>
 
       <SidebarFooter className="border-sidebar-border border-t p-2">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Profile & Logout">
-              <a href="#" className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 overflow-hidden rounded-full bg-gray-200 group-data-[collapsible=icon]:hidden">
-                    <Image
-                      src="/images/landing/avatar.png"
-                      alt="User avatar"
-                      className="h-full w-full object-cover"
-                      width={40}
-                      height={40}
-                    />
-                  </div>
-                  <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                    <span className="text-sm font-medium">Theo Kurniady</span>
-                    <span className="text-xs text-muted-foreground">
-                      Student
-                    </span>
-                  </div>
+            <a href="#" className="flex items-center justify-between">
+              <div
+                className="flex items-center gap-2"
+                onClick={() => router.push("/profile")}
+              >
+                <div className="h-8 w-8 overflow-hidden rounded-full bg-gray-200 group-data-[collapsible=icon]:hidden">
+                  <Image
+                    src="/images/landing/avatar.png"
+                    alt="User avatar"
+                    className="h-full w-full object-cover"
+                    width={40}
+                    height={40}
+                  />
                 </div>
-                <LogOut className="h-7 w-7 text-muted-foreground group-data-[collapsible=icon]:hidden" />
-              </a>
-            </SidebarMenuButton>
+                <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+                  <span className="text-sm font-medium">Theo Kurniady</span>
+                  <span className="text-xs text-muted-foreground">Student</span>
+                </div>
+              </div>
+              <LogOut className="h-4 w-4 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+            </a>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

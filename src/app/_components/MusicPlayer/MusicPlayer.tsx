@@ -177,7 +177,7 @@ export const MusicPlayer = () => {
   }, [showModal]);
 
   return (
-    <div className="relative mx-auto flex h-full w-full flex-col rounded-xl bg-white p-4 text-black shadow-lg">
+    <div className="relative mx-auto flex h-full w-full flex-col rounded-xl bg-black/70 p-4 text-white shadow-lg backdrop-blur-xl">
       <style jsx>{`
         /* Custom range slider styles */
 
@@ -201,15 +201,15 @@ export const MusicPlayer = () => {
           width: 16px;
           background-color: white;
           border-radius: 50%;
-          border: 2px solid black;
+          border: 2px solid #1a1a1a;
         }
 
         input[type="range"]::-moz-range-thumb {
           height: 16px;
           width: 16px;
-          background-color: black;
+          background-color: white;
           border-radius: 50%;
-          border: 2px solid white;
+          border: 2px solid #1a1a1a;
         }
 
         /* Focus styles */
@@ -219,20 +219,20 @@ export const MusicPlayer = () => {
       `}</style>
 
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">Music Player</h1>
+        <h1 className="text-xl font-bold">FocuSpace</h1>
         <button
           onClick={(e) => {
             e.stopPropagation();
             setShowModal(true);
           }}
-          className="text-gray-600 hover:text-black"
+          className="text-gray-300 hover:text-white"
         >
           <Settings2 size={20} />
         </button>
       </div>
 
       <div className="mt-3 flex items-center">
-        <div className="mr-3 flex h-16 w-16 items-center justify-center bg-gray-200">
+        <div className="mr-3 flex h-16 w-16 items-center justify-center bg-gray-800">
           {currentSong?.cover ? (
             <Image
               src={currentSong.cover}
@@ -247,7 +247,7 @@ export const MusicPlayer = () => {
         </div>
         <div>
           <h2 className="text-base font-semibold">{currentSong?.title}</h2>
-          <p className="text-sm text-gray-500">{currentSong?.artist}</p>
+          <p className="text-sm text-gray-400">{currentSong?.artist}</p>
         </div>
       </div>
 
@@ -263,12 +263,12 @@ export const MusicPlayer = () => {
           onTouchStart={handleSeekStart}
           onTouchEnd={handleSeekEnd}
           ref={progressBarRef}
-          className="h-1 w-full cursor-pointer appearance-none bg-gray-200"
+          className="h-1 w-full cursor-pointer appearance-none bg-gray-700"
           style={{
-            background: `linear-gradient(to right, #000000 0%, #000000 ${progress}%, #e5e7eb ${progress}%, #e5e7eb 100%)`,
+            background: `linear-gradient(to right, #6596b6 0%, #6596b6 ${progress}%, #4a4a4a ${progress}%, #4a4a4a 100%)`,
           }}
         />
-        <div className="mt-1 flex justify-between text-xs text-gray-500">
+        <div className="mt-1 flex justify-between text-xs text-gray-400">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
@@ -276,26 +276,26 @@ export const MusicPlayer = () => {
 
       <div className="mt-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button onClick={prev} className="text-gray-700 hover:text-black">
-            <SkipBack size={18} />
+          <button onClick={prev} className="text-gray-400 hover:text-white">
+            <SkipBack size={24} />
           </button>
 
           <button
             onClick={playPause}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-white hover:bg-gray-800"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#6596b6] text-white transition hover:bg-[#48a2df]"
           >
             {isPlaying ? <Pause size={18} /> : <Play size={18} />}
           </button>
 
-          <button onClick={next} className="text-gray-700 hover:text-black">
-            <SkipForward size={18} />
+          <button onClick={next} className="text-gray-400 hover:text-white">
+            <SkipForward size={24} />
           </button>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={toggleMute}
-            className="text-gray-700 hover:text-black"
+            className="text-gray-400 hover:text-white"
           >
             <VolumeIcon />
           </button>
@@ -306,9 +306,9 @@ export const MusicPlayer = () => {
             step="0.01"
             value={isMuted ? 0 : volume}
             onChange={handleVolumeChange}
-            className="h-1 w-20 cursor-pointer appearance-none bg-gray-200"
+            className="h-1 w-20 cursor-pointer appearance-none bg-gray-700"
             style={{
-              background: `linear-gradient(to right, #000000 0%, #000000 ${(isMuted ? 0 : volume) * 100}%, #e5e7eb ${(isMuted ? 0 : volume) * 100}%, #e5e7eb 100%)`,
+              background: `linear-gradient(to right, #6596b6 0%, #6596b6 ${(isMuted ? 0 : volume) * 100}%, #4a4a4a ${(isMuted ? 0 : volume) * 100}%, #4a4a4a 100%)`,
             }}
           />
         </div>
@@ -325,16 +325,16 @@ export const MusicPlayer = () => {
       {showModal &&
         typeof window !== "undefined" &&
         createPortal(
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-30">
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-90">
             <div
               ref={modalRef}
-              className="w-80 rounded-lg bg-white p-4 text-black shadow-lg"
+              className="w-80 rounded-lg bg-gray-900 p-4 text-white shadow-lg"
             >
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-semibold">Select a Sound</h3>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="text-gray-500 hover:text-black"
+                  className="text-gray-400 hover:text-white"
                 >
                   <XIcon size={20} />
                 </button>
@@ -344,7 +344,7 @@ export const MusicPlayer = () => {
                 <input
                   type="text"
                   placeholder="Search songs..."
-                  className="w-full rounded-md border border-gray-300 bg-gray-50 p-1.5 text-sm text-black placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-black"
+                  className="w-full rounded-md border border-gray-700 bg-gray-800 p-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#6596b6]"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -359,14 +359,14 @@ export const MusicPlayer = () => {
                           audioRef.current.pause();
                         }
 
-                        setCurrentSongIndex(songs.indexOf(song)); // make sure the real index is used
+                        setCurrentSongIndex(songs.indexOf(song));
                         setShowModal(false);
                         setIsPlaying(true);
                       }}
-                      className="w-full rounded-md bg-gray-100 px-3 py-1.5 text-left text-xs hover:bg-black hover:text-white"
+                      className="w-full rounded-md bg-gray-800 px-3 py-1.5 text-left text-xs hover:bg-gray-700 hover:text-white"
                     >
                       <span className="font-semibold">{song.title}</span> –{" "}
-                      <span className="text-gray-600">{song.artist}</span>
+                      <span className="text-gray-400">{song.artist}</span>
                     </button>
                   ))}
                 </div>

@@ -20,28 +20,6 @@ export default function WidgetToolkit({
   return (
     <div className="flex w-96 flex-col flex-wrap gap-2 p-2">
       <Button onClick={() => setAddingPage?.(true)}>➕ Add Slide</Button>
-
-      <AddWidgetButton
-        label="Add Text"
-        widgetName="Text"
-        w={3}
-        h={3}
-        page={currentPageId}
-      />
-      <AddWidgetButton
-        label="Add Text 1"
-        widgetName="Text1"
-        w={2}
-        h={2}
-        page={currentPageId}
-      />
-      <AddWidgetButton
-        label="Add Text 2"
-        widgetName="Text2"
-        w={1}
-        h={1}
-        page={currentPageId}
-      />
       <AddWidgetButton
         label="Add MusicPlayer"
         widgetName="MusicPlayer"

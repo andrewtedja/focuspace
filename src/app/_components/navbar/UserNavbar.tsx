@@ -31,31 +31,31 @@ const UserNavbar = () => {
 
         <div className="hidden items-center space-x-6 md:flex">
           <a
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/dashboard")}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
             Dashboard
           </a>
           <a
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/my-space")}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
             My Space
           </a>
           <a
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/room")}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
             AI Buddy
           </a>
           <a
-            onClick={() => router.push("/")}
+            onClick={() => router.push("#")}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
             Discover
           </a>
           <a
-            onClick={() => router.push("/")}
+            onClick={() => router.push("#")}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#95BAAA]"
           >
             Pricing
