@@ -4,7 +4,7 @@ import { ReactNode, useState, useCallback } from "react";
 import { WidgetManagerContext, PageData } from "./widget-manager-context";
 import { GridStack, GridStackOptions, GridStackWidget } from "gridstack";
 
-const CELL_HEIGHT = 50;
+const CELL_HEIGHT = 350;
 const BREAKPOINTS = [
   { c: 1, w: 700 },
   { c: 3, w: 850 },
@@ -23,7 +23,7 @@ export const BASE_GRID_OPTIONS: GridStackOptions = {
   float: true,
   itemClass: "grid-stack-item",
   margin: 8,
-  row: 12,
+  row: 2,
   cellHeight: CELL_HEIGHT,
   subGridOpts: {
     acceptWidgets: true,

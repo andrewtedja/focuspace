@@ -183,7 +183,7 @@ export const MusicPlayer = () => {
   }, [showModal]);
 
   return (
-    <div className="relative mx-auto max-w-md rounded-xl bg-gradient-to-b from-gray-800 to-gray-900 p-6 text-white shadow-lg">
+    <div className="relative mx-auto flex h-full w-full flex-col rounded-xl bg-gradient-to-b from-gray-800 to-gray-900 p-6 text-white shadow-lg">
       <div className="mb-4 flex items-center justify-between">
         <div>
           {currentSong?.cover ? (
@@ -200,7 +200,7 @@ export const MusicPlayer = () => {
             </div>
           )}
         </div>
-        <div className="flex-1">
+        <div className="start flex-1">
           <div></div>
           <h2 className="truncate text-xl font-bold">{currentSong?.title}</h2>
           <p className="truncate text-sm text-gray-300">
