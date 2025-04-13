@@ -1,28 +1,80 @@
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { createSupabaseServerClient } from "~/server/supabase";
+import { randomUUID } from "crypto"; // for generating file UUID
+import { Prisma } from "@prisma/client";
 
 export const storageRouter = createTRPCRouter({
-  uploadBase64: publicProcedure
-    .input(z.object({ fileName: z.string(), base64: z.string() }))
-    .mutation(async ({ input }) => {
+  uploadBase64: protectedProcedure
+    .input(
+      z.object({
+        fileName: z.string(),
+        base64: z.string(),
+        type: z.enum(["background", "profile", "audio"]),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
       const supabase = await createSupabaseServerClient();
 
       const fileBuffer = Buffer.from(input.base64, "base64");
 
-      const { data, error } = await supabase.storage
-        .from("uploads")
-        .upload(input.fileName, fileBuffer);
+      const uuid = randomUUID(); // generate a unique UUID
+      const fileNameWithUuid = `${uuid}_${input.fileName}`;
 
-      if (error) throw new Error(error.message);
+      // Determine content type based on file type
+      let contentType: string;
+      if (input.type === "audio") {
+        contentType = "audio/mpeg"; // Adjust as needed for different audio formats
+      } else {
+        contentType = "image/jpeg"; // Adjust as needed for different image formats
+      }
+
+      // Upload to Supabase Storage with specified content type
+      const { error: uploadError } = await supabase.storage
+        .from("uploads")
+        .upload(fileNameWithUuid, fileBuffer, {
+          contentType,
+        });
+
+      if (uploadError) throw new Error(uploadError.message);
 
       const publicUrl = supabase.storage
         .from("uploads")
-        .getPublicUrl(input.fileName).data.publicUrl;
+        .getPublicUrl(fileNameWithUuid).data.publicUrl;
 
-      return publicUrl;
+      // Update the appropriate field in the User model based on type
+      let updateData: Prisma.UserUpdateInput = {};
+      if (input.type === "profile") {
+        updateData = {
+          image: publicUrl,
+          imageUuid: uuid,
+        };
+      } else if (input.type === "audio") {
+        updateData = {
+          music: publicUrl,
+          musicUuid: uuid,
+          musicName: input.fileName,
+        };
+      } else if (input.type === "background") {
+        updateData = {
+          bg: publicUrl,
+          bgUuid: uuid,
+        };
+      }
+
+      // Update user in the database
+      const { error: updateError } = await supabase
+        .from("User")
+        .update(updateData)
+        .eq("id", userId);
+
+      if (updateError) throw new Error(updateError.message);
+
+      return { url: publicUrl, uuid };
     }),
-  getFileByUuid: publicProcedure
+
+  getFileByUuid: protectedProcedure
     .input(z.object({ uuid: z.string() }))
     .query(async ({ input }) => {
       const supabase = await createSupabaseServerClient();

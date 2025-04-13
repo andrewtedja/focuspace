@@ -11,6 +11,8 @@ import {
 import { initialRooms } from "~/data/rooms";
 
 import Image from "next/image";
+import { api } from "~/trpc/react";
+import { useRouter } from "next/navigation";
 
 interface CreateSpaceModalProps {
   isOpen: boolean;
@@ -32,6 +34,7 @@ const CreateSpaceModal = ({
 }: CreateSpaceModalProps) => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [description, setDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(
     "/images/spaces/placeholder/lofi.jpg",
@@ -42,16 +45,44 @@ const CreateSpaceModal = ({
     new Set(initialRooms.map((room) => room.backgroundImage)),
   );
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setUploadedImage(base64String); // ✅ actual base64
+        setSelectedImage(base64String); // if you're using base64 as preview
+        setSelectedFileName(file.name); // ✅ save the real filename
+      };
+      reader.readAsDataURL(file); // ✅ convert to base64
+    }
+  };
+
   // Pagination for background images
   const [currentPage, setCurrentPage] = useState(0);
   const imagesPerPage = 8;
   const totalPages = Math.ceil(allBackgrounds.length / (imagesPerPage - 1));
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
   const startIndex = currentPage * (imagesPerPage - 1);
   const displayedBackgrounds = allBackgrounds.slice(
     startIndex,
     startIndex + (imagesPerPage - 1),
   );
+  const router = useRouter();
+  const uploadImage = api.storage.uploadBase64.useMutation({
+    onSuccess: (data) => {
+      // Handle success, e.g., update the state or notify the user
+      router.push("/room?id=7");
+      console.log("Image uploaded successfully:", data);
+    },
+    onError: (error) => {
+      // Handle error, e.g., show an error message
+      console.error("Error uploading image:", error);
+    },
+  });
 
   // baru sample
   // const backgroundOptions = [
@@ -114,15 +145,22 @@ const CreateSpaceModal = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (step === 1) {
       setStep(2);
     } else {
-      onCreateSpace({
-        name,
-        desc: description,
-        backgroundImage: selectedImage,
-      });
+      // onCreateSpace({
+      //   name,
+      //   desc: description,
+      //   backgroundImage: selectedImage,
+      // });
+
+      if (uploadedImage && selectedFileName) {
+        uploadImage.mutate({
+          fileName: selectedFileName,
+          base64: uploadedImage,
+          type: "background",
+        });
+      }
 
       // ! reset form
       setName("");
@@ -265,11 +303,21 @@ const CreateSpaceModal = ({
                 ))}
 
                 {/* ! Upload Image */}
-                <div className="relative flex aspect-video cursor-pointer items-center justify-center rounded-lg border border-dashed border-gray-600 bg-gray-50 hover:bg-gray-100">
+                <div
+                  className="relative flex aspect-video cursor-pointer items-center justify-center rounded-lg border border-dashed border-gray-600 bg-gray-50 hover:bg-gray-100"
+                  onClick={() => fileInputRef.current?.click()}
+                >
                   <div className="flex flex-col items-center text-center">
                     <Upload size={20} className="mb-1 text-gray-600" />
                     <span className="text-xs text-gray-600">Upload</span>
                   </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    className="hidden"
+                  />
                 </div>
               </div>
 
@@ -325,6 +373,7 @@ const CreateSpaceModal = ({
 
             <button
               type="submit"
+              disabled={uploadImage.isPending}
               className="flex items-center justify-center rounded-full bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] px-6 py-2 text-sm font-medium text-white shadow-sm transition-all hover:shadow-md"
             >
               {step === 1 ? (

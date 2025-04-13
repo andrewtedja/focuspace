@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useSessionStore } from "~/stores/useSessionStore";
 import Loading from "../Loading";
 
-const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+const ProtectedRoute: React.FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const { status } = useSessionStore();
 

@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import { useSessionStore } from "~/stores/useSessionStore";
 import Loading from "../Loading";
 
-const AuthRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+const AuthRoute: React.FC<PropsWithChildren> = ({ children }) => {
   const router = useRouter();
   const { isAuthenticated, setSession } = useSessionStore();
   const { data: session } = useSession();

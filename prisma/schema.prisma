@@ -49,6 +49,11 @@ model User {
     File      File[]
     Message   Message[]
     Flashcard Flashcard[]
+
+
+    Favorites Favorites[]
+    roomName String?
+    roomDescription String? 
 }
 
 model VerificationToken {
@@ -112,4 +117,23 @@ model Flashcard {
     answer   String
 
     createdAt DateTime @default(now())
+}
+// model Room {
+//     id String @id @default(cuid())
+
+
+//     user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+//     userId String?
+//     public Boolean @default(false)
+
+//     Favorites Favorites[]
+
+// }
+
+model Favorites {
+    id String @id @default(cuid())
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    roomId Int 
 }
