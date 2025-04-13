@@ -132,7 +132,7 @@ const MenuPage = () => {
             </div>
 
             <div className="mb-4 flex items-center">
-              <div className="relative w-full md:w-64">
+              <div className="relative w-64">
                 <input
                   type="text"
                   placeholder="Search rooms..."
@@ -151,7 +151,7 @@ const MenuPage = () => {
                 className="ml-4 flex min-w-[160px] items-center justify-center rounded-full bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] px-4 py-3 text-sm font-medium text-white shadow-sm transition-all hover:from-[#89b6d3] hover:to-[#95d4c0] hover:shadow-md"
               >
                 <Plus size={18} className="mr-1.5" />
-                <span className="whitespace-nowrap">Create Space</span>
+                <span className="whitespace-nowrap">Create Your Space</span>
               </button>
             </div>
           </div>
@@ -159,7 +159,7 @@ const MenuPage = () => {
 
         {/* Loading skeleton */}
         {isLoading ? (
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3">
+          <div className="grid grid-cols-3 gap-5">
             {[1, 2, 3, 4, 5, 6].map((item) => (
               <div
                 key={item}
@@ -168,7 +168,7 @@ const MenuPage = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-3">
+          <div className="grid grid-cols-3 gap-5">
             {filteredRooms.length > 0 ? (
               filteredRooms.map((room) => (
                 // space groups

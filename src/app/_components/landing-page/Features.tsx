@@ -1,16 +1,24 @@
 import React from "react";
-import { Sparkles, Brain, Layers, Zap, Compass, PenTool } from "lucide-react";
+import {
+  Sparkles,
+  Brain,
+  Layers,
+  Zap,
+  Compass,
+  PenTool,
+  Target,
+} from "lucide-react";
 
 const features = [
   {
-    icon: <Brain size={28} />,
+    icon: <Target size={28} />,
     title: "Focus Learning Spaces",
     desc: "Customize visuals, sounds, and interactive elements to create your ideal focus environment.",
   },
   {
     icon: <Sparkles size={28} />,
     title: "AI Buddy",
-    desc: "Study with your own AI assistant that adapts to your communication style and generates flashcards.",
+    desc: "Study with your own AI assistant that adapts to your communication style and can generate flashcards.",
   },
   {
     icon: <Compass size={28} />,
@@ -25,10 +33,10 @@ const features = [
   {
     icon: <Layers size={28} />,
     title: "Multi-Sensory Design",
-    desc: "Customize visuals, sounds, and interactive elements to create your ideal focus environment.",
+    desc: "Customize flexible visuals, sounds, and interactive elements to create your ideal focus environment.",
   },
   {
-    icon: <Sparkles size={28} />,
+    icon: <Brain size={28} />,
     title: "Adaptive Learning",
     desc: "The more you use FocuSpace, the better it gets at optimizing for your specific needs.",
   },
@@ -36,7 +44,7 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="relative overflow-hidden py-32">
+    <section id="features" className="relative overflow-hidden py-32">
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#E9EEF2] to-[#F2F5F8]"></div>
       <div className="absolute left-0 right-0 top-0 h-2 bg-gradient-to-r from-[#86B3D1]/0 via-[#86B3D1] to-[#86B3D1]/0"></div>
 

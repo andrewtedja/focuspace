@@ -46,10 +46,10 @@ const UserNavbar = () => {
             onClick={() => router.push("#")}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
-            Discover
+            Community
           </a>
           <a
-            onClick={() => router.push("#")}
+            onClick={() => router.push("/pricing-user")}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#95BAAA]"
           >
             Pricing
@@ -97,16 +97,10 @@ const UserNavbar = () => {
                 <User className="mr-2 h-4 w-4 text-[#86B3D1]" />
                 <span>Your Profile</span>
               </DropdownMenuItem>
+
               <DropdownMenuItem
                 className="cursor-pointer text-[#4A5568] hover:bg-[#F5F7FA] focus:bg-[#F5F7FA]"
-                onClick={() => router.push("/settings")}
-              >
-                <Settings className="mr-2 h-4 w-4 text-[#95BAAA]" />
-                <span>Settings</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer text-[#4A5568] hover:bg-[#F5F7FA] focus:bg-[#F5F7FA]"
-                onClick={() => router.push("/help")}
+                // onClick={() => router.push("/")}
               >
                 <HelpCircle className="mr-2 h-4 w-4 text-[#A7BBC7]" />
                 <span>Help & Support</span>

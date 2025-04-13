@@ -3,7 +3,10 @@ import React from "react";
 
 const Rating = () => {
   return (
-    <section className="bg-gradient-to-r from-[##BCD0D7] to-[#D7DCD8] py-20">
+    <section
+      id="testimonials"
+      className="bg-gradient-to-b from-[#BCD0D7] to-[#f0f1f0] pb-20 pt-10"
+    >
       <div className="mx-auto max-w-7xl px-6">
         <div className="relative overflow-hidden rounded-2xl bg-white p-10 shadow-sm">
           <div className="relative z-10 flex flex-col items-center text-center">

@@ -2,7 +2,10 @@ import React from "react";
 import { Check } from "lucide-react";
 const Pricing = () => {
   return (
-    <section className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-white to-gray-100 py-24">
+    <section
+      id="pricing"
+      className="flex flex-col items-center justify-center bg-gradient-to-b from-white to-gray-100 py-16"
+    >
       <span className="mb-4 inline-block rounded-full bg-[#89AB9E]/30 px-5 py-2 text-sm font-semibold text-[#426d5d] shadow-sm">
         Pricing
       </span>
@@ -63,7 +66,7 @@ const Pricing = () => {
           <div className="mb-8">
             <h2 className="mb-4 text-2xl font-bold">Plus</h2>
             <div className="mb-6 flex items-baseline">
-              <span className="text-4xl font-bold">$19.99</span>
+              <span className="text-4xl font-bold">$4.99</span>
               <span className="ml-1 text-gray-500">/month</span>
             </div>
             <p className="text-gray-600">

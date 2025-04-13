@@ -158,17 +158,28 @@ const CreateSpaceModal = ({
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Create New Space</h2>
         </div>
-        <div className="mb-6 flex items-center">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#5aa182] text-white">
-            {step > 1 ? <Check size={16} /> : "1"}
+        {/* Progress Steps */}
+        <div className="mb-8 flex items-center">
+          <div
+            className={`flex h-10 w-10 items-center justify-center rounded-full transition-all ${
+              step > 1 ? "bg-emerald-500" : "bg-emerald-500"
+            } text-white`}
+          >
+            {step > 1 ? <Check size={20} /> : "1"}
           </div>
-          <div className="mx-2 h-1 w-12 bg-gray-200">
+          <div className="mx-2 h-1 w-16 bg-gray-200">
             <div
-              className={`h-full ${step > 1 ? "w-full bg-[#5aa182]" : "w-0"}`}
-            ></div>
+              className={`h-full transition-all duration-300 ${
+                step > 1 ? "w-full bg-emerald-500" : "w-0"
+              }`}
+            />
           </div>
           <div
-            className={`flex h-8 w-8 items-center justify-center rounded-full ${step === 2 ? "bg-[#5aa182] text-white" : "bg-gray-200 text-gray-500"}`}
+            className={`flex h-10 w-10 items-center justify-center rounded-full transition-all ${
+              step === 2
+                ? "bg-emerald-500 text-white"
+                : "bg-gray-100 text-gray-400"
+            }`}
           >
             2
           </div>
@@ -176,12 +187,13 @@ const CreateSpaceModal = ({
         {/* connect ama backend form later */}
 
         <form onSubmit={handleSubmit}>
-          {step === 1 ? ( // step 1
-            <div className="space-y-4">
+          {step === 1 ? (
+            // Step 1
+            <div className="space-y-6">
               <div>
                 <label
                   htmlFor="name"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-2 block text-sm font-medium text-gray-700"
                 >
                   Space Name
                 </label>
@@ -190,8 +202,8 @@ const CreateSpaceModal = ({
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter name here"
-                  className="w-full rounded-lg border border-gray-300 p-3 text-gray-800 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  placeholder="My Focus Space"
+                  className="w-full rounded-xl border-0 bg-gray-50 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 transition-all placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-emerald-500"
                   required
                 />
               </div>
@@ -199,7 +211,7 @@ const CreateSpaceModal = ({
               <div>
                 <label
                   htmlFor="description"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-2 block text-sm font-medium text-gray-700"
                 >
                   Description
                 </label>
@@ -207,14 +219,14 @@ const CreateSpaceModal = ({
                   id="description"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="What is this space for? Describe it here."
-                  className="h-32 w-full rounded-lg border border-gray-300 p-3 text-gray-800 shadow-sm focus:border-[#45a169] focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  placeholder="What will you use this space for?"
+                  className="h-32 w-full rounded-xl border-0 bg-gray-50 p-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-200 transition-all placeholder:text-gray-400 focus:bg-white focus:ring-2 focus:ring-emerald-500"
                   required
                 />
               </div>
             </div>
           ) : (
-            // step 2
+            // Step 2
             <div className="space-y-4">
               <div className="mb-2 flex items-center justify-between">
                 <label className="block text-sm font-medium text-gray-700">
@@ -230,7 +242,7 @@ const CreateSpaceModal = ({
                   <div
                     // SELECTED IMAGE
                     key={index}
-                    className={`relative aspect-video cursor-pointer overflow-hidden rounded-lg ${
+                    className={`relative aspect-video cursor-pointer overflow-hidden rounded-lg bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 ${
                       selectedImage === image
                         ? "ring-2 ring-[#45a169] ring-offset-2"
                         : "border border-gray-200"
@@ -240,7 +252,7 @@ const CreateSpaceModal = ({
                     <Image
                       src={image}
                       alt={`Background option ${startIndex + index + 1}`}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover text-xs"
                       width={120}
                       height={80}
                     />
@@ -251,6 +263,7 @@ const CreateSpaceModal = ({
                     )}
                   </div>
                 ))}
+
                 {/* ! Upload Image */}
                 <div className="relative flex aspect-video cursor-pointer items-center justify-center rounded-lg border border-dashed border-gray-600 bg-gray-50 hover:bg-gray-100">
                   <div className="flex flex-col items-center text-center">

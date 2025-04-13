@@ -17,31 +17,31 @@ const GuestNavbar = () => {
 
         <div className="flex items-center space-x-8">
           <a
-            onClick={() => router.push("/")}
+            onClick={() => router.push("#home")}
             className="text-md font-normal text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
             Home
           </a>
           <a
-            onClick={() => router.push("/")}
+            onClick={() => router.push("#features")}
             className="text-md font-normal text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
             Features
           </a>
           <a
-            onClick={() => router.push("/")}
+            onClick={() => router.push("#about")}
             className="text-md font-normal text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
             About Us
           </a>
           <a
-            onClick={() => router.push("/")}
+            onClick={() => router.push("#testimonials")}
             className="text-md font-normal text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
-            Community
+            Testimonials
           </a>
           <a
-            onClick={() => router.push("/")}
+            onClick={() => router.push("#pricing")}
             className="text-md font-normal text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
             Pricing
