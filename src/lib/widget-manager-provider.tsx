@@ -178,6 +178,38 @@ export function WidgetManagerProvider({ children }: { children: ReactNode }) {
     [pageStacks, activeWidgets],
   );
 
+  const updatePageBackground = useCallback(
+    (pageId: number, backgroundUrl: string, overlayOpacity?: number) => {
+      setPages((prev) =>
+        prev.map((page) =>
+          page.id === pageId
+            ? {
+                ...page,
+                backgroundImage: backgroundUrl,
+                backgroundOverlayOpacity: overlayOpacity,
+              }
+            : page,
+        ),
+      );
+    },
+    [],
+  );
+  <WidgetManagerContext.Provider
+    value={{
+      pages,
+      currentPageId,
+      setCurrentPageId,
+      addPage,
+      removePage,
+      addWidgetToPage,
+      registerGridStack,
+      transferWidgetToPage,
+      updatePageBackground,
+    }}
+  >
+    {children}
+  </WidgetManagerContext.Provider>;
+
   return (
     <WidgetManagerContext.Provider
       value={{
@@ -189,6 +221,7 @@ export function WidgetManagerProvider({ children }: { children: ReactNode }) {
         addWidgetToPage,
         registerGridStack,
         transferWidgetToPage,
+        updatePageBackground,
       }}
     >
       {children}

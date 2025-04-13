@@ -1,5 +1,6 @@
 import React from "react";
 
+// Mobile warning added to display a message when the app is accessed on a mobile device (because the FocuSpace is design for desktop)
 const MobileWarning = () => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0E131E] p-4 text-center text-lg text-white lg:hidden">

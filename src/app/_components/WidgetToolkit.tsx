@@ -9,6 +9,9 @@ interface WidgetToolkitProps {
   setRemovingPage: (val: boolean) => void;
   disabled?: boolean;
 }
+/**
+ * Tool kit file (just for testing purposes)
+ */
 
 export default function WidgetToolkit({
   setAddingPage,
