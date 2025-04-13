@@ -118,11 +118,11 @@ export const MusicPlayer = () => {
     setDuration(duration);
   };
 
-  const formatTime = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-  };
+  // const formatTime = (time: number) => {
+  //   const minutes = Math.floor(time / 60);
+  //   const seconds = Math.floor(time % 60);
+  //   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  // };
 
   const handleSeekStart = () => {
     setIsDragging(true);
@@ -269,8 +269,8 @@ export const MusicPlayer = () => {
           }}
         />
         <div className="mt-1 flex justify-between text-xs text-gray-400">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
+          <span>{currentTime}</span>
+          <span>{duration}</span>
         </div>
       </div>
 

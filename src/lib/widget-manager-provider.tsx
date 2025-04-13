@@ -32,7 +32,7 @@ export const BASE_GRID_OPTIONS: GridStackOptions = {
       layout: "moveScale",
     },
     margin: 8,
-    minRow: 2,
+    minRow: 1,
     cellHeight: CELL_HEIGHT,
   },
 };
