@@ -5,7 +5,7 @@ const page = () => {
   return (
     <ProtectedRoute>
       <div className="flex h-full w-full justify-center">
-        <div className="h-screen w-96 bg-gray-400">
+        <div className="relative h-screen max-h-screen bg-gray-400">
           <Chatbot></Chatbot>
         </div>
       </div>

@@ -367,3 +367,9 @@ input[type="range"]::-moz-range-thumb {
   cursor: pointer;
   border: none;
 }
+
+.react-flip-card {
+  transform-origin: center !important;
+  margin-left: auto;
+  margin-right: auto;
+}
