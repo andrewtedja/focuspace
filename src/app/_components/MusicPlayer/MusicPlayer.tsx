@@ -118,11 +118,11 @@ export const MusicPlayer = () => {
     setDuration(duration);
   };
 
-  // const formatTime = (time: number) => {
-  //   const minutes = Math.floor(time / 60);
-  //   const seconds = Math.floor(time % 60);
-  //   return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-  // };
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  };
 
   const handleSeekStart = () => {
     setIsDragging(true);
@@ -231,20 +231,7 @@ export const MusicPlayer = () => {
         </button>
       </div>
 
-      <div className="mt-3 flex items-center">
-        <div className="mr-3 flex h-16 w-16 items-center justify-center bg-gray-800">
-          {currentSong?.cover ? (
-            <Image
-              src={currentSong.cover}
-              alt="Cover"
-              className="h-full w-full object-cover"
-              width={64}
-              height={64}
-            />
-          ) : (
-            <div className="text-2xl">♪</div>
-          )}
-        </div>
+      <div className="mt-3 flex items-center justify-center">
         <div>
           <h2 className="text-base font-semibold">{currentSong?.title}</h2>
           <p className="text-sm text-gray-400">{currentSong?.artist}</p>
@@ -269,8 +256,8 @@ export const MusicPlayer = () => {
           }}
         />
         <div className="mt-1 flex justify-between text-xs text-gray-400">
-          <span>{currentTime}</span>
-          <span>{duration}</span>
+          <span>{formatTime(currentTime)}</span>
+          <span>{formatTime(duration)}</span>
         </div>
       </div>
 

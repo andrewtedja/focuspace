@@ -23,6 +23,9 @@ import WidgetToolkit from "./WidgetToolkit";
 import { CarouselPagination } from "./CarouselPagination";
 import { AppSidebar } from "./app_sidebar";
 
+/**
+ * Component for the main grid carousel layout.
+ */
 export default function GridCarouselLayout() {
   const {
     pages,

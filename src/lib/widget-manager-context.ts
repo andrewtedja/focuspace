@@ -7,6 +7,8 @@ export interface PageData {
   id: number;
   initialOptions: GridStackOptions;
   title?: string;
+  backgroundImage?: string;
+  backgroundOverlayOpacity?: number;
 }
 
 interface WidgetManagerContextValue {
@@ -26,6 +28,13 @@ interface WidgetManagerContextValue {
     fromPageId: number,
     toPageId: number,
     fn: (id: string) => Omit<GridStackWidget, "id">,
+  ) => void;
+
+  // update background image
+  updatePageBackground: (
+    pageId: number,
+    backgroundUrl: string,
+    overlayOpacity?: number,
   ) => void;
 }
 
