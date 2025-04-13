@@ -4,7 +4,7 @@ import { ReactNode, useState, useCallback } from "react";
 import { WidgetManagerContext, PageData } from "./widget-manager-context";
 import { GridStack, GridStackOptions, GridStackWidget } from "gridstack";
 
-const CELL_HEIGHT = 50;
+const CELL_HEIGHT = 270;
 const BREAKPOINTS = [
   { c: 1, w: 700 },
   { c: 3, w: 850 },
@@ -12,7 +12,7 @@ const BREAKPOINTS = [
   { c: 8, w: 1100 },
 ];
 export const BASE_GRID_OPTIONS: GridStackOptions = {
-  removable: true,
+  removable: false,
   acceptWidgets: true,
   columnOpts: {
     breakpointForWindow: true,
@@ -23,7 +23,7 @@ export const BASE_GRID_OPTIONS: GridStackOptions = {
   float: true,
   itemClass: "grid-stack-item",
   margin: 8,
-  row: 12,
+  row: 15,
   cellHeight: CELL_HEIGHT,
   subGridOpts: {
     acceptWidgets: true,
@@ -32,7 +32,7 @@ export const BASE_GRID_OPTIONS: GridStackOptions = {
       layout: "moveScale",
     },
     margin: 8,
-    minRow: 2,
+    minRow: 1,
     cellHeight: CELL_HEIGHT,
   },
 };

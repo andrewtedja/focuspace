@@ -21,6 +21,7 @@ import "gridstack/dist/gridstack.css";
 import "~/styles/demo.css";
 import WidgetToolkit from "./WidgetToolkit";
 import { CarouselPagination } from "./CarouselPagination";
+import { AppSidebar } from "./app_sidebar";
 
 export default function GridCarouselLayout() {
   const {
@@ -93,15 +94,22 @@ export default function GridCarouselLayout() {
   ]);
 
   return (
-    <div className="h-screen w-full">
-      <WidgetToolkit
+    <div className="relative h-screen w-full overflow-hidden">
+      <AppSidebar
         setAddingPage={setAddingPage}
         setRemovingPage={setRemovingPage}
         disabled={disabled}
-      ></WidgetToolkit>
-
-      <Carousel setApi={setCarouselApi} className="h-full w-full">
-        <CarouselContent>
+      />
+      {/* <WidgetToolkit
+        setAddingPage={setAddingPage}
+        setRemovingPage={setRemovingPage}
+        disabled={disabled}
+      ></WidgetToolkit> */}
+      <Carousel
+        setApi={setCarouselApi}
+        className="flex h-full w-full flex-col justify-between"
+      >
+        <CarouselContent className="flex-1">
           {pages.map((page) => (
             <CarouselItem key={page.id}>
               <GridStackProvider
@@ -111,24 +119,36 @@ export default function GridCarouselLayout() {
                 onGridStackReady={(gs) => registerGridStack(page.id, gs)}
               >
                 <GridStackRenderProvider>
-                  <div className="flex flex-col gap-2">
-                    <div className="grid-stack">
-                      <GridStackRender componentMap={COMPONENT_MAP} />
-                    </div>
+                  <div
+                    // ! GRID STACK
+                    className="grid-stack"
+                    style={{
+                      // backgroundImage: `url(/images/spaces/placeholder/adhd-2.jpg)`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                      height: "100%",
+                      width: "100%",
+                      backgroundRepeat: "no-repeat",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <GridStackRender componentMap={COMPONENT_MAP} />y{" "}
                   </div>
                 </GridStackRenderProvider>
               </GridStackProvider>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-
-        <CarouselPagination
-          pageCount={pages.length}
-          selectedIndex={selectedIndex}
-          onSelectPage={(index) => carouselApi?.scrollTo(index)}
-        ></CarouselPagination>
+        <CarouselPrevious className="mx-2 px-4 py-2" />
+        <CarouselNext className="mx-2 px-4 py-2" />
+        {/* //! MAIN PAGINATION */}
+        <div className="bg-white/70 bg-opacity-0 px-4 py-2 backdrop-blur-md">
+          <CarouselPagination
+            pageCount={pages.length}
+            selectedIndex={selectedIndex}
+            onSelectPage={(index) => carouselApi?.scrollTo(index)}
+          />
+        </div>
       </Carousel>
     </div>
   );
