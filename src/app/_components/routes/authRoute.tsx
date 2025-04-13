@@ -13,7 +13,7 @@ const AuthRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/room");
+      router.push("/dashboard");
       return;
     }
     if (!session) {
@@ -21,7 +21,7 @@ const AuthRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     }
     toast.success("Login successful!");
     setSession(session.expires, session.user);
-    router.push("/room");
+    router.push("/dashboard");
   }, [session]);
 
   if (session === undefined || session) {

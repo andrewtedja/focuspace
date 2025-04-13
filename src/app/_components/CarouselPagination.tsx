@@ -9,6 +9,12 @@ import {
   PaginationPrevious,
 } from "~/components/ui/pagination";
 
+/**
+ * Component for pagination inside the room
+ * This component renders a pagination component that is used to navigate to different pages
+ * in the room. It takes the total number of pages, the currently selected index, and a callback
+ * function to be called when a page is selected.
+ */
 export function CarouselPagination({
   pageCount,
   selectedIndex,

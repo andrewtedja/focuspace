@@ -1,5 +1,25 @@
+"use client";
+import { useState } from "react";
 import type React from "react";
-import { Home, BookOpen, Coffee, User, LogOut, Sparkle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import {
+  Home,
+  BookOpen,
+  Coffee,
+  User,
+  LogOut,
+  Sparkle,
+  ChevronDown,
+  ChevronRight,
+  Sparkles,
+  Boxes,
+  Plus,
+  Wallpaper,
+  CopyPlus,
+  Crown,
+  Gem,
+  Minus,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -12,37 +32,46 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
+import WidgetToolkit from "./WidgetToolkit";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "~/components/ui/collapsible";
+import Image from "next/image";
+import { useWidgetManager } from "~/lib/widget-manager-context";
+import AddWidgetButton from "./addWidgetButton";
+import { useSessionStore } from "~/stores/useSessionStore";
+import { signOut } from "next-auth/react";
+import BackgroundModal from "./BackgroundModal";
 
-// Menu items for the main navigation
 const mainItems = [
   {
-    title: "Home",
-    url: "#",
+    title: "Dashboard",
+    url: "/dashboard",
     icon: Home,
   },
   {
-    title: "Study Room",
-    url: "#",
+    title: "Focus Room",
+    url: "",
     icon: BookOpen,
   },
   {
-    title: "Break Room",
-    url: "#",
-    icon: Coffee,
-  },
-  {
-    title: "Profile",
-    url: "#",
+    title: "My Profile",
+    url: "/profile",
     icon: User,
   },
   {
-    title: "Get Plus",
+    title: "Get Plus++",
     url: "#",
-    icon: Sparkle,
+    icon: Gem,
     className:
       "glow relative overflow-hidden bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] text-white transition-all duration-300 ease-out  hover:shadow-xl hover:shadow-[#86B3D1]/50  hover:text-[#f7f7f7] active:shadow-none active:text-[#f7f7f7]",
   },
@@ -50,28 +79,38 @@ const mainItems = [
 
 export function AppSidebar({
   collapsible = "icon",
+  setAddingPage,
+  setRemovingPage,
+  disabled,
   ...props
-}: { collapsible?: "offcanvas" | "icon" | "none" } & React.ComponentProps<
-  typeof Sidebar
->) {
-  return (
-    <Sidebar collapsible={collapsible} {...props}>
-      <SidebarHeader className="border-sidebar-border flex h-16 items-center justify-center border-b">
-        <div className="flex items-center gap-2 px-2">
-          <SidebarTrigger />
-          <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-            <span className="text-md font-bold">FocuSpace</span>
-            <span className="text-xs text-muted-foreground">
-              Focus, Learn, Thrive
-            </span>
-          </div>
-        </div>
-      </SidebarHeader>
+}: {
+  collapsible?: "offcanvas" | "icon" | "none";
+  setAddingPage?: (val: boolean) => void;
+  setRemovingPage?: (val: boolean) => void;
+  disabled?: boolean;
+} & React.ComponentProps<typeof Sidebar>) {
+  const [open, setOpen] = useState(false);
+  const [isBackgroundModalOpen, setIsBackgroundModalOpen] = useState(false);
+  const router = useRouter();
+  const { currentPageId } = useWidgetManager();
+  const { user, logout } = useSessionStore();
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-          <SidebarGroupContent>
+  return (
+    <>
+      <Sidebar className="text-[#151515]" collapsible={collapsible} {...props}>
+        <SidebarHeader className="flex h-16 items-center justify-center border-b border-sidebar-border">
+          <div className="flex items-center gap-2 px-2">
+            <SidebarTrigger />
+            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+              <span className="text-md font-bold">Collapse Menu</span>
+            </div>
+          </div>
+        </SidebarHeader>
+        <SidebarContent className="">
+          <SidebarGroup>
+            <SidebarGroupLabel className="text-xs">
+              Navigation
+            </SidebarGroupLabel>
             <SidebarMenu>
               {mainItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
@@ -80,46 +119,164 @@ export function AppSidebar({
                     tooltip={item.title}
                     className={item.className}
                   >
-                    <a href={item.url} className="flex items-center gap-2">
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
+                    <a
+                      onClick={() => router.push(item.url)}
+                      className="flex items-center py-5"
+                    >
+                      <item.icon className="h-8 w-8" />
+                      <span className="text-md">{item.title}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+          </SidebarGroup>
+          <SidebarGroup>
+            <SidebarGroupLabel className="text-xs">
+              Workspace Customization
+            </SidebarGroupLabel>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  tooltip="Change Background"
+                  className="flex w-full cursor-pointer items-center justify-between"
+                  onClick={() => setIsBackgroundModalOpen(true)}
+                >
+                  <a className="flex items-center gap-2 py-2">
+                    <Wallpaper className="h-7 w-7 flex-none" />
+                    <span className="text-md flex-1">Change Background</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  tooltip="Add Page"
+                  className="flex w-full cursor-pointer items-center justify-between"
+                  onClick={() => setAddingPage?.(true)}
+                >
+                  <a className="flex items-center gap-2 py-2">
+                    <CopyPlus className="h-7 w-7 flex-none" />
+                    <span className="text-md flex-1">Add Page</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  tooltip="Remove Page"
+                  className="flex w-full cursor-pointer items-center justify-between"
+                  onClick={() => setRemovingPage?.(true)}
+                >
+                  <a className="flex items-center gap-2 py-2">
+                    <Minus className="h-7 w-7 flex-none" />
+                    <span className="text-md flex-1">Remove Current</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+          <SidebarGroup className="">
+            <SidebarGroupLabel className="text-xs">Widgets</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <Collapsible defaultOpen className="w-full">
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton
+                        tooltip="Widget Controls"
+                        className="flex w-full items-center justify-between transition-all hover:bg-gray-100/50"
+                        onClick={() => setOpen(!open)}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Boxes className="h-7 w-7" />
+                          <span className="text-sm">Add Tools</span>
+                        </div>
+                        {open ? (
+                          <ChevronRight className="h-7 w-7 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+                        ) : (
+                          <ChevronDown className="h-7 w-7 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+                        )}
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                  </SidebarMenuItem>
 
-      <SidebarFooter className="border-sidebar-border border-t p-2">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Profile & Logout">
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      <SidebarMenuSubItem>
+                        <AddWidgetButton
+                          label="Add Music"
+                          widgetName="MusicPlayer"
+                          w={4}
+                          h={1}
+                          page={currentPageId}
+                        />
+                      </SidebarMenuSubItem>
+                      <SidebarMenuSubItem>
+                        <AddWidgetButton
+                          label="Add Productivity Timer"
+                          widgetName="TodolistComponent"
+                          w={4}
+                          h={2}
+                          page={currentPageId}
+                        />
+                      </SidebarMenuSubItem>
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </Collapsible>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+          <SidebarSeparator className="border-sidebar-border" />
+        </SidebarContent>
+
+        <SidebarFooter className="border-t border-sidebar-border p-2">
+          <SidebarMenu>
+            <SidebarMenuItem>
               <a href="#" className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="h-8 w-8 overflow-hidden rounded-full bg-gray-200">
-                    <img
-                      src="/images/landing/avatar.png"
+                <div
+                  className="flex items-center gap-2"
+                  onClick={() => router.push("/profile")}
+                >
+                  <div className="h-8 w-8 overflow-hidden rounded-full bg-gray-200 group-data-[collapsible=icon]:hidden">
+                    <Image
+                      src={user?.image ?? "/images/landing/avatar.png"}
                       alt="User avatar"
                       className="h-full w-full object-cover"
+                      width={40}
+                      height={40}
                     />
                   </div>
                   <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                    <span className="text-sm font-medium">Theo Kurniady</span>
+                    <span className="text-sm font-medium">{user?.name}</span>
                     <span className="text-xs text-muted-foreground">
-                      Student
+                      Free Plan
                     </span>
                   </div>
                 </div>
-                <LogOut className="h-4 w-4 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+                <LogOut
+                  onClick={async () => {
+                    try {
+                      await signOut({}).then(() => logout());
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  }}
+                  className="h-4 w-4 text-muted-foreground group-data-[collapsible=icon]:hidden"
+                />
               </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+        <SidebarRail />
+      </Sidebar>
 
-      <SidebarRail />
-    </Sidebar>
+      {/* Background Modal */}
+      <BackgroundModal
+        open={isBackgroundModalOpen}
+        onClose={() => setIsBackgroundModalOpen(false)}
+      />
+    </>
   );
 }

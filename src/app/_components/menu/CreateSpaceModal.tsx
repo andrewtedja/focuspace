@@ -1,6 +1,15 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { X, Upload, Check, ArrowRight } from "lucide-react";
+import {
+  X,
+  Upload,
+  Check,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { initialRooms } from "~/data/rooms";
+
 import Image from "next/image";
 
 interface CreateSpaceModalProps {
@@ -12,7 +21,10 @@ interface CreateSpaceModalProps {
     backgroundImage: string;
   }) => void;
 }
-
+/**
+ * Modal component for creating a new space.
+ * It allows users to input a name, description, and select a background image.
+ */
 const CreateSpaceModal = ({
   isOpen,
   onClose,
@@ -26,14 +38,29 @@ const CreateSpaceModal = ({
   );
   const modalRef = useRef<HTMLDivElement>(null);
 
+  const allBackgrounds = Array.from(
+    new Set(initialRooms.map((room) => room.backgroundImage)),
+  );
+
+  // Pagination for background images
+  const [currentPage, setCurrentPage] = useState(0);
+  const imagesPerPage = 8;
+  const totalPages = Math.ceil(allBackgrounds.length / (imagesPerPage - 1));
+
+  const startIndex = currentPage * (imagesPerPage - 1);
+  const displayedBackgrounds = allBackgrounds.slice(
+    startIndex,
+    startIndex + (imagesPerPage - 1),
+  );
+
   // baru sample
-  const backgroundOptions = [
-    "/images/spaces/placeholder/lofi.jpg",
-    "/images/spaces/placeholder/room1.png",
-    "/images/spaces/placeholder/cafe.jpg",
-    "/images/spaces/placeholder/adhd-2.jpg",
-    "/images/spaces/placeholder/traveler.png",
-  ];
+  // const backgroundOptions = [
+  //   "/images/spaces/placeholder/lofi.jpg",
+  //   "/images/spaces/placeholder/room1.png",
+  //   "/images/spaces/placeholder/cafe.jpg",
+  //   "/images/spaces/placeholder/adhd-2.jpg",
+  //   "/images/spaces/placeholder/traveler.png",
+  // ];
 
   // Handle click outside to close
   useEffect(() => {
@@ -106,13 +133,21 @@ const CreateSpaceModal = ({
     }
   };
 
+  const goToNextPage = () => {
+    setCurrentPage((prev) => (prev < totalPages - 1 ? prev + 1 : prev));
+  };
+
+  const goToPrevPage = () => {
+    setCurrentPage((prev) => (prev > 0 ? prev - 1 : prev));
+  };
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
       <div
         ref={modalRef}
-        className="] relative w-full max-w-lg rounded-2xl bg-[#f2f2f2] p-6 shadow-xl"
+        className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-[#f2f2f2] p-6 shadow-xl"
       >
         <button
           onClick={onClose}
@@ -181,12 +216,17 @@ const CreateSpaceModal = ({
           ) : (
             // step 2
             <div className="space-y-4">
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Choose Background Image
-              </label>
+              <div className="mb-2 flex items-center justify-between">
+                <label className="block text-sm font-medium text-gray-700">
+                  Choose Background Image
+                </label>
+                <div className="text-sm text-gray-500">
+                  Page {currentPage + 1} of {totalPages}
+                </div>
+              </div>
 
-              <div className="grid grid-cols-3 gap-2">
-                {backgroundOptions.map((image, index) => (
+              <div className="grid grid-cols-4 gap-2">
+                {displayedBackgrounds.map((image, index) => (
                   <div
                     // SELECTED IMAGE
                     key={index}
@@ -199,7 +239,7 @@ const CreateSpaceModal = ({
                   >
                     <Image
                       src={image}
-                      alt={`Background option ${index + 1}`}
+                      alt={`Background option ${startIndex + index + 1}`}
                       className="h-full w-full object-cover"
                       width={120}
                       height={80}
@@ -211,7 +251,7 @@ const CreateSpaceModal = ({
                     )}
                   </div>
                 ))}
-
+                {/* ! Upload Image */}
                 <div className="relative flex aspect-video cursor-pointer items-center justify-center rounded-lg border border-dashed border-gray-600 bg-gray-50 hover:bg-gray-100">
                   <div className="flex flex-col items-center text-center">
                     <Upload size={20} className="mb-1 text-gray-600" />
@@ -219,6 +259,28 @@ const CreateSpaceModal = ({
                   </div>
                 </div>
               </div>
+
+              {/* Pagination controls */}
+              {totalPages > 1 && (
+                <div className="mt-3 flex justify-center space-x-2">
+                  <button
+                    type="button"
+                    onClick={goToPrevPage}
+                    disabled={currentPage === 0}
+                    className="rounded-full p-1 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={goToNextPage}
+                    disabled={currentPage === totalPages - 1}
+                    className="rounded-full p-1 hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </div>
+              )}
 
               <div className="mt-4">
                 <div className="text-sm font-medium text-gray-700">
@@ -228,7 +290,7 @@ const CreateSpaceModal = ({
                   <Image
                     src={selectedImage}
                     alt="Selected background"
-                    className="h-[full] w-full object-cover"
+                    className="h-full w-full object-cover"
                     width={400}
                     height={225}
                   />
