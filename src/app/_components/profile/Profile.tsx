@@ -1,22 +1,31 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Pencil, Cog, Share } from "lucide-react";
+import { Pencil, Gem, Check } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 
 const ProfileSection = () => {
   const [isAvatarHovered, setIsAvatarHovered] = useState(false);
+  const [selectedFont, setSelectedFont] = useState("Lexend");
 
-  const formatNumber = (num: number) => {
-    if (num >= 1000) {
-      return (num / 1000).toFixed(1) + "k";
-    }
-    return num.toString();
-  };
+  const fontOptions = [
+    { id: "Lexend", display: "Lexend" },
+    { id: "Open Dyslexic", display: "Open Dyslexic" },
+  ];
 
   return (
-    <div className="mb-8 flex flex-col items-center text-center">
+    <div className="fixed inset-0 z-10 flex h-full w-full flex-col items-center justify-center rounded-none bg-[url('/images/spaces/placeholder/adhd-2.jpg')] bg-cover bg-center bg-no-repeat text-center shadow-lg backdrop-blur-sm">
+      <div className="absolute inset-0 z-[-1] bg-black/85"></div>
       <div
-        className="relative mb-6 h-36 w-36 overflow-hidden rounded-full border-4 border-white bg-gray-100 shadow-lg"
+        className="group relative mb-6 h-64 w-64 overflow-hidden rounded-full border-4 border-white bg-gray-100 shadow-lg transition-transform duration-300 hover:scale-105"
         onMouseEnter={() => setIsAvatarHovered(true)}
         onMouseLeave={() => setIsAvatarHovered(false)}
       >
@@ -27,43 +36,60 @@ const ProfileSection = () => {
           alt="Profile Picture"
         />
         <div
-          className={`absolute bottom-0 left-0 right-0 cursor-pointer bg-black bg-opacity-60 py-2 text-sm text-white transition-opacity ${
+          className={`absolute bottom-4 left-0 right-0 cursor-pointer bg-gradient-to-t from-black/80 to-black/40 py-2 text-xs font-medium text-white backdrop-blur-sm transition-all ${
             isAvatarHovered ? "opacity-100" : "opacity-0"
           }`}
         >
+          <Pencil className="mx-auto mb-1 h-4 w-4" />
           Change Photo
         </div>
       </div>
+      {/*  Name  */}
+      <h1 className="relative m-0 text-3xl font-bold tracking-tight text-[#F8F8FF]">
+        Name
+      </h1>
 
-      {/* Profile Name */}
-      <h1 className="m-0 text-3xl font-bold text-gray-900">dsa</h1>
-
-      {/* Profile Badges */}
-      <div className="mt-2 flex justify-center gap-2">
-        <div className="inline-flex items-center rounded-full bg-indigo-600 px-3 py-1 text-xs font-medium text-white">
-          <Pencil className="mr-1 h-3.5 w-3.5" />
-          Member since 2020
+      <div className="mt-4 flex justify-center gap-3">
+        <div className="relative flex items-center rounded-full bg-[#FFD397] px-5 py-2 text-base font-medium text-black shadow-sm">
+          <Gem className="mr-1.5 h-5 w-5" />
+          <span className="font-semibold">Plus++</span>
         </div>
-        <div className="inline-flex items-center rounded-full border border-indigo-600 px-3 py-1 text-xs font-medium text-indigo-600">
-          <Cog className="mr-1 h-3.5 w-3.5" />
-          Pro User
-        </div>
-      </div>
 
-      {/* Action Buttons */}
-      <div className="mt-6 flex gap-2">
-        <button className="inline-flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700">
-          <Pencil className="mr-2 h-4 w-4" />
-          Edit Profile
-        </button>
-        <button className="inline-flex items-center justify-center rounded-md border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50">
-          <Cog className="mr-2 h-4 w-4" />
-          Settings
-        </button>
-        <button className="inline-flex items-center justify-center rounded-md border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50">
-          <Share className="mr-2 h-4 w-4" />
-          Share
-        </button>
+        {/* Dropdown */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="to- inline-flex items-center gap-2 rounded-full bg-[#A2B6A0] px-5 py-2 text-base font-medium text-white shadow-sm transition-all">
+              <span>Chosen Font:</span>
+              <span className="font-semibold">{selectedFont}</span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-64 cursor-pointer rounded-xl border-gray-200 shadow-lg duration-200 animate-in fade-in-80">
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="text-base font-medium text-gray-500">
+                Choose Font Style
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {fontOptions.map((font) => (
+                <DropdownMenuItem
+                  key={font.id}
+                  onSelect={() => setSelectedFont(font.id)}
+                  className={`flex items-center justify-between hover:bg-gray-50 ${
+                    selectedFont === font.id
+                      ? "bg-indigo-50 text-indigo-600"
+                      : ""
+                  }`}
+                >
+                  <span>{font.display}</span>
+                  {selectedFont === font.id && (
+                    <span className="text-indigo-600">
+                      <Check size={20} />
+                    </span>
+                  )}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

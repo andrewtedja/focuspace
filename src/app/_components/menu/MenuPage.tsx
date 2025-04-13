@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import CreateSpaceModal from "./CreateSpaceModal";
 import { initialRooms } from "~/data/rooms";
+import { useWidgetManager } from "~/lib/widget-manager-context";
 
 const MenuPage = () => {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -13,7 +14,7 @@ const MenuPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const [rooms, setRooms] = useState(initialRooms);
-
+  const { addPage } = useWidgetManager();
   // * Simulate loading
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -43,20 +44,13 @@ const MenuPage = () => {
     desc: string;
     backgroundImage: string;
   }) => {
-    // Generate a new ID (in a real app, this would come from the backend)
-    const newId = Math.max(...rooms.map((room) => room.id)) + 1;
+    const newId = addPage({
+      title: newSpace.name,
+      backgroundImage: newSpace.backgroundImage,
+      backgroundOverlayOpacity: 30,
+    });
 
-    // Add the new space to the rooms array
-    setRooms((prevRooms) => [
-      ...prevRooms,
-      {
-        id: newId,
-        name: newSpace.name,
-        desc: newSpace.desc,
-        backgroundImage: newSpace.backgroundImage,
-        isFavorite: false,
-      },
-    ]);
+    router.push(`/room?id=${newId}`);
   };
 
   const getFilteredRooms = () => {
@@ -121,7 +115,7 @@ const MenuPage = () => {
                   onClick={() => setActiveFilter(category.id)}
                   className={`flex items-center rounded-full px-4 py-2.5 text-sm font-medium transition-all ${
                     activeFilter === category.id
-                      ? "bg-[#86B3D1] text-[#ffffff] hover:bg-[#96bedb]"
+                      ? "bg-[#86B3D1] text-[#F8F8FF] hover:bg-[#96bedb]"
                       : "bg-[#1E293B] text-[#CBD5E0]"
                   }`}
                 >
@@ -138,7 +132,7 @@ const MenuPage = () => {
                   placeholder="Search rooms..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg border border-[#BCD0D7] bg-white py-2 pl-10 pr-4 text-sm shadow-sm transition-all focus:border-[#86B3D1] focus:outline-none focus:ring-2 focus:ring-[#86B3D1]/20"
+                  className="w-full rounded-lg border border-[#BCD0D7] bg-[#F8F8FF] py-2 pl-10 pr-4 text-sm shadow-sm transition-all focus:border-[#86B3D1] focus:outline-none focus:ring-2 focus:ring-[#86B3D1]/20"
                 />
                 <Search
                   size={18}
@@ -148,7 +142,7 @@ const MenuPage = () => {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="ml-4 flex min-w-[160px] items-center justify-center rounded-full bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] px-4 py-3 text-sm font-medium text-white shadow-sm transition-all hover:from-[#89b6d3] hover:to-[#95d4c0] hover:shadow-md"
+                className="ml-4 flex min-w-[160px] items-center justify-center rounded-full bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] px-4 py-3 text-sm font-medium text-[#F8F8FF] shadow-sm transition-all hover:from-[#89b6d3] hover:to-[#95d4c0] hover:shadow-md"
               >
                 <Plus size={18} className="mr-1.5" />
                 <span className="whitespace-nowrap">Create Your Space</span>
@@ -174,7 +168,7 @@ const MenuPage = () => {
                 // space groups
                 <div
                   key={room.id}
-                  onClick={() => router.push(`/room`)} // temporary
+                  onClick={() => router.push(`/room?id=${room.id}`)}
                   className="animated-border group relative mt-2 cursor-pointer overflow-visible rounded-xl bg-[#2D3748] shadow-md shadow-black/65 transition-all duration-500 hover:scale-105 hover:shadow-[#63B3ED]/20"
                 >
                   <div
@@ -243,7 +237,7 @@ const MenuPage = () => {
             {filteredRooms.length > 0 && (
               <div
                 onClick={() => setIsModalOpen(true)}
-                className="group relative mt-2 flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-xl border border-[#CBD5E0] bg-white p-4 backdrop-blur-sm transition-all hover:border-[#4A90E2] hover:shadow-lg hover:shadow-[#4A90E2]/10"
+                className="group relative mt-2 flex aspect-[4/3] cursor-pointer flex-col items-center justify-center rounded-xl border border-[#CBD5E0] bg-[#F8F8FF] p-4 backdrop-blur-sm transition-all hover:border-[#4A90E2] hover:shadow-lg hover:shadow-[#4A90E2]/10"
               >
                 <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#EBF8FF] transition-colors group-hover:bg-[#BEE3F8]">
                   <Plus size={28} className="text-[#4A90E2]" />
