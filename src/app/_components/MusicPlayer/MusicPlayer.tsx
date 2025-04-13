@@ -177,7 +177,7 @@ export const MusicPlayer = () => {
   }, [showModal]);
 
   return (
-    <div className="relative mx-auto flex h-full w-full flex-col rounded-xl bg-black/70 p-4 text-[#F8F8FF] shadow-lg backdrop-blur-xl">
+    <div className="relative mx-auto flex h-full w-full flex-col rounded-xl bg-black/70 p-4 text-white shadow-lg backdrop-blur-xl">
       <style jsx>{`
         input[type="range"] {
           height: 5px;
@@ -193,7 +193,7 @@ export const MusicPlayer = () => {
           margin-top: -4px;
           height: 13px;
           width: 13px;
-          background: [#F8F8FF];
+          background: white;
           border-radius: 50%;
           border: 2px solid;
           transition: all 0.2s ease;
@@ -213,7 +213,7 @@ export const MusicPlayer = () => {
             e.stopPropagation();
             setShowModal(true);
           }}
-          className="text-gray-300 hover:text-[#F8F8FF]"
+          className="text-gray-300 hover:text-white"
         >
           <Settings2 size={20} />
         </button>
@@ -250,18 +250,18 @@ export const MusicPlayer = () => {
 
       <div className="mt-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <button onClick={prev} className="text-gray-400 hover:text-[#F8F8FF]">
+          <button onClick={prev} className="text-gray-400 hover:text-white">
             <SkipBack size={24} />
           </button>
 
           <button
             onClick={playPause}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#6596b6] text-[#F8F8FF] transition hover:bg-[#48a2df]"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#6596b6] text-white transition hover:bg-[#48a2df]"
           >
             {isPlaying ? <Pause size={18} /> : <Play size={18} />}
           </button>
 
-          <button onClick={next} className="text-gray-400 hover:text-[#F8F8FF]">
+          <button onClick={next} className="text-gray-400 hover:text-white">
             <SkipForward size={24} />
           </button>
         </div>
@@ -269,7 +269,7 @@ export const MusicPlayer = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={toggleMute}
-            className="text-gray-400 hover:text-[#F8F8FF]"
+            className="text-gray-400 hover:text-white"
           >
             <VolumeIcon />
           </button>
@@ -301,15 +301,15 @@ export const MusicPlayer = () => {
           <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
             <div
               ref={modalRef}
-              className="h-[calc(100vh-4rem)] max-h-[700px] w-[calc(100vw-4rem)] max-w-[1200px] overflow-hidden rounded-2xl bg-gray-900/90 p-20 shadow-2xl ring-1 ring-[#F8F8FF]/10"
+              className="h-[calc(100vh-4rem)] max-h-[700px] w-[calc(100vw-4rem)] max-w-[1200px] overflow-hidden rounded-2xl bg-gray-900/90 p-20 shadow-2xl ring-1 ring-white/10"
             >
               <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-semibold text-[#F8F8FF]/90">
+                <h3 className="text-2xl font-semibold text-white/90">
                   Select Sound
                 </h3>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="rounded-full p-3 text-[#F8F8FF]/70 transition-all hover:bg-[#F8F8FF]/10 hover:text-[#F8F8FF] active:scale-95"
+                  className="rounded-full p-3 text-white/70 transition-all hover:bg-white/10 hover:text-white active:scale-95"
                 >
                   <XIcon size={24} />
                 </button>
@@ -320,7 +320,7 @@ export const MusicPlayer = () => {
                   <input
                     type="text"
                     placeholder="Search sounds..."
-                    className="w-full rounded-xl border border-[#F8F8FF]/10 bg-[#F8F8FF]/5 px-4 py-3 text-sm text-[#F8F8FF]/90 placeholder-[#F8F8FF]/40 backdrop-blur-xl transition-all focus:border-[#F8F8FF]/20 focus:outline-none focus:ring-0"
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/90 placeholder-white/40 backdrop-blur-xl transition-all focus:border-white/20 focus:outline-none focus:ring-0"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -339,14 +339,11 @@ export const MusicPlayer = () => {
                         setShowModal(false);
                         setIsPlaying(true);
                       }}
-                      className="mb-3 w-full rounded-xl bg-[#F8F8FF]/5 px-4 py-4 text-left transition-all hover:bg-[#F8F8FF]/10"
+                      className="mb-3 w-full rounded-xl bg-white/5 px-4 py-4 text-left transition-all hover:bg-white/10"
                     >
-                      <div className="text-sm font-medium text-[#F8F8FF]/90">
+                      <div className="text-sm font-medium text-white/90">
                         <div className="flex items-center gap-2">
-                          <AudioWaveform
-                            size={24}
-                            className="text-[#F8F8FF]/70"
-                          />
+                          <AudioWaveform size={24} className="text-white/70" />
                           {song.title}
                         </div>
                       </div>

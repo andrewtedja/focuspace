@@ -32,7 +32,6 @@ const CreateSpaceModal = ({
 }: CreateSpaceModalProps) => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [description, setDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(
     "/images/spaces/placeholder/lofi.jpg",
@@ -43,22 +42,10 @@ const CreateSpaceModal = ({
     new Set(initialRooms.map((room) => room.backgroundImage)),
   );
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setUploadedImage(imageUrl);
-      setSelectedImage(imageUrl);
-
-      // later upload the image to a server or cloud storage, and use server path
-    }
-  };
-
   // Pagination for background images
   const [currentPage, setCurrentPage] = useState(0);
   const imagesPerPage = 8;
   const totalPages = Math.ceil(allBackgrounds.length / (imagesPerPage - 1));
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const startIndex = currentPage * (imagesPerPage - 1);
   const displayedBackgrounds = allBackgrounds.slice(
@@ -278,21 +265,11 @@ const CreateSpaceModal = ({
                 ))}
 
                 {/* ! Upload Image */}
-                <div
-                  className="relative flex aspect-video cursor-pointer items-center justify-center rounded-lg border border-dashed border-gray-600 bg-gray-50 hover:bg-gray-100"
-                  onClick={() => fileInputRef.current?.click()}
-                >
+                <div className="relative flex aspect-video cursor-pointer items-center justify-center rounded-lg border border-dashed border-gray-600 bg-gray-50 hover:bg-gray-100">
                   <div className="flex flex-col items-center text-center">
                     <Upload size={20} className="mb-1 text-gray-600" />
                     <span className="text-xs text-gray-600">Upload</span>
                   </div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={handleFileUpload}
-                    className="hidden"
-                  />
                 </div>
               </div>
 
