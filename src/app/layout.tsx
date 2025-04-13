@@ -1,6 +1,6 @@
 import "~/styles/globals.css";
 
-import { Poppins } from "next/font/google";
+import { Poppins, Lexend } from "next/font/google";
 import { Toaster } from "sonner";
 import { type Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
@@ -13,6 +13,12 @@ const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-poppins",
+});
+
+const lexend = Lexend({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-lexend",
 });
 
 export const metadata: Metadata = {
@@ -29,8 +35,8 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${openDyslexic.className}`}>
-      <body className="OpenDyslexic">
+    <html lang="en" className={`${lexend.className}`}>
+      <body className="Lexend">
         <MobileWarning />
         <TRPCReactProvider>
           <SessionProvider> {children}</SessionProvider>

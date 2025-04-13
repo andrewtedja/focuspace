@@ -148,7 +148,7 @@ const MenuPage = () => {
               <button
                 type="button"
                 onClick={() => setIsModalOpen(true)}
-                className="ml-4 flex min-w-[160px] items-center justify-center rounded-full bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] px-4 py-3 text-sm font-medium text-white shadow-sm transition-all hover:shadow-md"
+                className="ml-4 flex min-w-[160px] items-center justify-center rounded-full bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] px-4 py-3 text-sm font-medium text-white shadow-sm transition-all hover:from-[#89b6d3] hover:to-[#95d4c0] hover:shadow-md"
               >
                 <Plus size={18} className="mr-1.5" />
                 <span className="whitespace-nowrap">Create Space</span>
@@ -185,7 +185,7 @@ const MenuPage = () => {
                     }}
                   >
                     {/* overlay (adjust yang via kalau mo ubah) */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#000000] via-[#000000]/50 to-transparent transition-all group-hover:via-[#000000]/30" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#000000] via-[#000000]/50 to-transparent transition-all group-hover:via-[#000000]/20" />
 
                     <div className="absolute bottom-0 left-0 right-0 p-6 transition-all duration-300 group-hover:-translate-y-[2rem]">
                       <h3 className="text-2xl font-semibold text-[#E2E8F0]">
@@ -202,7 +202,7 @@ const MenuPage = () => {
                     </button>
                     {/* star btn */}
                     <button
-                      className="group absolute right-5 top-5 opacity-0 group-hover:opacity-100"
+                      className="group absolute right-5 top-5 group-hover:opacity-100"
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleFavorite(room.id);
@@ -211,8 +211,9 @@ const MenuPage = () => {
                       <Star
                         size={24}
                         className={clsx("transition-all", {
-                          "fill-yellow-500 text-yellow-500": room.isFavorite,
-                          "text-[#CBD5E0] hover:text-yellow-500":
+                          "opaci fill-yellow-500 text-yellow-500":
+                            room.isFavorite,
+                          "text-[#CBD5E0] opacity-0 hover:text-yellow-500 group-hover:opacity-100":
                             !room.isFavorite,
                         })}
                       />
