@@ -146,11 +146,11 @@ const TestButton: React.FC<TestButtonProps> = ({
 
       <div
         ref={buttonRef}
-        className="relative flex items-center justify-center overflow-hidden rounded-full bg-[#86B3D1] px-2 py-6"
+        className="relative flex items-center justify-center overflow-hidden rounded-full bg-[#86B3D1] px-8 py-6"
         style={{
           ...calculateTransform(),
           ...calculateSurfaceLighting(),
-          width: "550px",
+          width: "680px",
           height: "140px",
           border: "1px solid rgba(255, 255, 255, 1)",
         }}

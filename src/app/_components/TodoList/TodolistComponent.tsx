@@ -122,52 +122,66 @@ export default function PomodoroTodoApp() {
 
       {/* TABS (tasks) */}
       {activeTab === "tasks" && (
-        <div className="bg-black/70 p-4 backdrop-blur-2xl">
-          <div className="mb-4 flex">
-            <input
-              type="text"
-              value={todoInput}
-              onChange={(e) => setTodoInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && addTodo()}
-              placeholder="Add a new task..."
-              className="flex-1 rounded-l bg-gray-700 p-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            />
-            <button
-              onClick={addTodo}
-              className="rounded-r bg-[#5c87a3] p-2 text-white hover:bg-[#48a2df]"
-            >
-              Add
-            </button>
+        <div className="bg-black/70 p-6 backdrop-blur-2xl">
+          <div className="mb-6">
+            <div className="flex overflow-hidden rounded-lg border border-gray-600/30 bg-gray-800/50 shadow-lg">
+              <input
+                type="text"
+                value={todoInput}
+                onChange={(e) => setTodoInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && addTodo()}
+                placeholder="Add a new task..."
+                className="flex-1 bg-transparent px-4 py-3 text-white placeholder-gray-400 focus:outline-none"
+              />
+              <button
+                onClick={addTodo}
+                className="bg-[#5c87a3] px-6 py-3 font-medium text-white transition-all hover:bg-[#48a2df] active:scale-95"
+              >
+                Add
+              </button>
+            </div>
           </div>
 
-          <div className="mt-4 min-h-64 space-y-2">
+          <div className="mt-4 min-h-64 space-y-3">
             {todos.length === 0 ? (
-              <p className="py-4 text-center text-gray-200">
-                No tasks yet. Add your first task!
-              </p>
+              <div className="flex min-h-[200px] items-center justify-center rounded-lg border border-dashed border-gray-600/30 bg-gray-800/20">
+                <p className="text-center text-gray-400">
+                  No tasks yet. Add your first task!
+                </p>
+              </div>
             ) : (
               todos.map((todo) => (
                 <div
                   key={todo.id}
-                  className={`rounded border p-3 ${todo.completed ? "bg-gray-600" : "bg-gray-700"}`}
+                  className={`group transform rounded-lg border border-gray-600/30 bg-gray-800/50 p-2 transition-all hover:border-gray-500/50 ${
+                    todo.completed ? "opacity-75" : ""
+                  }`}
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center gap-3">
                       <button
                         onClick={() => toggleComplete(todo.id)}
-                        className={`mt-0 flex h-5 w-5 items-center justify-center rounded-full border ${todo.completed ? "border-green-500 bg-green-500 text-white" : "border-gray-500"}`}
+                        className={`transform rounded-full border-2 p-1 transition-all hover:scale-110 ${
+                          todo.completed
+                            ? "border-green-500 bg-green-500/20 text-green-500"
+                            : "border-gray-500 hover:border-green-500 hover:text-green-500"
+                        }`}
                       >
                         {todo.completed && <Check size={12} />}
                       </button>
                       <p
-                        className={`${todo.completed ? "text-gray-400 line-through" : "text-gray-200"}`}
+                        className={`transition-all ${
+                          todo.completed
+                            ? "text-gray-500 line-through"
+                            : "text-gray-200"
+                        }`}
                       >
                         {todo.text}
                       </p>
                     </div>
                     <button
                       onClick={() => deleteTodo(todo.id)}
-                      className="p-1 text-red-500 hover:text-red-700"
+                      className="transform p-2 text-gray-500 opacity-0 transition-all hover:text-red-500 group-hover:opacity-100"
                     >
                       <Trash2 size={16} />
                     </button>
@@ -178,55 +192,60 @@ export default function PomodoroTodoApp() {
           </div>
         </div>
       )}
-
       {/* TABS */}
       {activeTab === "timer" && (
-        <div className="bg-black/70 p-6 backdrop-blur-xl">
-          <div className="mb-4 flex items-center justify-center">
-            <Clock className="mr-2" size={12} />
-            <h2 className="text-sm font-semibold text-gray-50">Pomodoro</h2>
+        <div className="bg-black/70 p-8 backdrop-blur-xl">
+          <div className="mb-6 flex items-center justify-center">
+            <Clock className="mr-2" size={16} />
+            <h2 className="text-lg font-semibold text-gray-50">
+              Pomodoro Focus
+            </h2>
           </div>
 
-          <div className="mb-4 text-center text-6xl font-normal text-[#c2d3d3]">
-            {formatTime(timeLeft)}
+          <div className="mb-8 text-center">
+            <div className="text-8xl font-light tracking-tight text-[#e2f0f0]">
+              {formatTime(timeLeft)}
+            </div>
           </div>
 
-          <div className="mb-6 flex justify-center space-x-4">
+          <div className="mb-8 flex justify-center space-x-4">
             {!isRunning ? (
               <button
                 onClick={startTimer}
-                className="bg-[#4677a1] px-4 py-2 text-white shadow-md hover:bg-[#4987bc]"
+                className="transform rounded-lg bg-[#5c87a3] px-6 py-3 font-medium text-white shadow-lg transition-all hover:bg-[#48a2df] hover:shadow-xl active:scale-95"
               >
-                Start
+                Start Focus
               </button>
             ) : (
               <button
                 onClick={pauseTimer}
-                className="bg-[#4677a1] px-4 py-2 text-white shadow-md hover:bg-[#4987bc]"
+                className="transform rounded-lg bg-[#4677a1] px-6 py-3 font-medium text-white shadow-lg transition-all hover:bg-[#4987bc] hover:shadow-xl active:scale-95"
               >
                 Pause
               </button>
             )}
             <button
               onClick={resetTimer}
-              className="bg-gray-500 px-4 py-2 text-white shadow-md hover:bg-gray-600"
+              className="transform rounded-lg bg-gray-600/50 px-6 py-3 font-medium text-white shadow-lg transition-all hover:bg-gray-500 hover:shadow-xl active:scale-95"
             >
               Reset
             </button>
           </div>
 
-          {/* Time  Grid */}
-          <div className="space-y-2">
-            <p className="mb-2 text-sm font-medium text-gray-700"></p>
-            <div className="grid grid-cols-3 gap-2">
+          {/* Time Presets */}
+          <div className="mx-auto max-w-md space-y-4">
+            <h3 className="text-center text-sm font-medium text-gray-400">
+              Quick Presets
+            </h3>
+            <div className="grid grid-cols-3 gap-3">
               {timePresets.flat().map((minutes) => (
                 <button
                   key={minutes}
                   onClick={() => selectTime(minutes)}
-                  className={`rounded-md px-2 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  className={`transform rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                     selectedTime === minutes
-                      ? "bg-[#6297b9] text-white"
-                      : "bg-[#b7c6d1] text-gray-800 hover:bg-gray-200"
+                      ? "bg-[#6297b9] text-white shadow-lg"
+                      : "bg-gray-700/50 text-gray-300 hover:bg-gray-600/50"
                   }`}
                 >
                   {minutes} min

@@ -68,10 +68,8 @@ const MenuPage = () => {
 
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (room) =>
-          room.name.toLowerCase().includes(query) ||
-          room.desc.toLowerCase().includes(query),
+      filtered = filtered.filter((room) =>
+        room.name.toLowerCase().includes(query),
       );
     }
 
@@ -92,7 +90,6 @@ const MenuPage = () => {
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-[#E9EEF2] to-[#F2F5F8] pb-20 text-[#151515]">
       <main className="container relative mx-auto px-4 py-12">
-        {/* Header */}
         <div>
           <div className="mb-8">
             <div className="mb-4 inline-block rounded-full border border-[#6183ac]/30 bg-[#F5F7FA] px-4 py-1.5 text-sm font-medium text-[#4A5568]">
@@ -162,7 +159,7 @@ const MenuPage = () => {
 
         {/* Loading skeleton */}
         {isLoading ? (
-          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-3">
+          <div className="grid grid-cols-2 gap-5 sm:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((item) => (
               <div
                 key={item}

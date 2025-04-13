@@ -1,11 +1,11 @@
 import "~/styles/globals.css";
 
 import { Poppins } from "next/font/google";
-import { GeistSans } from "geist/font/sans";
 import { Toaster } from "sonner";
 import { type Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { TRPCReactProvider } from "~/trpc/react";
+import localFont from "next/font/local";
 
 import MobileWarning from "./_components/MobileWarning";
 
@@ -21,12 +21,16 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
+const openDyslexic = localFont({
+  src: "../fonts/OpenDyslexic-Regular.woff",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${poppins.variable}`}>
-      <body>
+    <html lang="en" className={`${openDyslexic.className}`}>
+      <body className="OpenDyslexic">
         <MobileWarning />
         <TRPCReactProvider>
           <SessionProvider> {children}</SessionProvider>

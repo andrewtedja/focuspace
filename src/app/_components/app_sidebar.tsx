@@ -217,8 +217,8 @@ export function AppSidebar({
                         <AddWidgetButton
                           label="Add Productivity Timer"
                           widgetName="TodolistComponent"
-                          w={3}
-                          h={1}
+                          w={4}
+                          h={2}
                           page={currentPageId}
                         />
                       </SidebarMenuSubItem>
