@@ -213,9 +213,9 @@ export default function ChatArea({ history, currentFile }: ChatAreaProps) {
   const isSending = saveMessage.isPending || getAnswer.isPending;
 
   return (
-    <div className="m-0 flex h-full max-h-full w-fit flex-col">
+    <div className="m-0 flex h-full w-full flex-col items-center justify-center bg-[#f7f4f7]">
       {/* Scrollable area for chat messages */}
-      <ScrollArea className="h-full w-fit flex-1 overflow-y-auto px-4">
+      <ScrollArea className="h-full w-full flex-1 overflow-y-auto p-3">
         {showScrollButton && (
           <Button
             className="absolute bottom-5 left-1/2 z-10 h-10 w-10 -translate-x-1/2 rounded-full opacity-75"
@@ -232,7 +232,7 @@ export default function ChatArea({ history, currentFile }: ChatAreaProps) {
       </ScrollArea>
 
       {/* Bottom area: PDF upload + message input */}
-      <div className="flex gap-2 bg-gray-500 p-4">
+      <div className="flex w-full items-center gap-2 border-t bg-[#f0f1f0] px-2 py-4">
         {/* PDF Upload (AlertDialog inside) */}
         <UploadDialog
           currentFile={currentFile}
@@ -245,10 +245,10 @@ export default function ChatArea({ history, currentFile }: ChatAreaProps) {
             <button
               onClick={() => SetPdfMode(!pdfMode)}
               aria-label="Toggle PDF mode"
-              className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md border border-input px-2 text-sm font-medium text-white transition-colors ${
+              className={`inline-flex h-12 min-w-12 items-center justify-center rounded-md border px-2 text-sm font-medium transition-colors ${
                 pdfMode
-                  ? "bg-white text-accent-foreground"
-                  : "bg-transparent hover:bg-gray-400 hover:text-accent-foreground"
+                  ? "border-input bg-white text-accent-foreground"
+                  : "border-transparent bg-[#151515] text-sky-300"
               }`}
             >
               <File className="h-4 w-4" />

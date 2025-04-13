@@ -2,14 +2,11 @@
 
 import React from "react";
 import { useSessionStore } from "~/stores/useSessionStore";
-import { signOut } from "next-auth/react";
-import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "~/app/_components/routes/protectedRoute";
 import GridCarouselLayout from "~/app/_components/gridCarousel";
-import { WidgetManagerProvider } from "~/lib/widget-manager-provider";
 import { useWidgetManager } from "~/lib/widget-manager-context";
-
+import AiBuddy from "~/app/_components/chatbot/AiBuddy";
 // Component to render the grid with dynamic background
 const DynamicBackgroundGrid = () => {
   const { pages, currentPageId } = useWidgetManager();
@@ -43,7 +40,9 @@ const Page = () => {
 
   return (
     <ProtectedRoute>
-      <DynamicBackgroundGrid />
+      <AiBuddy>
+        <DynamicBackgroundGrid />
+      </AiBuddy>
     </ProtectedRoute>
   );
 };

@@ -13,7 +13,7 @@ import { Button } from "~/components/ui/button";
 import ChatTabs from "./ChatTabs";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
 import { api } from "~/trpc/react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, SparklesIcon } from "lucide-react";
 const AiBuddy: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data: history } = api.message.getRecentMessages.useQuery();
@@ -26,9 +26,9 @@ const AiBuddy: React.FC<PropsWithChildren<{}>> = ({ children }) => {
         <SheetTrigger asChild>
           <Button
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-5 right-5 h-10 w-10 rounded-full"
+            className="fixed bottom-16 right-5 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-[#86B3D1] to-[#95BAAA] text-white shadow-lg transition duration-300 ease-in-out hover:scale-105 hover:bg-gray-100 hover:shadow-lg hover:shadow-[#8abce5] active:scale-95"
           >
-            <Sparkles></Sparkles>
+            <SparklesIcon className="h-5 w-5 text-white" />
           </Button>
         </SheetTrigger>
         <SheetContent forceMount className="p-0">

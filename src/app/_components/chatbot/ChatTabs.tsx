@@ -5,21 +5,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import ChatArea from "./ChatArea";
 import Flashcards from "./Flashcards";
 import { TooltipProvider } from "~/components/ui/tooltip";
-/**
- * Top-level component for switching between Chatbot and Flashcard tabs
- */
 
 import { inferRouterOutputs } from "@trpc/server";
 import { AppRouter } from "~/server/api/root";
+
 type RouterOutput = inferRouterOutputs<AppRouter>;
 type Flashcard = RouterOutput["flashcard"]["getFlashcardsByUser"];
 type CurrentFile = RouterOutput["pdfUpload"]["getCurrentFile"];
 type History = RouterOutput["message"]["getRecentMessages"];
+
 type ChatTabsProps = {
   history: History;
   currentFile: CurrentFile;
   flashcards: Flashcard;
 };
+
 export default function ChatTabs({
   history,
   currentFile,
@@ -29,37 +29,44 @@ export default function ChatTabs({
 
   return (
     <TooltipProvider>
-      <div className="flex h-full w-full justify-center">
-        <div className="relative h-screen max-h-screen rounded-lg bg-gray-400">
+      <div className="flex h-full w-full items-center justify-center bg-gray-100 p-2">
+        <div className="relative h-[90vh] w-full rounded-xl bg-white shadow-lg">
           <Tabs
             value={tabValue}
             onValueChange={(value) => setTabValue(value)}
-            className="flex h-full max-h-full w-fit flex-col"
+            className="flex h-full flex-col"
           >
-            <TabsList className="flex h-fit w-full bg-gray-600">
-              <TabsTrigger value="chatbot" className="flex-1 text-white">
+            {/* Tabs Header */}
+            <TabsList className="flex w-full justify-around border-b border-gray-300 bg-gray-100 px-4 py-2">
+              <TabsTrigger
+                value="chatbot"
+                className="flex-1 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 data-[state=active]:bg-gray-700 data-[state=active]:text-white"
+              >
                 Chatbot
               </TabsTrigger>
-              <TabsTrigger value="flashcard" className="flex-1 text-white">
+              <TabsTrigger
+                value="flashcard"
+                className="flex-1 rounded-md px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 data-[state=active]:bg-gray-700 data-[state=active]:text-white"
+              >
                 Flashcard
               </TabsTrigger>
             </TabsList>
 
-            <div
-              className={`mt-0 h-[95vh] w-fit flex-1 ${
-                tabValue === "chatbot" ? "" : "hidden"
-              }`}
+            {/* Chat Area */}
+            <TabsContent
+              value="chatbot"
+              className="flex-1 overflow-hidden rounded-b-xl bg-white p-3"
             >
               <ChatArea currentFile={currentFile} history={history} />
-            </div>
+            </TabsContent>
 
-            <div
-              className={`mt-0 h-[95vh] w-fit flex-1 ${
-                tabValue === "flashcard" ? "" : "hidden"
-              }`}
+            {/* Flashcard Area */}
+            <TabsContent
+              value="flashcard"
+              className="flex-1 overflow-hidden rounded-b-xl bg-white p-4"
             >
               <Flashcards flashcards={flashcards} />
-            </div>
+            </TabsContent>
           </Tabs>
         </div>
       </div>
