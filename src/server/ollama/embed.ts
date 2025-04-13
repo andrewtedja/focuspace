@@ -1,15 +1,25 @@
-export async function getEmbedding(input: string): Promise<number[]> {
-  const response = await fetch("http://localhost:11434/api/embeddings", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ model: "llama3.2", prompt: input }),
-  });
+import { openai } from "../openai";
 
-  if (!response.ok) {
-    console.error(await response.text());
-    throw new Error("Failed to generate embedding from Ollama");
+/**
+ * Get embedding vector for the input text using OpenAI's API.
+ *
+ * @param input - The string to embed.
+ * @returns An array of numbers representing the embedding.
+ */
+export async function getEmbedding(input: string): Promise<number[]> {
+  if (!process.env.OPENAI_MODEL_EMBED) {
+    throw new Error("OPENAI_MODEL_EMBED is not set in environment variables.");
   }
 
-  const data = await response.json();
-  return data.embedding;
+  const response = await openai.embeddings.create({
+    model: process.env.OPENAI_MODEL_EMBED,
+    input,
+  });
+
+  const embedding = response.data?.[0]?.embedding;
+  if (!embedding) {
+    throw new Error("No embedding returned by OpenAI");
+  }
+
+  return embedding;
 }

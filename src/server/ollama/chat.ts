@@ -1,20 +1,28 @@
+import { openai } from "../openai";
+/**
+ * Create a chat completion using the OpenAI API.
+ *
+ * @param messages - An array of chat messages, each with a role and content.
+ * @param temperature - Controls the randomness. Default is 0.7.
+ * @returns The string content of the first completion choice.
+ */
 export async function getChatCompletion(
   messages: { role: "user" | "system" | "assistant"; content: string }[],
+  temperature: number,
 ): Promise<string> {
-  const response = await fetch("http://localhost:11434/v1/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      model: "llama3.2",
-      messages,
-    }),
+  if (!process.env.OPENAI_MODEL_CHAT) {
+    throw new Error("OPENAI_MODEL_CHAT is not set in environment variables.");
+  }
+  const response = await openai.chat.completions.create({
+    model: process.env.OPENAI_MODEL_CHAT,
+    messages,
+    temperature,
   });
 
-  if (!response.ok) {
-    console.error(await response.text());
-    throw new Error("Failed to generate chat completion from Ollama");
+  const choice = response.choices?.[0]?.message?.content;
+  if (!choice) {
+    throw new Error("No completion returned by OpenAI");
   }
 
-  const data = await response.json();
-  return data.choices?.[0]?.message?.content ?? "";
+  return choice;
 }

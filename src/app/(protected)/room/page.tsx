@@ -8,15 +8,16 @@ import { useRouter } from "next/navigation";
 import ProtectedRoute from "~/app/_components/routes/protectedRoute";
 import GridCarouselLayout from "~/app/_components/gridCarousel";
 import { WidgetManagerProvider } from "~/lib/widget-manager-provider";
-
+import AiBuddy from "~/app/_components/chatbot/AiBuddy";
 const Page = () => {
   const router = useRouter();
   const { user, logout } = useSessionStore();
 
   return (
     <ProtectedRoute>
-      <div className="h-screen w-full">
-        {/* <span className="break-words">
+      <AiBuddy>
+        <div className="h-screen w-full">
+          {/* <span className="break-words">
           session store: {JSON.stringify(user)}
         </span>
         <div className="flex gap-4 py-4">
@@ -39,10 +40,11 @@ const Page = () => {
             Go to settings
           </Button>
         </div> */}
-        <WidgetManagerProvider>
-          <GridCarouselLayout />
-        </WidgetManagerProvider>
-      </div>
+          <WidgetManagerProvider>
+            <GridCarouselLayout />
+          </WidgetManagerProvider>
+        </div>
+      </AiBuddy>
     </ProtectedRoute>
   );
 };
