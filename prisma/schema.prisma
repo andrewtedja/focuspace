@@ -44,10 +44,11 @@ model User {
     bg     String?
     bgUuid String?
 
-    accounts Account[]
-    TodoList TodoList[]
-    File     File[]
-    Message  Message[]
+    accounts  Account[]
+    TodoList  TodoList[]
+    File      File[]
+    Message   Message[]
+    Flashcard Flashcard[]
 }
 
 model VerificationToken {
@@ -99,5 +100,16 @@ model Message {
 
     sender    String
     content   String
+    createdAt DateTime @default(now())
+}
+
+model Flashcard {
+    id     String @id @default(cuid())
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+
+    question String
+    answer   String
+
     createdAt DateTime @default(now())
 }
