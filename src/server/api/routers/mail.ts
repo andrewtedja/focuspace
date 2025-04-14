@@ -20,8 +20,8 @@ export const mailRouter = createTRPCRouter({
     .input(z.object({ token: z.string(), email: z.string().email() }))
     .mutation(async ({ input }) => {
       const baseUrl =
-        process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-      const fromEmail = process.env.RESEND_FROM || "noreply@yourdomain.com"; // fallback
+        process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+      const fromEmail = process.env.RESEND_FROM ?? "noreply@yourdomain.com"; // fallback
 
       const confirmLink = `${baseUrl}/auth/new-verification?token=${input.token}`;
 

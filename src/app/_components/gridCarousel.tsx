@@ -133,7 +133,7 @@ export default function GridCarouselLayout() {
                       overflow: "hidden",
                     }}
                   >
-                    <GridStackRender componentMap={COMPONENT_MAP} />y{" "}
+                    <GridStackRender componentMap={COMPONENT_MAP} />{" "}
                   </div>
                 </GridStackRenderProvider>
               </GridStackProvider>
