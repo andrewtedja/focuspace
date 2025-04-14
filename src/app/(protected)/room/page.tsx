@@ -3,7 +3,8 @@ import ProtectedRoute from "~/app/_components/routes/protectedRoute";
 import GridCarouselLayout from "~/app/_components/gridCarousel";
 import { useWidgetManager } from "~/lib/widget-manager-context";
 import AiBuddy from "~/app/_components/chatbot/AiBuddy";
-// Component to render the grid with dynamic background
+import { WidgetManagerProvider } from "~/lib/widget-manager-provider";
+
 const DynamicBackgroundGrid = () => {
   const { pages, currentPageId } = useWidgetManager();
 
@@ -33,9 +34,11 @@ const DynamicBackgroundGrid = () => {
 const Page = () => {
   return (
     <ProtectedRoute>
-      <AiBuddy>
-        <DynamicBackgroundGrid />
-      </AiBuddy>
+      <WidgetManagerProvider>
+        <AiBuddy>
+          <DynamicBackgroundGrid />
+        </AiBuddy>
+      </WidgetManagerProvider>
     </ProtectedRoute>
   );
 };
