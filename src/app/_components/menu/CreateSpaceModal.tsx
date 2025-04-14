@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useRef, useEffect } from "react";
 import {
   X,
@@ -9,10 +10,13 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { initialRooms } from "~/data/rooms";
-
 import Image from "next/image";
-import { api } from "~/trpc/react";
 import { useRouter } from "next/navigation";
+
+// 1) Import your tRPC hooks
+import { api } from "~/trpc/react"; // or wherever your hooks are exported from
+// 2) We can use a random UUID for fileUuid
+import { v4 as uuidv4 } from "uuid";
 
 interface CreateSpaceModalProps {
   isOpen: boolean;
@@ -23,9 +27,10 @@ interface CreateSpaceModalProps {
     backgroundImage: string;
   }) => void;
 }
+
 /**
  * Modal component for creating a new space.
- * It allows users to input a name, description, and select a background image.
+ * It allows users to input a name, description, and select a background image (or upload a custom one).
  */
 const CreateSpaceModal = ({
   isOpen,
@@ -33,66 +38,44 @@ const CreateSpaceModal = ({
   onCreateSpace,
 }: CreateSpaceModalProps) => {
   const [step, setStep] = useState(1);
+
+  // Form fields
   const [name, setName] = useState("");
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [description, setDescription] = useState("");
+
+  // Track which background is selected
+  // (either from existing backgrounds or from an uploaded file)
   const [selectedImage, setSelectedImage] = useState(
     "/images/spaces/placeholder/lofi.jpg",
   );
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const allBackgrounds = Array.from(
-    new Set(initialRooms.map((room) => room.backgroundImage)),
-  );
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = reader.result as string;
-        setUploadedImage(base64String); // ✅ actual base64
-        setSelectedImage(base64String); // if you're using base64 as preview
-        setSelectedFileName(file.name); // ✅ save the real filename
-      };
-      reader.readAsDataURL(file); // ✅ convert to base64
-    }
-  };
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   // Pagination for background images
   const [currentPage, setCurrentPage] = useState(0);
   const imagesPerPage = 8;
+  const allBackgrounds = Array.from(
+    new Set(initialRooms.map((room) => room.backgroundImage)),
+  );
   const totalPages = Math.ceil(allBackgrounds.length / (imagesPerPage - 1));
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
 
   const startIndex = currentPage * (imagesPerPage - 1);
   const displayedBackgrounds = allBackgrounds.slice(
     startIndex,
     startIndex + (imagesPerPage - 1),
   );
+
+  // We'll use this ref to trigger the hidden <input type="file" />
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // For closing the modal if user clicks outside
+  const modalRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const uploadImage = api.storage.uploadBase64.useMutation({
-    onSuccess: (data) => {
-      // Handle success, e.g., update the state or notify the user
-      router.push("/room?id=7");
-      console.log("Image uploaded successfully:", data);
-    },
-    onError: (error) => {
-      // Handle error, e.g., show an error message
-      console.error("Error uploading image:", error);
-    },
-  });
 
-  // baru sample
-  // const backgroundOptions = [
-  //   "/images/spaces/placeholder/lofi.jpg",
-  //   "/images/spaces/placeholder/room1.png",
-  //   "/images/spaces/placeholder/cafe.jpg",
-  //   "/images/spaces/placeholder/adhd-2.jpg",
-  //   "/images/spaces/placeholder/traveler.png",
-  // ];
+  // --------------------------
+  // tRPC mutation: uploadAndReplaceFile
+  const uploadFileMutation = api.fileUpload.uploadAndReplaceFile.useMutation();
 
+  // --------------------------
   // Handle click outside to close
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -107,7 +90,6 @@ const CreateSpaceModal = ({
     if (isOpen) {
       document.addEventListener("mousedown", handleOutsideClick);
     }
-
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
@@ -124,61 +106,115 @@ const CreateSpaceModal = ({
     if (isOpen) {
       document.addEventListener("keydown", handleEscKey);
     }
-
     return () => {
       document.removeEventListener("keydown", handleEscKey);
     };
   }, [isOpen, onClose]);
 
-  // *  scroller prevention
+  // Prevent body scrolling when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "auto";
     }
-
     return () => {
       document.body.style.overflow = "auto";
     };
   }, [isOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (step === 1) {
-      setStep(2);
-    } else {
-      // onCreateSpace({
-      //   name,
-      //   desc: description,
-      //   backgroundImage: selectedImage,
-      // });
+  // --------------------------
+  // Handle file selection (for custom upload)
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-      if (uploadedImage && selectedFileName) {
-        uploadImage.mutate({
-          fileName: selectedFileName,
-          base64: uploadedImage,
-          type: "background",
-        });
+    // Save the raw file for uploading
+    setSelectedFile(file);
+
+    // Also generate a local preview
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === "string") {
+        // `reader.result` is a data URL (e.g. "data:image/png;base64,...")
+        setSelectedImage(reader.result);
       }
-
-      // ! reset form
-      setName("");
-      setDescription("");
-      setSelectedImage("/images/spaces/placeholder/lofi.jpg");
-      setStep(1);
-      onClose();
-    }
+    };
+    reader.readAsDataURL(file);
   };
 
+  // --------------------------
+  // Pagination
   const goToNextPage = () => {
     setCurrentPage((prev) => (prev < totalPages - 1 ? prev + 1 : prev));
   };
-
   const goToPrevPage = () => {
     setCurrentPage((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
+  // --------------------------
+  // Final form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // If we're on step 1, move to step 2
+    if (step === 1) {
+      setStep(2);
+      return;
+    }
+
+    // Step 2: If a custom file was selected, upload it via tRPC
+    let finalBackgroundUrl = selectedImage; // default to whichever is selected
+
+    if (selectedFile) {
+      try {
+        // 1) Extract base64 from data URL
+        //    "data:image/png;base64,iVBORw0K..." => just "iVBORw0K..."
+        let base64String = selectedImage;
+        if (base64String.startsWith("data:")) {
+          base64String = base64String.split(",")[1] ?? "";
+        }
+
+        // 2) Generate a new random ID for the file
+        const fileUuid = uuidv4();
+
+        // 3) Call the tRPC mutation
+        const result = await uploadFileMutation.mutateAsync({
+          fileName: selectedFile.name, // e.g. "myphoto.png"
+          fileUuid, // the random ID
+          base64: base64String, // the raw base64
+          fileType: "background", // or "profile" / "audio"
+        });
+
+        if (result?.success) {
+          finalBackgroundUrl = result.publicUrl; // your new file
+        }
+      } catch (error) {
+        console.error("Error uploading image via tRPC:", error);
+        return;
+      }
+    }
+
+    // Create the space using the final background URL
+    onCreateSpace({
+      name,
+      desc: description,
+      backgroundImage: finalBackgroundUrl,
+    });
+
+    // Optionally redirect after creating the space
+    router.push("/room?id=7");
+
+    // Reset
+    setName("");
+    setDescription("");
+    setSelectedImage("/images/spaces/placeholder/lofi.jpg");
+    setSelectedFile(null);
+    setStep(1);
+    onClose();
+  };
+
+  // --------------------------
   if (!isOpen) return null;
 
   return (
@@ -193,15 +229,17 @@ const CreateSpaceModal = ({
         >
           <X size={20} />
         </button>
+
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Create New Space</h2>
         </div>
+
         {/* Progress Steps */}
         <div className="mb-8 flex items-center">
           <div
-            className={`flex h-10 w-10 items-center justify-center rounded-full transition-all ${
+            className={`flex h-10 w-10 items-center justify-center rounded-full ${
               step > 1 ? "bg-emerald-500" : "bg-emerald-500"
-            } text-white`}
+            } text-white transition-all`}
           >
             {step > 1 ? <Check size={20} /> : "1"}
           </div>
@@ -222,11 +260,11 @@ const CreateSpaceModal = ({
             2
           </div>
         </div>
-        {/* connect ama backend form later */}
 
+        {/* Form */}
         <form onSubmit={handleSubmit}>
           {step === 1 ? (
-            // Step 1
+            // STEP 1: Basic Info
             <div className="space-y-6">
               <div>
                 <label
@@ -264,7 +302,7 @@ const CreateSpaceModal = ({
               </div>
             </div>
           ) : (
-            // Step 2
+            // STEP 2: Select or Upload Background
             <div className="space-y-4">
               <div className="mb-2 flex items-center justify-between">
                 <label className="block text-sm font-medium text-gray-700">
@@ -278,18 +316,20 @@ const CreateSpaceModal = ({
               <div className="grid grid-cols-4 gap-2">
                 {displayedBackgrounds.map((image, index) => (
                   <div
-                    // SELECTED IMAGE
                     key={index}
                     className={`relative aspect-video cursor-pointer overflow-hidden rounded-lg bg-gradient-to-r from-gray-200 via-gray-300 to-gray-400 ${
                       selectedImage === image
                         ? "ring-2 ring-[#45a169] ring-offset-2"
                         : "border border-gray-200"
                     }`}
-                    onClick={() => setSelectedImage(image)}
+                    onClick={() => {
+                      setSelectedImage(image);
+                      setSelectedFile(null); // if they pick from existing, clear any custom file
+                    }}
                   >
                     <Image
                       src={image}
-                      alt={`Background option ${startIndex + index + 1}`}
+                      alt={`Background ${startIndex + index + 1}`}
                       className="h-full w-full object-cover text-xs"
                       width={120}
                       height={80}
@@ -302,7 +342,7 @@ const CreateSpaceModal = ({
                   </div>
                 ))}
 
-                {/* ! Upload Image */}
+                {/* Custom Upload Button */}
                 <div
                   className="relative flex aspect-video cursor-pointer items-center justify-center rounded-lg border border-dashed border-gray-600 bg-gray-50 hover:bg-gray-100"
                   onClick={() => fileInputRef.current?.click()}
@@ -343,6 +383,7 @@ const CreateSpaceModal = ({
                 </div>
               )}
 
+              {/* Selected Preview */}
               <div className="mt-4">
                 <div className="text-sm font-medium text-gray-700">
                   Selected Preview
@@ -360,6 +401,7 @@ const CreateSpaceModal = ({
             </div>
           )}
 
+          {/* Bottom Buttons */}
           <div className="mt-6 flex justify-end space-x-3">
             {step === 2 && (
               <button
@@ -370,10 +412,8 @@ const CreateSpaceModal = ({
                 Back
               </button>
             )}
-
             <button
               type="submit"
-              disabled={uploadImage.isPending}
               className="flex items-center justify-center rounded-full bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] px-6 py-2 text-sm font-medium text-white shadow-sm transition-all hover:shadow-md"
             >
               {step === 1 ? (

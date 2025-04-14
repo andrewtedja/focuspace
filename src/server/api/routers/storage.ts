@@ -1,7 +1,7 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { createSupabaseServerClient } from "~/server/supabase";
-import { randomUUID } from "crypto"; // for generating file UUID
+import { randomUUID } from "crypto";
 import { Prisma } from "@prisma/client";
 
 export const storageRouter = createTRPCRouter({
@@ -17,17 +17,58 @@ export const storageRouter = createTRPCRouter({
       const userId = ctx.session.user.id;
       const supabase = await createSupabaseServerClient();
 
+      // Convert base64 to Buffer
       const fileBuffer = Buffer.from(input.base64, "base64");
 
-      const uuid = randomUUID(); // generate a unique UUID
-      const fileNameWithUuid = `${uuid}_${input.fileName}`;
+      // Generate a unique file name
+      const uuid = randomUUID();
+      const extension = input.fileName.split(".").pop()?.toLowerCase() || "";
 
-      // Determine content type based on file type
+      const fileNameWithUuid = `${uuid}.${extension}`;
+
+      // Extract extension
+
+      // Dynamically set content type based on type + file extension
       let contentType: string;
+
+      // If audio:
       if (input.type === "audio") {
-        contentType = "audio/mpeg"; // Adjust as needed for different audio formats
+        switch (extension) {
+          case "mp3":
+            contentType = "audio/mpeg";
+            break;
+          case "wav":
+            contentType = "audio/wav";
+            break;
+          case "ogg":
+            contentType = "audio/ogg";
+            break;
+          case "aac":
+            contentType = "audio/aac";
+            break;
+          // Add other audio extensions as needed
+          default:
+            contentType = "audio/mpeg"; // Fallback
+            break;
+        }
       } else {
-        contentType = "image/jpeg"; // Adjust as needed for different image formats
+        // Otherwise, treat as image
+        switch (extension) {
+          case "png":
+            contentType = "image/png";
+            break;
+          case "jpg":
+          case "jpeg":
+            contentType = "image/jpeg";
+            break;
+          case "gif":
+            contentType = "image/gif";
+            break;
+          // Add other image extensions as needed
+          default:
+            contentType = "image/jpeg"; // Fallback
+            break;
+        }
       }
 
       // Upload to Supabase Storage with specified content type
@@ -37,8 +78,11 @@ export const storageRouter = createTRPCRouter({
           contentType,
         });
 
-      if (uploadError) throw new Error(uploadError.message);
+      if (uploadError) {
+        throw new Error(uploadError.message);
+      }
 
+      // Retrieve the public URL
       const publicUrl = supabase.storage
         .from("uploads")
         .getPublicUrl(fileNameWithUuid).data.publicUrl;
@@ -69,7 +113,9 @@ export const storageRouter = createTRPCRouter({
         .update(updateData)
         .eq("id", userId);
 
-      if (updateError) throw new Error(updateError.message);
+      if (updateError) {
+        throw new Error(updateError.message);
+      }
 
       return { url: publicUrl, uuid };
     }),

@@ -1,139 +1,113 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
-    id                       String  @id @default(cuid())
-    userId                   String
-    type                     String
-    provider                 String
-    providerAccountId        String
-    refresh_token            String?
-    access_token             String?
-    expires_at               Int?
-    token_type               String?
-    scope                    String?
-    id_token                 String?
-    session_state            String?
-    refresh_token_expires_in Int?
-    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String?
+  access_token             String?
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String?
+  session_state            String?
+  refresh_token_expires_in Int?
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@unique([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-
-    image     String?
-    imageUuid String?
-
-    password String?
-
-    music     String?
-    musicUuid String?
-    musicName String?
-
-    bg     String?
-    bgUuid String?
-
-    accounts  Account[]
-    TodoList  TodoList[]
-    File      File[]
-    Message   Message[]
-    Flashcard Flashcard[]
-
-
-    Favorites Favorites[]
-    roomName String?
-    roomDescription String? 
+  id              String      @id @default(cuid())
+  name            String?
+  email           String?     @unique
+  emailVerified   DateTime?
+  image           String?
+  password        String?
+  bg              String?
+  bgUuid          String?
+  imageUuid       String?
+  music           String?
+  musicName       String?
+  musicUuid       String?
+  roomDescription String?
+  roomName        String?
+  accounts        Account[]
+  Favorites       Favorites[]
+  File            File[]
+  Flashcard       Flashcard[]
+  Message         Message[]
+  TodoList        TodoList[]
 }
 
 model VerificationToken {
-    token   String   @unique
-    expires DateTime
-    email   String
-    id      String   @id @default(cuid())
+  token   String   @unique
+  expires DateTime
+  email   String
+  id      String   @id @default(cuid())
 
-    @@unique([email, token])
+  @@unique([email, token])
 }
 
 model TodoList {
-    id      String  @id @default(cuid())
-    user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId  String
-    content String
-    check   Boolean @default(false)
+  id      String  @id @default(cuid())
+  userId  String
+  content String
+  check   Boolean @default(false)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model File {
-    id     String @id @default(cuid())
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
-
-    fileName    String
-    fileUuid    String
-    fileUrl     String
-    isProcessed Boolean @default(false)
-    vectorIndex String?
-
-    uploadedAt     DateTime         @default(now())
-    EmbeddingChunk EmbeddingChunk[]
+  id             String           @id @default(cuid())
+  userId         String
+  fileName       String
+  fileUuid       String
+  fileUrl        String
+  isProcessed    Boolean          @default(false)
+  vectorIndex    String?
+  uploadedAt     DateTime         @default(now())
+  EmbeddingChunk EmbeddingChunk[]
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model EmbeddingChunk {
-    id     String @id @default(cuid())
-    file   File   @relation(fields: [fileId], references: [id], onDelete: Cascade)
-    fileId String
-
-    chunk  String
-    vector Json
+  id     String @id @default(cuid())
+  fileId String
+  chunk  String
+  vector Json
+  file   File   @relation(fields: [fileId], references: [id], onDelete: Cascade)
 }
 
 model Message {
-    id String @id @default(cuid())
-
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
-
-    sender    String
-    content   String
-    createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String
+  sender    String
+  content   String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Flashcard {
-    id     String @id @default(cuid())
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
-
-    question String
-    answer   String
-
-    createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String
+  question  String
+  answer    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
-// model Room {
-//     id String @id @default(cuid())
-
-
-//     user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-//     userId String?
-//     public Boolean @default(false)
-
-//     Favorites Favorites[]
-
-// }
 
 model Favorites {
-    id String @id @default(cuid())
-
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId String
-    roomId Int 
+  id     String @id @default(cuid())
+  userId String
+  roomId Int
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
