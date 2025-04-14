@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { User, LogOut, Settings, HelpCircle, ChevronDown } from "lucide-react";
+import { User, LogOut, HelpCircle, ChevronDown } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useSessionStore } from "~/stores/useSessionStore";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";

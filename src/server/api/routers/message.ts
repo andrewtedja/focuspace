@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
-import { getChatCompletion } from "~/server/ollama/chat";
+// import { getChatCompletion } from "~/server/ollama/chat";
 
 export const messageRouter = createTRPCRouter({
   // Save a new message (from user or bot)
@@ -18,7 +18,7 @@ export const messageRouter = createTRPCRouter({
 
       const message = await db.message.create({
         data: {
-          userId: userId as string,
+          userId: userId,
           sender: input.sender,
           content: input.content,
         },

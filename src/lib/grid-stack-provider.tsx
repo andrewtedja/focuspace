@@ -18,7 +18,6 @@ interface GridStackProviderProps extends PropsWithChildren {
 
 export function GridStackProvider({
   children,
-  pageId,
   initialOptions,
   onGridStackReady,
 }: GridStackProviderProps) {

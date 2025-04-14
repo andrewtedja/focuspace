@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight, MousePointerClick } from "lucide-react";
+import { MousePointerClick } from "lucide-react";
 
 interface TestButtonProps {
   children?: React.ReactNode;

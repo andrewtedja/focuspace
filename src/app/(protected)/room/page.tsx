@@ -1,8 +1,4 @@
-"use client";
-
 import React from "react";
-import { useSessionStore } from "~/stores/useSessionStore";
-import { useRouter } from "next/navigation";
 import ProtectedRoute from "~/app/_components/routes/protectedRoute";
 import GridCarouselLayout from "~/app/_components/gridCarousel";
 import { useWidgetManager } from "~/lib/widget-manager-context";
@@ -35,9 +31,6 @@ const DynamicBackgroundGrid = () => {
 
 // Main page component
 const Page = () => {
-  const router = useRouter();
-  const { user, logout } = useSessionStore();
-
   return (
     <ProtectedRoute>
       <AiBuddy>

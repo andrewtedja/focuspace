@@ -2,7 +2,7 @@
 
 import { Button } from "~/components/ui/button";
 import { useWidgetManager } from "~/lib/widget-manager-context";
-import { COMPONENT_MAP } from "~/lib/component-map";
+import type { COMPONENT_MAP } from "~/lib/component-map";
 import { toast } from "sonner";
 
 interface AddWidgetButtonProps {

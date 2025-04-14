@@ -1,5 +1,5 @@
 "use client";
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import React, { useState } from "react";
 import {
   Sheet,
@@ -13,8 +13,8 @@ import { Button } from "~/components/ui/button";
 import ChatTabs from "./ChatTabs";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
 import { api } from "~/trpc/react";
-import { Sparkles, SparklesIcon } from "lucide-react";
-const AiBuddy: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+import { SparklesIcon } from "lucide-react";
+const AiBuddy: React.FC<PropsWithChildren> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data: history } = api.message.getRecentMessages.useQuery();
   const { data: currentFile } = api.pdfUpload.getCurrentFile.useQuery();

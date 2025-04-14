@@ -8,7 +8,6 @@ import {
 } from "~/components/ui/card";
 import { RegisterForm } from "~/app/_components/auth/register";
 import Link from "next/link";
-import { CircleIcon, Sparkles, SquareIcon, TriangleIcon } from "lucide-react";
 const page = () => {
   return (
     <div className="flex h-screen w-screen">

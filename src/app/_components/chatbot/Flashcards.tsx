@@ -2,12 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
-import {
-  BookOpen,
-  CheckCircle,
-  CircleFadingPlus,
-  MessageCircleQuestion,
-} from "lucide-react";
+import { CheckCircle, CircleFadingPlus } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -29,8 +24,8 @@ import {
 import ReactFlipCard from "reactjs-flip-card";
 import { toast } from "sonner";
 import { api } from "~/trpc/react";
-import { inferRouterOutputs } from "@trpc/server";
-import { AppRouter } from "~/server/api/root";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "~/server/api/root";
 type RouterOutput = inferRouterOutputs<AppRouter>;
 type Flashcard = RouterOutput["flashcard"]["getFlashcardsByUser"];
 

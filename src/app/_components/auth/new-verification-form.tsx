@@ -28,7 +28,7 @@ const NewVerificationForm = () => {
     }
 
     newVerification.mutate({ token });
-  }, [token]);
+  }, [token, newVerification, router]);
 
   useEffect(() => {
     onSubmit();

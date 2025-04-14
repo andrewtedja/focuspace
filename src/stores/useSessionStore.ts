@@ -9,7 +9,7 @@ interface SessionState {
   user: User | null;
   status: AuthStatus;
   isAuthenticated: boolean;
-  expires: String | null;
+  expires: string | null;
   setSession: (expires: string, userData: User | undefined) => void;
   checkToken: () => void;
   logout: () => void;
@@ -96,7 +96,7 @@ export const useSessionStore = create<SessionState>()(
             });
           }
           // Session is valid, restore user into state if not already
-          const parsedUser = JSON.parse(userData);
+          const parsedUser = JSON.parse(userData) as User;
           set({
             user: parsedUser,
             expires: expires,

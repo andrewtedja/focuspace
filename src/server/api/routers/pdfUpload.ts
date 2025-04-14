@@ -43,7 +43,7 @@ export const pdfUploadRouter = createTRPCRouter({
         supabase.storage.from("uploads").getPublicUrl(`${input.fileUuid}.pdf`)
           .data.publicUrl ?? "";
 
-      const newFile = await db.file.create({
+      await db.file.create({
         data: {
           userId,
           fileName: input.fileName,

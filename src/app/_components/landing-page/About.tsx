@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { Brain, Sparkles, BrainCircuit, Headphones, Zap } from "lucide-react";
+import { Brain, Sparkles, BrainCircuit, Headphones } from "lucide-react";
 
 const About = () => {
   return (
@@ -84,7 +84,7 @@ const About = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 grid-cols-2 gap-6 pt-4">
+            <div className="grid grid-cols-2 gap-6 pt-4">
               <div className="flex items-start">
                 <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-[#86B3D1]/20">
                   <Brain className="text-[#5A8CA3]" />

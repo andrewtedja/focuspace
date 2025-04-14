@@ -11,12 +11,9 @@ import {
   Volume1,
   VolumeX,
   XIcon,
-  Settings,
   Settings2,
-  Sparkles,
   AudioWaveform,
 } from "lucide-react";
-import Image from "next/image";
 import { createPortal } from "react-dom";
 
 export const MusicPlayer = () => {

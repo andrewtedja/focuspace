@@ -9,7 +9,6 @@ import {
 import { Suspense } from "react";
 import { LoginForm } from "~/app/_components/auth/login";
 import Link from "next/link";
-import { CircleIcon, Sparkles, SquareIcon } from "lucide-react";
 import AuthRoute from "~/app/_components/routes/authRoute";
 const page = () => {
   return (

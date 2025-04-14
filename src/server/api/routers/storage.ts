@@ -10,7 +10,7 @@ export const storageRouter = createTRPCRouter({
 
       const fileBuffer = Buffer.from(input.base64, "base64");
 
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from("uploads")
         .upload(input.fileName, fileBuffer);
 

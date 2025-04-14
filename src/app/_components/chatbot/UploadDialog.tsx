@@ -14,6 +14,11 @@ import { Button } from "~/components/ui/button";
 import { Paperclip } from "lucide-react";
 import { BeatLoader } from "react-spinners";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "~/server/api/root";
+
+type RouterOutput = inferRouterOutputs<AppRouter>;
+type CurrentFile = RouterOutput["pdfUpload"]["getCurrentFile"];
 import {
   Tooltip,
   TooltipContent,
@@ -21,7 +26,7 @@ import {
 } from "~/components/ui/tooltip";
 
 interface UploadDialogProps {
-  currentFile: any;
+  currentFile: CurrentFile;
   isUploading: boolean;
   fileRef: React.RefObject<HTMLInputElement>;
   handleUpload: () => void;

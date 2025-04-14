@@ -6,8 +6,8 @@ import ChatArea from "./ChatArea";
 import Flashcards from "./Flashcards";
 import { TooltipProvider } from "~/components/ui/tooltip";
 
-import { inferRouterOutputs } from "@trpc/server";
-import { AppRouter } from "~/server/api/root";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "~/server/api/root";
 
 type RouterOutput = inferRouterOutputs<AppRouter>;
 type Flashcard = RouterOutput["flashcard"]["getFlashcardsByUser"];
