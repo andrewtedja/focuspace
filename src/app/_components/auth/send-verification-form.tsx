@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/navigation";
 import CountdownTimer from "../countdown";
+import { Mail } from "lucide-react";
+
 const SendVerificationForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -53,25 +55,38 @@ const SendVerificationForm = () => {
   };
 
   return (
-    <Card className="">
-      <CardHeader>
-        <CardTitle className="flex w-full justify-center">
-          Send Verification Link to Email
-        </CardTitle>
+    <Card className="w-full max-w-md rounded-lg border border-gray-200 bg-white shadow-md">
+      <CardHeader className="rounded-t-lg border-b border-gray-100 bg-gray-50">
+        <div className="mb-2 flex items-center justify-center">
+          <Mail className="mr-2 h-6 w-6 text-[#68b3e6]" />
+          <CardTitle className="text-xl font-semibold text-[#030303]">
+            Send Verification Link to Email
+          </CardTitle>
+        </div>
+        {email && (
+          <div className="mt-1 text-center text-sm text-gray-600">{email}</div>
+        )}
       </CardHeader>
-      <CardContent className="flex h-full w-full items-center justify-center">
-        <CountdownTimer
-          initialTime={60}
-          start={start}
-          reset={reset}
-          setStart={setStart}
-          setReset={setReset}
-          setFinish={setFinish}
-        ></CountdownTimer>
+      <CardContent className="flex flex-col items-center justify-center px-6 py-8">
+        <div className="mb-2 flex h-24 w-24 items-center justify-center p-4">
+          <CountdownTimer
+            initialTime={60}
+            start={start}
+            reset={reset}
+            setStart={setStart}
+            setReset={setReset}
+            setFinish={setFinish}
+          />
+        </div>
+        <p className="mt-2 text-sm text-gray-500">
+          {start
+            ? "Time remaining until you can resend"
+            : "Click below to send verification"}
+        </p>
       </CardContent>
-      <CardFooter className="flex w-full justify-between">
+      <CardFooter className="rounded-b-lg border-t border-gray-100 bg-gray-50 p-4">
         <Button
-          className="w-full"
+          className="w-full rounded-md bg-[#86B3D1] py-2 text-white hover:bg-[#86B3D1]"
           disabled={start && !finish}
           onClick={() => {
             if (finish) {

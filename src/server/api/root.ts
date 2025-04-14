@@ -2,7 +2,13 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { userRouter } from "./routers/user";
 import { verificationRouter } from "./routers/verification";
 import { mailRouter } from "./routers/mail";
-
+import { storageRouter } from "./routers/storage";
+import { openaiRouter } from "./routers/openai";
+import { pdfUploadRouter } from "./routers/pdfUpload";
+import { messageRouter } from "./routers/message";
+import { embeddingRouter } from "./routers/embedding";
+import { flashcardRouter } from "./routers/flashcard";
+import { fileUploadRouter } from "./routers/fileUpload";
 /**
  * This is the primary router for your server.
  *
@@ -12,6 +18,13 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   verification: verificationRouter,
   mail: mailRouter,
+  storage: storageRouter,
+  openai: openaiRouter,
+  pdfUpload: pdfUploadRouter,
+  message: messageRouter,
+  embedding: embeddingRouter,
+  flashcard: flashcardRouter,
+  fileUpload: fileUploadRouter,
 });
 
 // export type definition of API

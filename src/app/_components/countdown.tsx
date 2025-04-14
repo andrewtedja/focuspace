@@ -34,7 +34,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [start]);
+  }, [start, timeLeft]);
 
   // Handle timer completion inside useEffect
   useEffect(() => {
@@ -63,7 +63,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
       //   setTimeout(() => setStart(false), 0); // Delay to avoid triggering during render
       //   setTimeout(() => setReset(false), 0); // Ensure the reset flag is cleared safely
     }
-  }, [reset, initialTime, setFinish, setReset]);
+  }, [reset, initialTime, setFinish, setReset, setStart]);
 
   return <div className="text-9xl font-bold">{timeLeft}</div>;
 };
