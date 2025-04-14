@@ -1,5 +1,25 @@
 export const songs = [
   {
+    title: "Brown Noise",
+    genre: "Broadband",
+    url: "music/noise2.mp3",
+  },
+  {
+    title: "Pink Noise (Ocean Waves)",
+    genre: "Broadband",
+    url: "music/noise1.mp3",
+  },
+  {
+    title: "Blue Noise",
+    genre: "Broadband",
+    url: "music/noise3.mp3",
+  },
+  {
+    title: "Calming Rain",
+    genre: "Rain",
+    url: "music/noise4.mp3",
+  },
+  {
     title: "Chill Vibes",
     genre: "Chill",
     url: "music/music1.mp3",

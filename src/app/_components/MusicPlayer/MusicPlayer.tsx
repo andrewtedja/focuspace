@@ -13,6 +13,7 @@ import {
   XIcon,
   Settings2,
   AudioWaveform,
+  Repeat,
 } from "lucide-react";
 import { createPortal } from "react-dom";
 
@@ -33,6 +34,8 @@ export const MusicPlayer = () => {
   const currentSong = songs[currentSongIndex];
 
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const [isLooping, setIsLooping] = useState(false);
 
   // for searching
   const [searchQuery, setSearchQuery] = useState("");
@@ -149,6 +152,14 @@ export const MusicPlayer = () => {
     next();
   };
 
+  const toggleLoop = () => {
+    setIsLooping((prev) => !prev);
+    if (audioRef.current) {
+      audioRef.current.loop = !isLooping;
+    }
+  };
+
+  // Modal overlay handlers
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
       if (!modalRef.current?.contains(event.target as Node)) {
@@ -261,6 +272,13 @@ export const MusicPlayer = () => {
           <button onClick={next} className="text-gray-400 hover:text-[#F8F8FF]">
             <SkipForward size={24} />
           </button>
+          <button
+            onClick={toggleLoop}
+            className={`text-gray-400 hover:text-[#F8F8FF] ${isLooping ? "text-[#98c7e7]" : ""}`}
+            title="Toggle Loop"
+          >
+            <Repeat size={20} />
+          </button>
         </div>
 
         <div className="flex items-center gap-2">
@@ -298,7 +316,7 @@ export const MusicPlayer = () => {
           <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
             <div
               ref={modalRef}
-              className="h-[calc(100vh-4rem)] max-h-[700px] w-[calc(100vw-4rem)] max-w-[1200px] overflow-hidden rounded-2xl bg-gray-900/90 p-20 shadow-2xl ring-1 ring-[#F8F8FF]/10"
+              className="h-[calc(100vh-4rem)] max-h-[700px] w-[calc(100vw-4rem)] max-w-[1200px] overflow-y-auto rounded-2xl bg-gray-900/90 p-20 shadow-2xl ring-1 ring-[#F8F8FF]/10"
             >
               <div className="flex items-center justify-between">
                 <h3 className="text-2xl font-semibold text-[#F8F8FF]/90">

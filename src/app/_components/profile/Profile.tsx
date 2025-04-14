@@ -11,10 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { useSessionStore } from "~/stores/useSessionStore";
 
 const ProfileSection = () => {
   const [isAvatarHovered, setIsAvatarHovered] = useState(false);
   const [selectedFont, setSelectedFont] = useState("Lexend");
+  const { user } = useSessionStore();
 
   const fontOptions = [
     { id: "Lexend", display: "Lexend" },
@@ -32,7 +34,7 @@ const ProfileSection = () => {
         <Image
           fill
           className="object-cover"
-          src="/images/spaces/placeholder/zen.jpg"
+          src="/images/spaces/placeholder/adhd-2.jpg"
           alt="Profile Picture"
         />
         {/* <div
@@ -46,7 +48,7 @@ const ProfileSection = () => {
       </div>
       {/*  Name  */}
       <h1 className="relative m-0 text-3xl font-bold tracking-tight text-[#F8F8FF]">
-        Name
+        {user?.name}
       </h1>
 
       <div className="mt-4 flex justify-center gap-3">
