@@ -33,7 +33,7 @@ export const fileUploadRouter = createTRPCRouter({
 
       // 2) Determine old UUID field + new DB fields
       let oldUuid: string | null = null;
-      let updateData: Record<string, any> = {};
+      const updateData: Record<string, unknown> = {};
 
       if (input.fileType === "background") {
         oldUuid = userRecord.bgUuid;
@@ -68,7 +68,7 @@ export const fileUploadRouter = createTRPCRouter({
       }
 
       // 4) Prepare new file data and upload
-      const extension = input.fileName.split(".").pop()?.toLowerCase() || "";
+      const extension = input.fileName.split(".").pop()?.toLowerCase() ?? "";
       const fileBuffer = Buffer.from(input.base64, "base64");
       const newFilename = `${input.fileUuid}.${extension}`;
 

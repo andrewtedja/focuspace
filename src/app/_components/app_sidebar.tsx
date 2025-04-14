@@ -86,9 +86,6 @@ export function AppSidebar({
   const router = useRouter();
   const { currentPageId } = useWidgetManager();
   const { user, logout } = useSessionStore();
-  const [, setAddingPage] = useState(false);
-  const [, setRemovingPage] = useState(false);
-  const [disabled] = useState(false);
 
   return (
     <>

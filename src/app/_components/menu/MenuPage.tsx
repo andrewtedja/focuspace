@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import CreateSpaceModal from "./CreateSpaceModal";
 import { initialRooms } from "~/data/rooms";
-import { useWidgetManager } from "~/lib/widget-manager-context";
 
 const MenuPage = () => {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -14,7 +13,6 @@ const MenuPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const [rooms, setRooms] = useState(initialRooms);
-  const { addPage } = useWidgetManager();
   // * Simulate loading
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -39,11 +37,7 @@ const MenuPage = () => {
     );
   };
 
-  const handleCreateSpace = (newSpace: {
-    name: string;
-    desc: string;
-    backgroundImage: string;
-  }) => {
+  const handleCreateSpace = () => {
     router.push(`/room?id=7`);
   };
 

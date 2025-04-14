@@ -2,7 +2,7 @@ import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { createSupabaseServerClient } from "~/server/supabase";
 import { randomUUID } from "crypto";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 
 export const storageRouter = createTRPCRouter({
   uploadBase64: protectedProcedure
@@ -22,7 +22,7 @@ export const storageRouter = createTRPCRouter({
 
       // Generate a unique file name
       const uuid = randomUUID();
-      const extension = input.fileName.split(".").pop()?.toLowerCase() || "";
+      const extension = input.fileName.split(".").pop()?.toLowerCase() ?? "";
 
       const fileNameWithUuid = `${uuid}.${extension}`;
 
