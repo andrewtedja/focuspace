@@ -79,7 +79,10 @@ const DynamicBackgroundGrid = () => {
   const [disabled] = useState(false);
 
   useEffect(() => {
-    if (idFromParams !== 7 && (idFromParams < 1 || idFromParams > 6)) {
+    if (
+      idFromParams !== 7 &&
+      (idFromParams < 1 || idFromParams > initialRooms.length + 1)
+    ) {
       router.push("/dashboard");
     }
   }, [idFromParams, router]);
@@ -101,7 +104,7 @@ const DynamicBackgroundGrid = () => {
     );
   }
 
-  if (idFromParams >= 1 && idFromParams <= 6) {
+  if (idFromParams >= 1 && idFromParams <= initialRooms.length + 1) {
     return (
       <WidgetManagerProvider>
         <AiBuddy>
