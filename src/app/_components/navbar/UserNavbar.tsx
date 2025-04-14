@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import Image from "next/image";
 
 const UserNavbar = () => {
   const router = useRouter();
@@ -23,7 +24,13 @@ const UserNavbar = () => {
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="relative h-10 w-10">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#86B3D1] to-[#95BAAA]"></div>
+            <Image
+              src="/logo-focuspace.png"
+              alt="FocuSpace Logo"
+              className="h-full w-full rotate-[65deg]"
+              width={40}
+              height={40}
+            />
           </div>
           <span className="text-xl font-bold text-[#2D3748]">FocuSpace</span>
         </div>
@@ -56,7 +63,6 @@ const UserNavbar = () => {
           </a>
         </div>
 
-        {/* Profile Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button

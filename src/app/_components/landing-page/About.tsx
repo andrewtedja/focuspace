@@ -9,7 +9,6 @@ const About = () => {
       className="bg-gradient-to-b from-[#E9EEF2] to-[#BCD0D7]/50 py-24"
     >
       <div className="mx-auto max-w-7xl px-6">
-        {/* Header */}
         <div className="mb-16 text-center">
           <div className="mb-4 inline-block rounded-full border border-[#86B3D1]/30 bg-[#f2f4f6] px-5 py-2 text-sm font-medium text-[#527680] shadow-sm">
             Our Story
@@ -27,18 +26,17 @@ const About = () => {
           </p>
         </div>
 
-        {/* Main  */}
         <div className="grid grid-cols-2 items-center gap-12">
           <div className="relative">
-            <div className="aspect-square overflow-hidden rounded-2xl shadow-xl">
-              <div className="absolute inset-0 z-10 bg-gradient-to-br from-[#86B3D1]/20 to-[#7EB6A4]/20"></div>
+            <div className="aspect-square overflow-hidden shadow-xl">
+              <div className="absolute inset-0 z-0 rounded-lg bg-gradient-to-br from-[#86B3D1] to-[#1c211f]"></div>
               <div className="absolute -bottom-6 -right-6 -z-10 h-2/3 w-2/3 rounded-2xl bg-[#E9EEF2]"></div>
               <div className="relative h-full w-full">
                 <div className="absolute inset-0 flex items-center justify-center">
                   <Image
-                    src="/images/spaces/adhd-3.png"
+                    src="/images/spaces/placeholder/pagedemo.png"
                     alt="FocuSpace environment"
-                    className="rounded-2xl object-cover"
+                    className="rounded-md object-cover"
                     width={500}
                     height={375}
                   />
@@ -56,7 +54,6 @@ const About = () => {
             </div>
           </div>
 
-          {/* Right */}
           <div className="space-y-8">
             <div>
               <h3 className="mb-4 text-2xl font-bold text-[#2D3748]">

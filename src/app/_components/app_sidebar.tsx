@@ -264,7 +264,6 @@ export function AppSidebar({
         <SidebarRail />
       </Sidebar>
 
-      {/* Background Modal */}
       <BackgroundModal
         open={isBackgroundModalOpen}
         onClose={() => setIsBackgroundModalOpen(false)}

@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const GuestNavbar = () => {
@@ -8,9 +9,14 @@ const GuestNavbar = () => {
     <nav className="sticky top-0 z-50 flex h-20 w-full items-center bg-[#F5F7FA] px-6 text-[#2D3748] shadow-sm backdrop-blur-md">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
         <div className="flex items-center space-x-3">
-          {/* logo */}
           <div className="relative h-10 w-10">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#86B3D1] to-[#95BAAA]"></div>
+            <Image
+              src="/logo-focuspace.png"
+              alt="FocuSpace Logo"
+              className="h-full w-full rotate-[65deg]"
+              width={40}
+              height={40}
+            />
           </div>
           <span className="text-xl font-bold text-[#2D3748]">FocuSpace</span>
         </div>

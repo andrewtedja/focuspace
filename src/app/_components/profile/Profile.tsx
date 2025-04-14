@@ -32,17 +32,17 @@ const ProfileSection = () => {
         <Image
           fill
           className="object-cover"
-          src="/images/avatars/avatar-placeholder.png"
+          src="/images/spaces/placeholder/zen.jpg"
           alt="Profile Picture"
         />
-        <div
+        {/* <div
           className={`absolute bottom-4 left-0 right-0 cursor-pointer bg-gradient-to-t from-black/80 to-black/40 py-2 text-xs font-medium text-white backdrop-blur-sm transition-all ${
             isAvatarHovered ? "opacity-100" : "opacity-0"
           }`}
         >
           <Pencil className="mx-auto mb-1 h-4 w-4" />
           Change Photo
-        </div>
+        </div> */}
       </div>
       {/*  Name  */}
       <h1 className="relative m-0 text-3xl font-bold tracking-tight text-[#F8F8FF]">

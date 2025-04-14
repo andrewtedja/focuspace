@@ -16,30 +16,29 @@ const LandingPage = () => {
   const router = useRouter();
   const spaces = [
     {
-      name: "Flow Room",
-      description: "Unlock deep focus with zero distractions",
-      imagePath: "/images/spaces/adhd-3.png",
+      name: "Cozy Dorm",
+      description: "Gentle sounds and a calm atmosphere for focus",
+      imagePath: "/images/spaces/placeholder/1.png",
     },
     {
-      name: "Zen Garden",
-      description:
-        "Find inner peace with soothing rain and crackling fireplace",
-      imagePath: "/images/spaces/adhd-3.png",
+      name: "Riverside Room",
+      description: "Minimalist environment with ambient noise",
+      imagePath: "/images/spaces/placeholder/cozers.png",
     },
     {
       name: "Rainy Jazz Cafe",
       description: "Relax with the smooth sounds of jazz and gentle rain",
-      imagePath: "/images/spaces/adhd-3.png",
+      imagePath: "/images/spaces/placeholder/2.jpg",
     },
     {
-      name: "Traveler's Rest",
-      description: "Take a break with the warm feel of a campfire",
-      imagePath: "/images/spaces/adhd-3.png",
+      name: "Flow Room",
+      description: "Unlock deep focus with zero distractions",
+      imagePath: "/images/spaces/placeholder/adhd-2.jpg",
     },
     {
-      name: "Lo-Fi Room",
+      name: "Lo-Fi Space",
       description: "Study with Lo-Fi girl & Lo-Fi music",
-      imagePath: "/images/spaces/adhd-3.png",
+      imagePath: "/images/spaces/placeholder/lofi.jpg",
     },
   ];
 
@@ -88,7 +87,10 @@ const LandingPage = () => {
                     className="ml-2 transition-transform group-hover:translate-x-1"
                   />
                 </button>
-                <button className="group relative overflow-hidden rounded-full border border-[#A7BBC7] bg-white px-6 py-3 text-[#7B9EA8] transition-colors duration-300">
+                <button
+                  className="group relative overflow-hidden rounded-full border border-[#A7BBC7] bg-white px-6 py-3 text-[#7B9EA8] transition-colors duration-300"
+                  onClick={() => router.push("/dashboard")}
+                >
                   <span className="absolute inset-0 w-0 bg-[#9ebb89] transition-all ease-out group-hover:w-full group-active:bg-[#8da779]"></span>
                   <span className="relative transition-colors group-hover:text-[#F9FBFD]">
                     View Demo
@@ -109,7 +111,7 @@ const LandingPage = () => {
                     },
                   )}
                 >
-                  <div className="absolute inset-0 z-20 bg-gradient-to-t from-black to-transparent opacity-80"></div>
+                  <div className="absolute inset-0 z-20 bg-gradient-to-t from-black to-transparent opacity-90"></div>
                   <Image
                     src={space.imagePath}
                     alt={space.name}

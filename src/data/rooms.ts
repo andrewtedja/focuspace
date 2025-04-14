@@ -10,9 +10,9 @@ export const initialRooms = [
 
   {
     id: 2,
-    name: "Rainy Jazz Cafe",
-    desc: "Cozy cafe with gentle sounds and jazz music",
-    backgroundImage: "/images/spaces/placeholder/2.jpg",
+    name: "Fancy Hotel",
+    desc: "Cozy hotel room with elegant decor",
+    backgroundImage: "/images/spaces/placeholder/hotel.jpg",
     isFavorite: false,
   },
   {
@@ -32,7 +32,7 @@ export const initialRooms = [
   {
     id: 5,
     name: "Distractionless",
-    desc: "Color noise for focus",
+    desc: "Unlock deep focus with zero distractions",
     backgroundImage: "/images/spaces/placeholder/adhd-2.jpg",
     isFavorite: false,
   },
@@ -41,6 +41,20 @@ export const initialRooms = [
     name: "Traveler's Rest",
     desc: "Rest traveler, it's safe here",
     backgroundImage: "/images/spaces/placeholder/traveler.png",
+    isFavorite: false,
+  },
+  {
+    id: 8,
+    name: "Zen Garden",
+    desc: "Study and focus in a tranquil garden",
+    backgroundImage: "/images/spaces/placeholder/zen.jpg",
+    isFavorite: false,
+  },
+  {
+    id: 9,
+    name: "Rainy Jazz Cafe",
+    desc: "Cozy cafe with gentle sounds and jazz music",
+    backgroundImage: "/images/spaces/placeholder/2.jpg",
     isFavorite: false,
   },
 ];
