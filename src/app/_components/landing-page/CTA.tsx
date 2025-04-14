@@ -4,7 +4,10 @@ import CoolButton from "./CoolButton";
 
 const CTA = () => {
   return (
-    <section className="bg-white] relative flex min-h-screen items-center justify-center bg-[#f6f9fa] bg-cover bg-no-repeat">
+    <section
+      id="cta"
+      className="bg-white] relative flex min-h-screen items-center justify-center bg-[#f6f9fa] bg-cover bg-no-repeat"
+    >
       <div className="absolute left-0 right-0 top-0 h-2 bg-gradient-to-r from-[#86B3D1]/0 via-[#86B3D1] to-[#86B3D1]/0"></div>
       {/* <div className="absolute inset-0 z-0 bg-black/50"></div> */}
       <div className="z-10 mx-auto max-w-4xl px-6 text-center">
@@ -17,7 +20,7 @@ const CTA = () => {
           focus environment.
         </p>
         <div className="flex flex-col justify-center space-x-4 space-y-0">
-          <CoolButton />
+          <CoolButton href="/dashboard" />
         </div>
       </div>
     </section>

@@ -4,15 +4,16 @@ import { ChevronRight, Sparkles } from "lucide-react";
 import Features from "./Features";
 import Image from "next/image";
 import clsx from "clsx";
-
 import Rating from "./Rating";
 import CTA from "./CTA";
 import Footer from "../footer/Footer";
 import Pricing from "./Pricing";
+import { useRouter } from "next/navigation";
+import About from "./About";
 
 const LandingPage = () => {
   const [displaySpace, setDisplaySpace] = useState(0);
-
+  const router = useRouter();
   const spaces = [
     {
       name: "Flow Room",
@@ -56,7 +57,7 @@ const LandingPage = () => {
           <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
             <div className="space-y-8">
               <div>
-                <div className="mb-4 inline-block rounded-full border border-[#86B3D1]/30 bg-[#E9EEF2] px-4 py-1.5 text-sm font-medium text-[#7B9EA8]">
+                <div className="mb-4 inline-block rounded-full border border-[#86B3D1]/30 bg-[#E9EEF2] px-5 py-2 text-sm font-medium text-[#7B9EA8] shadow-sm">
                   For Neurodivergent Minds
                 </div>
                 <p className="mb-3 text-4xl font-bold tracking-tight md:text-6xl">
@@ -76,18 +77,21 @@ const LandingPage = () => {
                 </p>
               </div>
 
-              <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                <button className="group flex items-center justify-center rounded-full bg-[#86B3D1] px-6 py-3 font-medium text-white transition-all hover:scale-105 hover:bg-[#8fbecb] hover:shadow-lg hover:shadow-[#86B3D1]/30 active:bg-[#86B3D1]">
+              <div className="flex flex-col space-y-4 sm:flex-row sm:space-x-6 sm:space-y-0">
+                <button
+                  className="group flex items-center justify-center rounded-full bg-[#86B3D1] px-6 py-3 font-medium text-white transition-transform duration-200 hover:scale-105 hover:bg-[#8fbecb] hover:shadow-lg hover:shadow-[#86B3D1]/30 active:bg-[#86B3D1]"
+                  onClick={() => router.push("/dashboard")}
+                >
                   <span>Create Your Space</span>
                   <ChevronRight
                     size={18}
                     className="ml-2 transition-transform group-hover:translate-x-1"
                   />
                 </button>
-                <button className="group relative overflow-hidden rounded-full border border-[#A7BBC7] bg-white px-6 py-3 text-[#7B9EA8]">
-                  <span className="absolute inset-0 w-0 bg-[#9ebb89] transition-all duration-300 ease-out group-hover:w-full group-active:bg-[#8da779]"></span>
-                  <span className="relative transition-colors duration-300 ease-out group-hover:text-[#F9FBFD]">
-                    Explore Spaces
+                <button className="group relative overflow-hidden rounded-full border border-[#A7BBC7] bg-white px-6 py-3 text-[#7B9EA8] transition-colors duration-300">
+                  <span className="absolute inset-0 w-0 bg-[#9ebb89] transition-all ease-out group-hover:w-full group-active:bg-[#8da779]"></span>
+                  <span className="relative transition-colors group-hover:text-[#F9FBFD]">
+                    View Demo
                   </span>
                 </button>
               </div>
@@ -105,20 +109,19 @@ const LandingPage = () => {
                     },
                   )}
                 >
-                  s
-                  <div className="absolute inset-0 z-20 bg-gradient-to-t from-[#000000]/100 to-transparent opacity-100"></div>
+                  <div className="absolute inset-0 z-20 bg-gradient-to-t from-black to-transparent opacity-80"></div>
                   <Image
                     src={space.imagePath}
                     alt={space.name}
                     fill
-                    className="h-full w-full object-cover"
+                    className="object-cover"
                     priority={index === 0}
                   />
                   <div className="absolute bottom-0 left-0 z-30 p-6">
-                    <h3 className="mb-2 text-2xl font-bold text-white">
+                    <h3 className="mb-2 text-2xl font-bold text-white drop-shadow-lg">
                       {space.name}
                     </h3>
-                    <p className="max-w-md text-[#F5F7FA]">
+                    <p className="max-w-md text-[#F5F7FA] drop-shadow">
                       {space.description}
                     </p>
                   </div>
@@ -139,10 +142,47 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
+          <div className="flex items-center">
+            <div className="mt-8 rounded-2xl border border-[#E9EEF2] bg-white/80 p-6 shadow-lg backdrop-blur-sm">
+              <div className="flex flex-col items-center justify-between md:flex-row">
+                <div className="flex flex-wrap justify-center gap-8 md:justify-start">
+                  <div className="flex flex-col items-center md:items-start">
+                    <span className="bg-gradient-to-r from-[#5A8CA3] to-[#4d6b90] bg-clip-text text-3xl font-bold text-transparent">
+                      10k+
+                    </span>
+                    <span className="text-sm text-gray-600">Active Users</span>
+                  </div>
+                  <div className="flex flex-col items-center md:items-start">
+                    <span className="bg-gradient-to-r from-[#5A8CA3] to-[#4d6b90] bg-clip-text text-3xl font-bold text-transparent">
+                      4.9
+                    </span>
+                    <div className="flex items-center">
+                      <div className="mr-1 flex items-center text-yellow-500">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <span key={i} className="text-sm">
+                            ★
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center md:items-start">
+                    <span className="bg-gradient-to-r from-[#5A8CA3] to-[#4d6b90] bg-clip-text text-3xl font-bold text-transparent">
+                      96%
+                    </span>
+                    <span className="text-sm text-gray-600">
+                      Focus Improvement
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <Features />
+      <About />
       <Rating />
       <Pricing />
       <CTA />

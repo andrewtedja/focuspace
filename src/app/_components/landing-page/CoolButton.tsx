@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowRight, MousePointerClick } from "lucide-react";
 
 interface TestButtonProps {
@@ -9,6 +10,7 @@ interface TestButtonProps {
     via?: string;
     to: string;
   };
+  href?: string;
 }
 
 const TestButton: React.FC<TestButtonProps> = ({
@@ -18,7 +20,9 @@ const TestButton: React.FC<TestButtonProps> = ({
     via: "#000000",
     to: "#89AB9E",
   },
+  href,
 }) => {
+  const router = useRouter();
   const [isHovering, setIsHovering] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [position, setPosition] = useState({ x: 0.5, y: 0.5 });
@@ -50,6 +54,12 @@ const TestButton: React.FC<TestButtonProps> = ({
 
   const handleMouseUp = () => {
     setIsActive(false);
+  };
+
+  const handleOnClick = () => {
+    if (href) {
+      router.push(href);
+    }
   };
 
   const calculateTransform = () => {
@@ -150,7 +160,7 @@ const TestButton: React.FC<TestButtonProps> = ({
         style={{
           ...calculateTransform(),
           ...calculateSurfaceLighting(),
-          width: "680px",
+          width: "600px",
           height: "140px",
           border: "1px solid rgba(255, 255, 255, 1)",
         }}
@@ -159,6 +169,7 @@ const TestButton: React.FC<TestButtonProps> = ({
         onMouseLeave={handleMouseLeave}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
+        onClick={handleOnClick}
       >
         <div className="relative flex items-center justify-center break-words">
           <div className="mr-4 text-6xl font-medium text-white">{children}</div>

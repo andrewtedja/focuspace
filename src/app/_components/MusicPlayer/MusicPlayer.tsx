@@ -13,6 +13,8 @@ import {
   XIcon,
   Settings,
   Settings2,
+  Sparkles,
+  AudioWaveform,
 } from "lucide-react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
@@ -38,10 +40,8 @@ export const MusicPlayer = () => {
   // for searching
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredSongs = songs.filter(
-    (song) =>
-      song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      song.artist.toLowerCase().includes(searchQuery.toLowerCase()),
+  const filteredSongs = songs.filter((song) =>
+    song.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const [showModal, setShowModal] = useState(false);
@@ -69,7 +69,7 @@ export const MusicPlayer = () => {
     setCurrentSongIndex((prev) => (prev === 0 ? songs.length - 1 : prev - 1));
   };
 
-  // Auto-play on song change
+  // Autoplay when done
   useEffect(() => {
     if (!audioRef.current) return;
 
@@ -179,42 +179,30 @@ export const MusicPlayer = () => {
   return (
     <div className="relative mx-auto flex h-full w-full flex-col rounded-xl bg-black/70 p-4 text-white shadow-lg backdrop-blur-xl">
       <style jsx>{`
-        /* Custom range slider styles */
-
-        /* Track styles */
+        input[type="range"] {
+          height: 5px;
+          border-radius: 2px;
+          transition: all 0.2s ease;
+        }
         input[type="range"]::-webkit-slider-runnable-track {
-          height: 4px;
+          height: 5px;
           border-radius: 2px;
         }
-
-        input[type="range"]::-moz-range-track {
-          height: 4px;
-          border-radius: 2px;
-        }
-
-        /* Thumb styles */
         input[type="range"]::-webkit-slider-thumb {
           -webkit-appearance: none;
-          appearance: none;
-          margin-top: -6px; /* To center thumb on track */
-          height: 16px;
-          width: 16px;
-          background-color: white;
+          margin-top: -4px;
+          height: 13px;
+          width: 13px;
+          background: white;
           border-radius: 50%;
-          border: 2px solid #1a1a1a;
+          border: 2px solid;
+          transition: all 0.2s ease;
         }
-
-        input[type="range"]::-moz-range-thumb {
-          height: 16px;
-          width: 16px;
-          background-color: white;
-          border-radius: 50%;
-          border: 2px solid #1a1a1a;
+        input[type="range"]:hover::-webkit-slider-thumb {
+          transform: scale(1.1);
         }
-
-        /* Focus styles */
-        input[type="range"]:focus {
-          outline: none;
+        input[type="range"]:active::-webkit-slider-thumb {
+          transform: scale(0.9);
         }
       `}</style>
 
@@ -234,7 +222,6 @@ export const MusicPlayer = () => {
       <div className="mt-3 flex items-center justify-center">
         <div>
           <h2 className="text-base font-semibold">{currentSong?.title}</h2>
-          <p className="text-sm text-gray-400">{currentSong?.artist}</p>
         </div>
       </div>
 
@@ -310,33 +297,36 @@ export const MusicPlayer = () => {
       </audio>
 
       {showModal &&
-        typeof window !== "undefined" &&
         createPortal(
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-90">
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm">
             <div
               ref={modalRef}
-              className="w-80 rounded-lg bg-gray-900 p-4 text-white shadow-lg"
+              className="h-[calc(100vh-4rem)] max-h-[700px] w-[calc(100vw-4rem)] max-w-[1200px] overflow-hidden rounded-2xl bg-gray-900/90 p-20 shadow-2xl ring-1 ring-white/10"
             >
               <div className="flex items-center justify-between">
-                <h3 className="text-base font-semibold">Select a Sound</h3>
+                <h3 className="text-2xl font-semibold text-white/90">
+                  Select Sound
+                </h3>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="text-gray-400 hover:text-white"
+                  className="rounded-full p-3 text-white/70 transition-all hover:bg-white/10 hover:text-white active:scale-95"
                 >
-                  <XIcon size={20} />
+                  <XIcon size={24} />
                 </button>
               </div>
 
-              <div className="mt-3 space-y-3">
-                <input
-                  type="text"
-                  placeholder="Search songs..."
-                  className="w-full rounded-md border border-gray-700 bg-gray-800 p-1.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#6596b6]"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+              <div className="mt-6 space-y-6">
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search sounds..."
+                    className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/90 placeholder-white/40 backdrop-blur-xl transition-all focus:border-white/20 focus:outline-none focus:ring-0"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
 
-                <div className="max-h-48 space-y-1.5 overflow-y-auto">
+                <div className="max-h-[calc(100%-12rem)] overflow-y-auto rounded-xl">
                   {filteredSongs.slice(0, 10).map((song, index) => (
                     <button
                       key={index}
@@ -345,15 +335,18 @@ export const MusicPlayer = () => {
                           audioRef.current.currentTime = 0;
                           audioRef.current.pause();
                         }
-
                         setCurrentSongIndex(songs.indexOf(song));
                         setShowModal(false);
                         setIsPlaying(true);
                       }}
-                      className="w-full rounded-md bg-gray-800 px-3 py-1.5 text-left text-xs hover:bg-gray-700 hover:text-white"
+                      className="mb-3 w-full rounded-xl bg-white/5 px-4 py-4 text-left transition-all hover:bg-white/10"
                     >
-                      <span className="font-semibold">{song.title}</span> –{" "}
-                      <span className="text-gray-400">{song.artist}</span>
+                      <div className="text-sm font-medium text-white/90">
+                        <div className="flex items-center gap-2">
+                          <AudioWaveform size={24} className="text-white/70" />
+                          {song.title}
+                        </div>
+                      </div>
                     </button>
                   ))}
                 </div>
@@ -362,6 +355,14 @@ export const MusicPlayer = () => {
           </div>,
           document.body,
         )}
+
+      <audio
+        ref={audioRef}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={handleEnded}
+      >
+        <source src={currentSong?.url} type="audio/mpeg" />
+      </audio>
     </div>
   );
 };
