@@ -99,7 +99,7 @@ export default function Flashcards({ flashcards }: FlashcardProps) {
                     </Card>
                   }
                   backComponent={
-                    <Card className="h-full w-full rounded-xl border-2 border-black bg-gradient-to-b from-[#f1f0f1] to-white shadow-md transition-transform duration-200 hover:scale-[1.01]">
+                    <Card className="h-full w-full rounded-xl border-2 border-black bg-gradient-to-b from-[#f1f0f1] to-white shadow-md transition-transform duration-200 hover:shadow-xl">
                       <CardHeader className="flex h-full flex-col justify-between gap-4 p-6">
                         <div className="flex items-center gap-2">
                           <CheckCircle className="h-5 w-5 text-green-600" />
