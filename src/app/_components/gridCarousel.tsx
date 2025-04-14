@@ -14,12 +14,9 @@ import { GridStackProvider } from "~/lib/grid-stack-provider";
 import { GridStackRenderProvider } from "~/lib/grid-stack-render-provider";
 import { GridStackRender } from "~/lib/grid-stack-render";
 import { COMPONENT_MAP } from "~/lib/component-map";
-import AddWidgetButton from "./addWidgetButton";
-import { Button } from "~/components/ui/button";
 import "gridstack/dist/gridstack-extra.css";
 import "gridstack/dist/gridstack.css";
 import "~/styles/demo.css";
-import WidgetToolkit from "./WidgetToolkit";
 import { CarouselPagination } from "./CarouselPagination";
 import { AppSidebar } from "./app_sidebar";
 
@@ -94,6 +91,7 @@ export default function GridCarouselLayout() {
     setCurrentPageId,
     removingPage,
     setRemovingPage,
+    removePage,
   ]);
 
   return (

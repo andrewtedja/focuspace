@@ -1,6 +1,7 @@
+"use client";
 import { createContext, useContext } from "react";
 import type { GridStackOptions } from "gridstack";
-import { GridStackWidget } from "gridstack";
+import type { GridStackWidget } from "gridstack";
 import type { GridStack } from "gridstack";
 
 export interface PageData {

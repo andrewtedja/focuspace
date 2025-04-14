@@ -5,18 +5,13 @@ import { useRouter } from "next/navigation";
 import {
   Home,
   BookOpen,
-  Coffee,
   User,
   LogOut,
-  Sparkle,
   ChevronDown,
   ChevronRight,
-  Sparkles,
   Boxes,
-  Plus,
   Wallpaper,
   CopyPlus,
-  Crown,
   Gem,
   Minus,
 } from "lucide-react";
@@ -33,13 +28,11 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
-  SidebarMenuSubButton,
   SidebarMenuSubItem,
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
 } from "~/components/ui/sidebar";
-import WidgetToolkit from "./WidgetToolkit";
 import {
   Collapsible,
   CollapsibleContent,
@@ -81,7 +74,6 @@ export function AppSidebar({
   collapsible = "icon",
   setAddingPage,
   setRemovingPage,
-  disabled,
   ...props
 }: {
   collapsible?: "offcanvas" | "icon" | "none";
@@ -94,6 +86,9 @@ export function AppSidebar({
   const router = useRouter();
   const { currentPageId } = useWidgetManager();
   const { user, logout } = useSessionStore();
+  const [, setAddingPage] = useState(false);
+  const [, setRemovingPage] = useState(false);
+  const [disabled] = useState(false);
 
   return (
     <>

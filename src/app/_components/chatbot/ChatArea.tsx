@@ -6,10 +6,18 @@ import { Button } from "~/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import * as pdfjsLib from "pdfjs-dist/build/pdf";
+
 import { toast } from "sonner";
 import { File } from "lucide-react";
 
 import { api } from "~/trpc/react";
+import type {
+  PDFDocumentLoadingTask,
+  TextContent,
+  TextItem,
+  PDFDocumentProxy,
+  PDFPageProxy,
+} from "pdfjs-dist/types/src/display/api";
 
 import MessageList from "./MessageList";
 import MessageInput from "./MessageInput";
@@ -24,8 +32,8 @@ import {
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.0.375/pdf.worker.min.mjs";
 
-import { inferRouterOutputs } from "@trpc/server";
-import { AppRouter } from "~/server/api/root";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "~/server/api/root";
 type RouterOutput = inferRouterOutputs<AppRouter>;
 type CurrentFile = RouterOutput["pdfUpload"]["getCurrentFile"];
 type History = RouterOutput["message"]["getRecentMessages"];
@@ -62,7 +70,8 @@ export default function ChatArea({ history, currentFile }: ChatAreaProps) {
     onSuccess: async () => {
       await utils.pdfUpload.getCurrentFile.invalidate();
       toast("PDF uploaded successfully!");
-      handleProcessClient();
+
+      await handleProcessClient();
     },
     onError: (err) => {
       console.error("Upload error:", err);
@@ -145,16 +154,19 @@ export default function ChatArea({ history, currentFile }: ChatAreaProps) {
         uint8Array[i] = binaryString.charCodeAt(i);
       }
 
-      const loadingTask = pdfjsLib.getDocument({ data: uint8Array });
-      const pdfDocument = await loadingTask.promise;
+      const loadingTask: PDFDocumentLoadingTask = pdfjsLib.getDocument({
+        data: uint8Array,
+      });
+      const pdfDocument: PDFDocumentProxy = await loadingTask.promise;
+
       console.log("PDF loaded. Number of pages:", pdfDocument.numPages);
 
       let rawText = "";
       for (let pageNum = 1; pageNum <= pdfDocument.numPages; pageNum++) {
-        const page = await pdfDocument.getPage(pageNum);
-        const textContent = await page.getTextContent();
-        const pageText = textContent.items
-          .map((item: any) => item.str)
+        const page: PDFPageProxy = await pdfDocument.getPage(pageNum);
+        const textContent: TextContent = await page.getTextContent();
+        const pageText = (textContent.items as TextItem[])
+          .map((item: { str: string }) => item.str)
           .join(" ");
         rawText += pageText + "\n";
       }
@@ -181,6 +193,7 @@ export default function ChatArea({ history, currentFile }: ChatAreaProps) {
    * and toggle the scroll-to-bottom button.
    */
   useEffect(() => {
+    const node = scrollRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
         // If the entry is not fully visible, show the scroll button
@@ -189,17 +202,17 @@ export default function ChatArea({ history, currentFile }: ChatAreaProps) {
         }
       },
       {
-        root: document.querySelector(".scroll-area-viewport") || null,
+        root: document.querySelector(".scroll-area-viewport") ?? null,
         threshold: 1.0,
       },
     );
 
-    if (scrollRef.current) {
-      observer.observe(scrollRef.current);
+    if (node) {
+      observer.observe(node);
     }
     return () => {
-      if (scrollRef.current) {
-        observer.unobserve(scrollRef.current);
+      if (node) {
+        observer.unobserve(node);
       }
     };
   }, []);
@@ -213,9 +226,9 @@ export default function ChatArea({ history, currentFile }: ChatAreaProps) {
   const isSending = saveMessage.isPending || getAnswer.isPending;
 
   return (
-    <div className="m-0 flex h-full max-h-full w-fit flex-col">
+    <div className="m-0 flex h-full w-full flex-col items-center justify-center bg-[#f7f4f7]">
       {/* Scrollable area for chat messages */}
-      <ScrollArea className="h-full w-fit flex-1 overflow-y-auto px-4">
+      <ScrollArea className="h-full w-full flex-1 overflow-y-auto p-3">
         {showScrollButton && (
           <Button
             className="absolute bottom-5 left-1/2 z-10 h-10 w-10 -translate-x-1/2 rounded-full opacity-75"
@@ -232,7 +245,7 @@ export default function ChatArea({ history, currentFile }: ChatAreaProps) {
       </ScrollArea>
 
       {/* Bottom area: PDF upload + message input */}
-      <div className="flex gap-2 bg-gray-500 p-4">
+      <div className="flex w-full items-center gap-2 border-t bg-[#f0f1f0] px-2 py-4">
         {/* PDF Upload (AlertDialog inside) */}
         <UploadDialog
           currentFile={currentFile}
@@ -245,10 +258,10 @@ export default function ChatArea({ history, currentFile }: ChatAreaProps) {
             <button
               onClick={() => SetPdfMode(!pdfMode)}
               aria-label="Toggle PDF mode"
-              className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md border border-input px-2 text-sm font-medium text-white transition-colors ${
+              className={`inline-flex h-12 min-w-12 items-center justify-center rounded-md border px-2 text-sm font-medium transition-colors ${
                 pdfMode
-                  ? "bg-white text-accent-foreground"
-                  : "bg-transparent hover:bg-gray-400 hover:text-accent-foreground"
+                  ? "border-input bg-white text-accent-foreground"
+                  : "border-transparent bg-[#151515] text-sky-300"
               }`}
             >
               <File className="h-4 w-4" />

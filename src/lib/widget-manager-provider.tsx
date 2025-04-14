@@ -1,8 +1,10 @@
 "use client";
+import type { ReactNode } from "react";
+import { useState, useCallback } from "react";
+import { WidgetManagerContext } from "./widget-manager-context";
+import type { PageData } from "./widget-manager-context";
 
-import { ReactNode, useState, useCallback } from "react";
-import { WidgetManagerContext, PageData } from "./widget-manager-context";
-import { GridStack, GridStackOptions, GridStackWidget } from "gridstack";
+import type { GridStack, GridStackOptions, GridStackWidget } from "gridstack";
 
 const CELL_HEIGHT = 270;
 const BREAKPOINTS = [
@@ -175,7 +177,7 @@ export function WidgetManagerProvider({ children }: { children: ReactNode }) {
       stack.addWidget({ ...partialWidget, id: newId, content: widgetName });
       setActiveWidgets((prev) => ({ ...prev, [widgetName]: pageId }));
     },
-    [pageStacks, activeWidgets],
+    [pageStacks, activeWidgets, transferWidgetToPage],
   );
 
   const updatePageBackground = useCallback(

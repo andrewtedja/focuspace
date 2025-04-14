@@ -62,10 +62,10 @@ export default function BackgroundModal({
     }
   };
 
-  const getOverlayClass = () => {
-    const roundedOpacity = Math.round(overlayOpacity / 5) * 5;
-    return `bg-black/${roundedOpacity}`;
-  };
+  // const getOverlayClass = () => {
+  //   const roundedOpacity = Math.round(overlayOpacity / 5) * 5;
+  //   return `bg-black/${roundedOpacity}`;
+  // };
 
   return (
     <Dialog open={open} onOpenChange={onClose}>

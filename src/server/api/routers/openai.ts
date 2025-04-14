@@ -145,8 +145,11 @@ export const openaiRouter = createTRPCRouter({
 
     if (qaMatches) {
       for (const block of qaMatches) {
-        const qMatch = block.match(/Q\d+:\s*([\s\S]+?)A\d+:/);
-        const aMatch = block.match(/A\d+:\s*([\s\S]+)/);
+        const qRegex = /Q\d+:\s*([\s\S]+?)A\d+:/;
+        const aRegex = /A\d+:\s*([\s\S]+)/;
+
+        const qMatch = qRegex.exec(block);
+        const aMatch = aRegex.exec(block);
 
         if (qMatch?.[1] && aMatch?.[1]) {
           pairs.push({

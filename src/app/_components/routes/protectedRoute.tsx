@@ -1,8 +1,7 @@
 "use client";
-import { useEffect, PropsWithChildren } from "react";
-import { toast } from "sonner";
+import type { PropsWithChildren } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { useSessionStore } from "~/stores/useSessionStore";
 import Loading from "../Loading";
 
@@ -15,7 +14,7 @@ const ProtectedRoute: React.FC<PropsWithChildren> = ({ children }) => {
       return;
     }
     router.push("/auth/login");
-  }, [status]);
+  }, [status, router]);
 
   if (status === "loading" || status === "unauthenticated") {
     return (

@@ -2,8 +2,10 @@
 
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { VariantProps, cva } from "class-variance-authority";
-import { ChevronLeft, ChevronRight, PanelLeft } from "lucide-react";
+import { cva } from "class-variance-authority";
+import type { VariantProps } from "class-variance-authority";
+
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { useIsMobile } from "~/hooks/use-mobile";
 import { cn } from "~/lib/utils";
@@ -276,7 +278,7 @@ Sidebar.displayName = "Sidebar";
 const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
->(({ className, onClick, ...props }, ref) => {
+>(({ onClick, ...props }, ref) => {
   const { toggleSidebar, open } = useSidebar();
 
   return (

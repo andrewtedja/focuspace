@@ -3,7 +3,6 @@ import {
   Sparkles,
   Brain,
   Layers,
-  Zap,
   Compass,
   PenTool,
   Target,

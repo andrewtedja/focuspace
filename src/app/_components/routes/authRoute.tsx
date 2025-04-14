@@ -1,5 +1,7 @@
 "use client";
-import { useEffect, PropsWithChildren } from "react";
+import { useEffect } from "react";
+import type { PropsWithChildren } from "react";
+
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -22,7 +24,7 @@ const AuthRoute: React.FC<PropsWithChildren> = ({ children }) => {
     toast.success("Login successful!");
     setSession(session.expires, session.user);
     router.push("/dashboard");
-  }, [session]);
+  }, [session, isAuthenticated, router, setSession]);
 
   if (session === undefined || session) {
     return <Loading />;

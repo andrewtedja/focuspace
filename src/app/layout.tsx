@@ -1,19 +1,13 @@
 import "~/styles/globals.css";
 
-import { Poppins, Lexend } from "next/font/google";
+import { Lexend } from "next/font/google";
 import { Toaster } from "sonner";
 import { type Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { TRPCReactProvider } from "~/trpc/react";
-import localFont from "next/font/local";
+// import localFont from "next/font/local";
 
 import MobileWarning from "./_components/MobileWarning";
-
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--font-poppins",
-});
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -27,9 +21,9 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-const openDyslexic = localFont({
-  src: "../fonts/OpenDyslexic-Regular.woff",
-});
+// const openDyslexic = localFont({
+//   src: "../fonts/OpenDyslexic-Regular.woff",
+// });
 
 export default function RootLayout({
   children,

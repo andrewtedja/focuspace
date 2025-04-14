@@ -1,12 +1,9 @@
-import {
-  PropsWithChildren,
-  useCallback,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-} from "react";
+import { useCallback, useLayoutEffect, useMemo, useRef } from "react";
+import type { PropsWithChildren } from "react";
 import { useGridStackContext } from "./grid-stack-context";
-import { GridStack, GridStackOptions, GridStackWidget } from "gridstack";
+import { GridStack } from "gridstack";
+import type { GridStackOptions, GridStackWidget } from "gridstack";
+
 import { GridStackRenderContext } from "./grid-stack-render-context";
 import isEqual from "react-fast-compare";
 import ReactDOM from "react-dom/client";
@@ -69,7 +66,7 @@ export function GridStackRenderProvider({ children }: PropsWithChildren) {
       return gs;
     }
     return null;
-  }, [renderCBFn, logAllNodes]);
+  }, [renderCBFn]);
 
   useLayoutEffect(() => {
     if (!isEqual(initialOptions, optionsRef.current) && gridStack) {
@@ -112,10 +109,10 @@ export function GridStackRenderProvider({ children }: PropsWithChildren) {
       value={useMemo(
         () => ({
           getWidgetContainer: (widgetId: string) => {
-            return widgetContainersRef.current.get(widgetId) || null;
+            return widgetContainersRef.current.get(widgetId) ?? null;
           },
         }),
-        [gridStack],
+        [],
       )}
     >
       <div ref={containerRef}>{gridStack ? children : null}</div>
