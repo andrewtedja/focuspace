@@ -19,12 +19,17 @@ export const mailRouter = createTRPCRouter({
   sendVerificationEmail: publicProcedure
     .input(z.object({ token: z.string(), email: z.string().email() }))
     .mutation(async ({ input }) => {
-      const confirmLink = `http://localhost:3000/auth/new-verification?token=${input.token}`;
+      const baseUrl =
+        process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+      const fromEmail = process.env.RESEND_FROM || "noreply@yourdomain.com"; // fallback
+
+      const confirmLink = `${baseUrl}/auth/new-verification?token=${input.token}`;
+
       await resend.emails.send({
-        from: "onboarding@resend.dev",
+        from: fromEmail,
         to: input.email,
         subject: "Confirm your email",
-        html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`,
+        html: `<p>Click <a href="${confirmLink}">here</a> to confirm your email address.</p>`,
       });
     }),
 });
