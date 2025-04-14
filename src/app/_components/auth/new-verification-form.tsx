@@ -28,11 +28,11 @@ const NewVerificationForm = () => {
     }
 
     newVerification.mutate({ token });
-  }, [token, newVerification, router]);
+  }, []);
 
   useEffect(() => {
     onSubmit();
-  }, [onSubmit]);
+  }, []);
   return <div></div>;
 };
 
