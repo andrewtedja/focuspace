@@ -153,10 +153,13 @@ export const MusicPlayer = () => {
   };
 
   const toggleLoop = () => {
-    setIsLooping((prev) => !prev);
-    if (audioRef.current) {
-      audioRef.current.loop = !isLooping;
-    }
+    setIsLooping((prev) => {
+      const newLoopState = !prev;
+      if (audioRef.current) {
+        audioRef.current.loop = newLoopState;
+      }
+      return newLoopState;
+    });
   };
 
   // Modal overlay handlers
@@ -274,7 +277,7 @@ export const MusicPlayer = () => {
           </button>
           <button
             onClick={toggleLoop}
-            className={`text-gray-400 hover:text-[#F8F8FF] ${isLooping ? "text-[#98c7e7]" : ""}`}
+            className={`transition-colors hover:text-[#F8F8FF] ${isLooping ? "text-[#98c7e7]" : "text-gray-400"}`}
             title="Toggle Loop"
           >
             <Repeat size={20} />
