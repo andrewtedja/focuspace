@@ -43,7 +43,7 @@ const UserNavbar = () => {
             Dashboard
           </a>
           <a
-            onClick={() => router.push("/room")}
+            onClick={() => router.push(`/room/?id=7`)}
             className="px-2 py-1 text-[#4A5568] transition-colors hover:text-[#7B9EA8]"
           >
             My Space

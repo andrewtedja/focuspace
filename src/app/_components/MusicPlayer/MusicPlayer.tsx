@@ -71,18 +71,30 @@ export const MusicPlayer = () => {
 
   // Autoplay when done
   useEffect(() => {
-    if (!audioRef.current) return;
+    if (audioRef.current) {
+      audioRef.current.load();
+    }
+  }, [currentSongIndex]);
 
-    audioRef.current.load();
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
 
     if (isPlaying) {
-      audioRef.current.play().catch((err) => {
-        console.error("Autoplay failed:", err);
+      audio.play().catch((err) => {
+        console.error(err);
       });
+    } else {
+      audio.pause();
     }
-  }, [currentSongIndex, isPlaying]);
+  }, [isPlaying]);
 
   // Volume control
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
   const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = parseFloat(event.target.value);
     setVolume(newVolume);
@@ -376,14 +388,6 @@ export const MusicPlayer = () => {
           </div>,
           document.body,
         )}
-
-      <audio
-        ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={handleEnded}
-      >
-        <source src={currentSong?.url} type="audio/mpeg" />
-      </audio>
     </div>
   );
 };

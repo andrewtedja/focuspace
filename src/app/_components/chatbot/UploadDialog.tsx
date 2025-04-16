@@ -62,7 +62,12 @@ export default function UploadDialog({
             {currentFile?.fileUuid ? "Update" : "Upload"} PDF Context
           </AlertDialogTitle>
           <div className="space-y-2" />
-          <Input type="file" ref={fileRef} accept="application/pdf" />
+          <Input
+            type="file"
+            ref={fileRef}
+            accept="application/pdf"
+            disabled={isUploading}
+          />
 
           {currentFile?.fileName && (
             <p className="text-sm text-gray-600">
