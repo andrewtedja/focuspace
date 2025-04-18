@@ -10,6 +10,7 @@ import Footer from "../footer/Footer";
 import Pricing from "./Pricing";
 import { useRouter } from "next/navigation";
 import About from "./About";
+import { motion } from "framer-motion";
 
 const LandingPage = () => {
   const [displaySpace, setDisplaySpace] = useState(0);
@@ -54,7 +55,13 @@ const LandingPage = () => {
       <div className="min-h-screen bg-[#BCD0D7] py-20 text-[#2D3748]">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
-            <div className="space-y-8">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="space-y-8"
+            >
               <div>
                 <div className="mb-4 inline-block rounded-full border border-[#86B3D1]/30 bg-[#E9EEF2] px-5 py-2 text-sm font-medium text-[#7B9EA8] shadow-sm">
                   For Neurodivergent Minds
@@ -97,9 +104,15 @@ const LandingPage = () => {
                   </span>
                 </button>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="relative h-96 overflow-hidden rounded-2xl shadow-2xl shadow-gray-950/50">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="relative h-96 overflow-hidden rounded-2xl shadow-2xl shadow-gray-950/50"
+            >
               {spaces.map((space, index) => (
                 <div
                   key={index}
@@ -142,19 +155,56 @@ const LandingPage = () => {
                   />
                 ))}
               </div>
-            </div>
+            </motion.div>
           </div>
-          <div className="flex items-center">
-            <div className="mt-8 rounded-2xl border border-[#E9EEF2] bg-white/80 p-6 shadow-lg backdrop-blur-sm">
-              <div className="flex flex-col items-center justify-between md:flex-row">
-                <div className="flex flex-wrap justify-center gap-8 md:justify-start">
-                  <div className="flex flex-col items-center md:items-start">
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="flex items-center"
+          >
+            <motion.div
+              initial={{ x: -100 }}
+              animate={{ x: 0 }}
+              exit={{ x: 100 }}
+              transition={{ duration: 0.5 }}
+              className="mt-8 rounded-2xl border border-[#E9EEF2] bg-white/80 p-6 shadow-lg backdrop-blur-sm"
+            >
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="flex flex-col items-center justify-between md:flex-row"
+              >
+                <motion.div
+                  initial={{ y: 100 }}
+                  animate={{ y: 0 }}
+                  exit={{ y: -100 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex flex-wrap justify-center gap-8 md:justify-start"
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex flex-col items-center md:items-start"
+                  >
                     <span className="bg-gradient-to-r from-[#5A8CA3] to-[#4d6b90] bg-clip-text text-3xl font-bold text-transparent">
                       10k+
                     </span>
                     <span className="text-sm text-gray-600">Active Users</span>
-                  </div>
-                  <div className="flex flex-col items-center md:items-start">
+                  </motion.div>
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex flex-col items-center md:items-start"
+                  >
                     <span className="bg-gradient-to-r from-[#5A8CA3] to-[#4d6b90] bg-clip-text text-3xl font-bold text-transparent">
                       4.9
                     </span>
@@ -167,19 +217,25 @@ const LandingPage = () => {
                         ))}
                       </div>
                     </div>
-                  </div>
-                  <div className="flex flex-col items-center md:items-start">
+                  </motion.div>
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    exit={{ scale: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex flex-col items-center md:items-start"
+                  >
                     <span className="bg-gradient-to-r from-[#5A8CA3] to-[#4d6b90] bg-clip-text text-3xl font-bold text-transparent">
                       96%
                     </span>
                     <span className="text-sm text-gray-600">
                       Focus Improvement
                     </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
 

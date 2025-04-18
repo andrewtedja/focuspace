@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import CreateSpaceModal from "./CreateSpaceModal";
 import { initialRooms } from "~/data/rooms";
+import { motion } from "framer-motion";
 
 const MenuPage = () => {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -143,10 +144,13 @@ const MenuPage = () => {
         {isLoading ? (
           <div className="grid grid-cols-3 gap-5">
             {[1, 2, 3, 4, 5, 6].map((item) => (
-              <div
+              <motion.div
                 key={item}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
                 className="mt-2 h-72 animate-pulse rounded-xl bg-[#E2E8F0]"
-              ></div>
+              ></motion.div>
             ))}
           </div>
         ) : (
@@ -154,9 +158,12 @@ const MenuPage = () => {
             {filteredRooms.length > 0 ? (
               filteredRooms.map((room) => (
                 // space groups
-                <div
+                <motion.div
                   key={room.id}
                   onClick={() => router.push(`/room?id=${room.id}`)}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
                   className="animated-border group relative mt-2 cursor-pointer overflow-visible rounded-xl bg-[#2D3748] shadow-md shadow-black/65 transition-all duration-500 hover:scale-105 hover:shadow-[#63B3ED]/20"
                 >
                   <div
@@ -179,12 +186,20 @@ const MenuPage = () => {
                     </div>
 
                     {/* Arrow button (stays in place) */}
-                    <button className="absolute bottom-5 right-5 z-10 transform rounded-full bg-[#63B3ED] p-1.5 text-[#0F172A] opacity-0 transition-all duration-300 hover:bg-[#90CDF4] group-hover:opacity-100">
+                    <motion.button
+                      className="absolute bottom-5 right-5 z-10 transform rounded-full bg-[#63B3ED] p-1.5 text-[#0F172A] opacity-0 transition-all duration-300 hover:bg-[#90CDF4] group-hover:opacity-100"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
                       <ArrowRight size={20} />
-                    </button>
+                    </motion.button>
                     {/* star btn */}
-                    <button
+                    <motion.button
                       className="group absolute right-5 top-5 group-hover:opacity-100"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleFavorite(room.id);
@@ -199,12 +214,17 @@ const MenuPage = () => {
                             !room.isFavorite,
                         })}
                       />
-                    </button>
+                    </motion.button>
                   </div>
-                </div>
+                </motion.div>
               ))
             ) : (
-              <div className="col-span-3 flex flex-col items-center justify-center p-10">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="col-span-3 flex flex-col items-center justify-center p-10"
+              >
                 <div className="mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-[#EBF8FF]">
                   <Search size={28} className="text-[#4A90E2]" />
                 </div>
@@ -212,14 +232,17 @@ const MenuPage = () => {
                   No rooms found
                 </span>
                 {searchQuery && (
-                  <button
+                  <motion.button
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
                     onClick={() => setSearchQuery("")}
                     className="mt-3 rounded-full bg-[#EDF2F7] px-4 py-1.5 text-sm text-[#4A5568]"
                   >
                     Clear search
-                  </button>
+                  </motion.button>
                 )}
-              </div>
+              </motion.div>
             )}
 
             {filteredRooms.length > 0 && (

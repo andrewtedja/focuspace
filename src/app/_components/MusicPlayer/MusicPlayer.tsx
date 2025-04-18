@@ -73,6 +73,11 @@ export const MusicPlayer = () => {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.load();
+      if (isPlaying) {
+        audioRef.current
+          .play()
+          .catch((err) => console.error("Autoplay failed:", err));
+      }
     }
   }, [currentSongIndex]);
 

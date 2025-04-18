@@ -7,6 +7,7 @@ import {
   PenTool,
   Target,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 const features = [
   {
@@ -66,9 +67,13 @@ const Features = () => {
 
         <div className="grid grid-cols-3 gap-8">
           {features.map((feature, index) => (
-            <div
+            <motion.div
               key={index}
               className="group rounded-2xl border border-gray-100 bg-[#F5F7FA] p-8 shadow-xl shadow-gray-400/20 transition-transform duration-500 hover:-translate-y-2 hover:scale-105 hover:shadow-xl hover:shadow-sky-200/30"
+              initial={{ opacity: 0, y: 50 }}
+              viewport={{ once: true }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
             >
               <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-xl bg-[#e4f4ff] text-gray-950 shadow-sm transition-all duration-500">
                 {feature.icon}
@@ -77,7 +82,7 @@ const Features = () => {
                 {feature.title}
               </h3>
               <p className="text-[#718096]">{feature.desc}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
