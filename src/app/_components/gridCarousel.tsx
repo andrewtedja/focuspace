@@ -122,10 +122,10 @@ export default function GridCarouselLayout() {
                 <GridStackRenderProvider>
                   <div
                     // ! GRID STACK
-                    className="grid-stack"
+                    className="grid-stack relative"
                     style={{
-                      // backgroundImage: `url(/images/spaces/placeholder/adhd-2.jpg)`,
                       backgroundSize: "cover",
+                      backgroundImage: `url(${page.backgroundImage})`,
                       backgroundPosition: "center",
                       height: "100%",
                       width: "100%",
@@ -133,6 +133,10 @@ export default function GridCarouselLayout() {
                       overflow: "hidden",
                     }}
                   >
+                    <div
+                      className="pointer-events-none absolute inset-0 bg-black"
+                      style={{ opacity: page.backgroundOverlayOpacity ?? 0 }}
+                    />
                     <GridStackRender componentMap={COMPONENT_MAP} />{" "}
                   </div>
                 </GridStackRenderProvider>

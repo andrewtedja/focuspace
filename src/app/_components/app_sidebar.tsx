@@ -44,6 +44,7 @@ import AddWidgetButton from "./addWidgetButton";
 import { useSessionStore } from "~/stores/useSessionStore";
 import { signOut } from "next-auth/react";
 import BackgroundModal from "./BackgroundModal";
+import BackgroundOpacitySlider from "./BackgroundOpacitySlider";
 
 const mainItems = [
   {
@@ -166,6 +167,11 @@ export function AppSidebar({
                     <span className="text-md flex-1">Remove Current</span>
                   </a>
                 </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              {/* opacity slider */}
+              <SidebarMenuItem>
+                <BackgroundOpacitySlider />
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroup>
