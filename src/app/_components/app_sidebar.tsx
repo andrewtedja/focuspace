@@ -45,6 +45,7 @@ import { useSessionStore } from "~/stores/useSessionStore";
 import { signOut } from "next-auth/react";
 import BackgroundModal from "./BackgroundModal";
 import BackgroundOpacitySlider from "./BackgroundOpacitySlider";
+import { toast } from "sonner";
 
 const mainItems = [
   {
@@ -129,7 +130,7 @@ export function AppSidebar({
               Workspace Customization
             </SidebarGroupLabel>
             <SidebarMenu>
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   tooltip="Change Background"
@@ -141,13 +142,19 @@ export function AppSidebar({
                     <span className="text-md flex-1">Change Background</span>
                   </a>
                 </SidebarMenuButton>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   tooltip="Add Page"
                   className="flex w-full cursor-pointer items-center justify-between"
-                  onClick={() => setAddingPage?.(true)}
+                  onClick={() => {
+                    setAddingPage?.(true);
+                    toast("Page added successfully.", {
+                      duration: 2000,
+                      description: "You can customize the new page now!",
+                    });
+                  }}
                 >
                   <a className="flex items-center gap-2 py-2">
                     <CopyPlus className="h-7 w-7 flex-none" />
@@ -160,17 +167,22 @@ export function AppSidebar({
                   asChild
                   tooltip="Remove Page"
                   className="flex w-full cursor-pointer items-center justify-between"
-                  onClick={() => setRemovingPage?.(true)}
+                  onClick={() => {
+                    setRemovingPage?.(true);
+                    toast("Page removed successfully.", {
+                      duration: 2000,
+                    });
+                  }}
                 >
                   <a className="flex items-center gap-2 py-2">
                     <Minus className="h-7 w-7 flex-none" />
-                    <span className="text-md flex-1">Remove Current</span>
+                    <span className="text-md flex-1">Remove Page</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               {/* opacity slider */}
-              <SidebarMenuItem>
+              <SidebarMenuItem className="group-data-[collapsible=icon]:hidden">
                 <BackgroundOpacitySlider />
               </SidebarMenuItem>
             </SidebarMenu>

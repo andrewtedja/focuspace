@@ -42,6 +42,11 @@ export default function AddWidgetButton({
           onClick: transfer,
         },
       });
+    } else {
+      toast("Widget added successfully.", {
+        description: "Try to move around or resize the widget!",
+        duration: 3000,
+      });
     }
   };
 
