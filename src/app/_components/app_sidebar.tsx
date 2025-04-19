@@ -63,7 +63,7 @@ const mainItems = [
   },
   {
     title: "Get Plus++",
-    url: "#",
+    url: "/pricing",
     icon: Gem,
     className:
       "glow relative overflow-hidden bg-gradient-to-r from-[#86B3D1] to-[#7EB6A4] text-white transition-all duration-300 ease-out  hover:shadow-xl hover:shadow-[#86B3D1]/50  hover:text-[#f7f7f7] active:shadow-none active:text-[#f7f7f7]",
