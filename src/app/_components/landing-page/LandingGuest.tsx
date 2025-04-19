@@ -39,7 +39,7 @@ const LandingPage = () => {
     {
       name: "Lo-Fi Space",
       description: "Study with Lo-Fi girl & Lo-Fi music",
-      imagePath: "/images/spaces/placeholder/lofi.jpg",
+      imagePath: "/images/spaces/placeholder/lofi.png",
     },
   ];
 

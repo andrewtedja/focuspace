@@ -1,5 +1,4 @@
 import "~/styles/globals.css";
-
 import { Lexend } from "next/font/google";
 import { Toaster } from "sonner";
 import { type Metadata } from "next";
@@ -20,6 +19,11 @@ export const metadata: Metadata = {
   title: "FocuSpace",
   description: "Your perfect learning environment",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
+  assets: [
+    "images/spaces/placeholder/lofi.png",
+    "images/spaces/placeholder/cozers.png",
+    "images/spaces/placeholder/zen.jpg",
+  ],
 };
 
 const openDyslexic = localFont({
