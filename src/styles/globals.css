@@ -107,6 +107,11 @@
   --container-4xs: 14rem;
 }
 
+.od-scale {
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
 .container-class {
   container-type: inline-size;
 }

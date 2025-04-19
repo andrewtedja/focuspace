@@ -8,7 +8,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ["var(--font-poppins)", ...fontFamily.sans],
-        openDyslexic: ["var(--font-opendyslexic)", "OpenDyslexic"],
+        "open-dyslexic": ["var(--font-open-dyslexic)", "OpenDyslexic"],
+        lexend: ["var(--font-lexend)", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

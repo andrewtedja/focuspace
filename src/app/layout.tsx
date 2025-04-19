@@ -5,9 +5,10 @@ import { Toaster } from "sonner";
 import { type Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { TRPCReactProvider } from "~/trpc/react";
-// import localFont from "next/font/local";
+import localFont from "next/font/local";
 
 import MobileWarning from "./_components/MobileWarning";
+import { FontProvider } from "~/lib/font-context";
 
 const lexend = Lexend({
   subsets: ["latin"],
@@ -16,26 +17,29 @@ const lexend = Lexend({
 });
 
 export const metadata: Metadata = {
-  title: "focuspace",
-  description: "an amazing app",
+  title: "FocuSpace",
+  description: "Your perfect learning environment",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-// const openDyslexic = localFont({
-//   src: "../fonts/OpenDyslexic-Regular.woff",
-// });
+const openDyslexic = localFont({
+  src: "../fonts/OpenDyslexic-Regular.woff",
+  variable: "--font-open-dyslexic",
+});
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${lexend.className}`}>
+    <html lang="en" className={`${lexend.variable} ${openDyslexic.variable}`}>
       <body className="Lexend">
-        <MobileWarning />
-        <TRPCReactProvider>
-          <SessionProvider> {children}</SessionProvider>
-        </TRPCReactProvider>
-        <Toaster />
+        <FontProvider>
+          <MobileWarning />
+          <TRPCReactProvider>
+            <SessionProvider> {children}</SessionProvider>
+          </TRPCReactProvider>
+          <Toaster />
+        </FontProvider>
       </body>
     </html>
   );
