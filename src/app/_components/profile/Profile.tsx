@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Pencil, Gem, Check } from "lucide-react";
+import { Gem, Check } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,13 +12,15 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useSessionStore } from "~/stores/useSessionStore";
+import { useFontContext } from "~/lib/font-context";
+import type { FontType } from "~/lib/font-context";
 
 const ProfileSection = () => {
   const [isAvatarHovered, setIsAvatarHovered] = useState(false);
-  const [selectedFont, setSelectedFont] = useState("Lexend");
+  const { selectedFont, setSelectedFont } = useFontContext();
   const { user } = useSessionStore();
 
-  const fontOptions = [
+  const fontOptions: { id: FontType; display: string }[] = [
     { id: "Lexend", display: "Lexend" },
     { id: "Open Dyslexic", display: "Open Dyslexic" },
   ];
